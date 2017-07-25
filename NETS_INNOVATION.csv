@@ -1,6 +1,6 @@
 technology,innovation,total_docs,reviewed,relevant
 Synonyms,total,506,422,240
-total,RD,1564,1562,1518
+total,RD,1564,1562,1533
 Synonyms,RD,36,1562,35
 total,Demos,259,257,53
 Synonyms,Demos,9,257,4
@@ -29,7 +29,7 @@ Synonyms,PublicacceptNETS,0,0,0
 total,InnovationgeneralNETS,0,0,0
 Synonyms,InnovationgeneralNETS,0,0,0
 Enhanced Weathering,total,226,115,36
-total,RD,1564,1562,1518
+total,RD,1564,1562,1533
 Enhanced Weathering,RD,48,1562,47
 total,Demos,259,257,53
 Enhanced Weathering,Demos,9,257,1
@@ -58,7 +58,7 @@ Enhanced Weathering,PublicacceptNETS,0,0,0
 total,InnovationgeneralNETS,0,0,0
 Enhanced Weathering,InnovationgeneralNETS,0,0,0
 Blue Carbon,total,216,118,16
-total,RD,1564,1562,1518
+total,RD,1564,1562,1533
 Blue Carbon,RD,60,1562,59
 total,Demos,259,257,53
 Blue Carbon,Demos,4,257,0
@@ -87,7 +87,7 @@ Blue Carbon,PublicacceptNETS,0,0,0
 total,InnovationgeneralNETS,0,0,0
 Blue Carbon,InnovationgeneralNETS,0,0,0
 BECCS,total,564,456,209
-total,RD,1564,1562,1518
+total,RD,1564,1562,1533
 BECCS,RD,119,1562,98
 total,Demos,259,257,53
 BECCS,Demos,29,257,10
@@ -116,7 +116,7 @@ BECCS,PublicacceptNETS,0,0,0
 total,InnovationgeneralNETS,0,0,0
 BECCS,InnovationgeneralNETS,0,0,0
 Soil Carbon Sequestration,total,1878,1266,491
-total,RD,1564,1562,1518
+total,RD,1564,1562,1533
 Soil Carbon Sequestration,RD,746,1562,742
 total,Demos,259,257,53
 Soil Carbon Sequestration,Demos,98,257,23
@@ -145,7 +145,7 @@ Soil Carbon Sequestration,PublicacceptNETS,0,0,0
 total,InnovationgeneralNETS,0,0,0
 Soil Carbon Sequestration,InnovationgeneralNETS,0,0,0
 Ocean Alkalinisation,total,26,25,19
-total,RD,1564,1562,1518
+total,RD,1564,1562,1533
 Ocean Alkalinisation,RD,5,1562,5
 total,Demos,259,257,53
 Ocean Alkalinisation,Demos,0,257,0
@@ -174,8 +174,8 @@ Ocean Alkalinisation,PublicacceptNETS,0,0,0
 total,InnovationgeneralNETS,0,0,0
 Ocean Alkalinisation,InnovationgeneralNETS,0,0,0
 Afforestation/reforestation,total,3346,1487,494
-total,RD,1564,1562,1518
-Afforestation/reforestation,RD,468,1562,451
+total,RD,1564,1562,1533
+Afforestation/reforestation,RD,468,1562,466
 total,Demos,259,257,53
 Afforestation/reforestation,Demos,66,257,15
 total,Scaleup,759,755,339
@@ -203,7 +203,7 @@ Afforestation/reforestation,PublicacceptNETS,0,0,0
 total,InnovationgeneralNETS,0,0,0
 Afforestation/reforestation,InnovationgeneralNETS,0,0,0
 Biochar,total,888,863,101
-total,RD,1564,1562,1518
+total,RD,1564,1562,1533
 Biochar,RD,357,1562,356
 total,Demos,259,257,53
 Biochar,Demos,55,257,12
@@ -232,7 +232,7 @@ Biochar,PublicacceptNETS,0,0,0
 total,InnovationgeneralNETS,0,0,0
 Biochar,InnovationgeneralNETS,0,0,0
 Direct Air Capture,total,326,319,223
-total,RD,1564,1562,1518
+total,RD,1564,1562,1533
 Direct Air Capture,RD,89,1562,83
 total,Demos,259,257,53
 Direct Air Capture,Demos,47,257,7
@@ -261,7 +261,7 @@ Direct Air Capture,PublicacceptNETS,0,0,0
 total,InnovationgeneralNETS,0,0,0
 Direct Air Capture,InnovationgeneralNETS,0,0,0
 Ocean fertilisation,total,782,627,207
-total,RD,1564,1562,1518
+total,RD,1564,1562,1533
 Ocean fertilisation,RD,164,1562,164
 total,Demos,259,257,53
 Ocean fertilisation,Demos,21,257,5
