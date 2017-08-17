@@ -13,7 +13,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 
-source("heatbar_functions.R")
+source("heatbars/heatbar_functions.R")
 
 # Authorise googlesheets to access your Google Sheets account
 gs_auth()
@@ -23,7 +23,7 @@ gs_auth()
 gs  <- gs_title("NETs Review")
 ss  <- gs_read(gs, ws = u_sheetName, verbose=DEBUG)
 
-data <- get_data(ss)
+data <- get_data(ss,2)
 names(data) <- make.names(names(data))
 
 
@@ -59,10 +59,13 @@ TotalEstimates <- c("totalPotential")
 # Add any additional "Dimension" filters too
 res2050 <- countranges(
   df, 
-  filter(data_copy, Data.categorisationyear == 2050 & Data.categorisationsystem.boundaries == "Global"), 
+  filter(
+    data_copy, Data.categorisationyear == 2050 & 
+      Data.categorisationsystem.boundaries == "Global"
+    ), 
   resources, "max"
   )
-heatbar(res2050,"pcnt") + 
+heatbar(filter(res2050,!is.na(pcnt)),"pcnt") + 
   labs(x="Variable",y="Resources")
 ggsave("plots/BECCS/Resourcesmax.png",width=8,height=5)
 
