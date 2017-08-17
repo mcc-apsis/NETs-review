@@ -1,4 +1,4 @@
-get_data <- function(ss){
+get_data <- function(ss,offset){
   if (dim(ss)[1] <= 2) stop("No data in selected spreadsheet")
   
   #==== PROCESS DATA ==========
@@ -26,9 +26,13 @@ get_data <- function(ss){
     names(data)[col] <- var
   } 
   
+  exclusions <- paste0("-",names(data)[1])
+  
   # Switch the data to long format
   data <- data %>% 
-    gather_("variable", "value",names(data)[7:dim(ss)[2]]) %>% 
+    gather("variable", "value",
+            8:(dim(ss)[2]-offset)
+            ) %>% 
     separate(variable, into=c("category", "subcategory", "variable"), sep="Â§") %>%
     separate(
       variable,into=c("variable","measurement"), 
@@ -71,7 +75,12 @@ countranges <- function(df,data,headers, measure) {
     dataf$TI <- if ("TI" %in% names(dataf)) dataf$TI else dataf$UT
     if (length(dataf$TI) > length(unique(dataf$TI))) {
         print("warning, some titles seem to be duplicated, do you
-            need to filter by a dimension?")       
+            need to filter by a dimension?") 
+      dataf <- dataf %>% 
+        group_by(TI) %>% 
+        filter(
+          value == max(value)
+        ) %>% ungroup()
     } 
     return(as.numeric(count(dataf)))
     }
