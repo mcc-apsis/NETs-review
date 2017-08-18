@@ -54,19 +54,19 @@ costs <- unique(
 res2050 <- countranges(df, filter(data), costs, "max")
 heatbar(res2050,"pcnt") + 
   labs(x="Variable",y="Cost")
-ggsave("plots/afforestation/max.png",width=8,height=5)
+ggsave("plots/heatbars/afforestation/max.png",width=8,height=5)
 
 res2050 <- countranges(df, filter(data), costs, "min")
 heatbar(res2050,"pcnt") + 
   labs(x="Variable",y="Cost") +
   ylim(c(0,200))
-ggsave("plots/afforestation/min.png",width=8,height=5)
+ggsave("plots/heatbars/afforestation/min.png",width=8,height=5)
 
 
 res2050 <- countranges(df, filter(data, PY > 2004), costs, "range")
 heatbar(res2050,"pcnt") + 
   labs(x="Variable",y="Cost")
-ggsave("plots/afforestation/max_gt_2004.png",width=8,height=5)
+ggsave("plots/heatbars/afforestation/max_gt_2004.png",width=8,height=5)
 
 res2050 <- countranges(df, filter(data, PY > 2004), costs, "min")
 
@@ -74,7 +74,7 @@ heatbar(res2050,"pcnt") +
   labs(x="Variable",y="Cost") +
   ylim(c(0,200))
 
-ggsave("plots/afforestation/min_gt_2004.png",width=8,height=5)
+ggsave("plots/heatbars/afforestation/min_gt_2004.png",width=8,height=5)
 
 ### Range
 res2050 <- countranges(df, filter(data, PY > 2004), costs, "range")
@@ -84,7 +84,7 @@ heatbar(res2050,"pcnt") +
   ylim(c(0,200))
 
 
-ggsave("plots/afforestation/range_gt_2004.png",width=8,height=5)
+ggsave("plots/heatbars/afforestation/range_gt_2004.png",width=8,height=5)
 
 res2050 <- countranges(df, filter(data), costs, "range")
 
@@ -92,7 +92,7 @@ heatbar(res2050,"pcnt") +
   labs(x="Variable",y="Cost") #+
   #ylim(c(0,200))
 
-ggsave("plots/afforestation/range.png",width=8,height=5)
+ggsave("plots/heatbars/afforestation/range.png",width=8,height=5)
 
 
 
@@ -156,7 +156,7 @@ ggplot() +
   )
 
 
-ggsave("plots/afforestation/ranges_years.png",width=8,height=5)
+ggsave("plots/heatbars/afforestation/ranges_years.png",width=8,height=5)
 
 
 
