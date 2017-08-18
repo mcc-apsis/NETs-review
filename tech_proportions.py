@@ -32,86 +32,90 @@ qid = 1498
 
 # In[20]:
 
-df = pd.read_csv('bib_data/NETS [Nodes].csv')
+fnames = [
+    'bib_data/pre_1998 [Nodes].csv',
+    'bib_data/pre_2006 [Nodes].csv',
+    'bib_data/pre_2013 [Nodes].csv'
+]
 
-cols = df.columns
+for fname in fnames:
 
-df.head()
+    df = pd.read_csv('bib_data/NETS [Nodes].csv')
 
+    cols = df.columns
 
-
-# In[28]:
-
-p = Project.objects.get(title="NETs")
-techs = Technology.objects.filter(project = p).values_list('name',flat=True)
-
-ndf = df
-
-def istech(x,t):
-    doi = str(x['url']).replace('http://dx.doi.org/','').strip()
-
-    try:
-        doc = Doc.objects.get(
-                wosarticle__di=doi
-            )
-    except:
-        print(doi)
-        return(np.nan)
-
-    if doc.technology.name==t:
-        return(1)
-    elif DocOwnership.objects.filter(
-            doc=doc,
-            query__technology__name=t,
-            relevant=1
-        ).count() > 0:
-        return(1)
-    else:
-        return(0)
-
-for t in techs:
-    ndf[t] = ndf.apply(lambda x: istech(x,t),axis=1)
-    
-ndf.head()
+    df.head()
 
 
-# In[29]:
 
-ndf.head()
+    # In[28]:
 
-len(ndf)
+    p = Project.objects.get(title="NETs")
+    techs = Technology.objects.filter(project = p).values_list('name',flat=True)
 
-len(ndf[ndf['BECCS'].isnull()])
+    ndf = df
+
+    def istech(x,t):
+        doi = str(x['url']).replace('http://dx.doi.org/','').strip()
+
+        try:
+            doc = Doc.objects.get(
+                    wosarticle__di=doi
+                )
+        except:
+            print(doi)
+            return(np.nan)
+
+        if doc.technology.name==t:
+            return(1)
+        elif DocOwnership.objects.filter(
+                doc=doc,
+                query__technology__name=t,
+                relevant=1
+            ).count() > 0:
+            return(1)
+        else:
+            return(0)
+
+    for t in techs:
+        ndf[t] = ndf.apply(lambda x: istech(x,t),axis=1)
+
+    ndf.head()
 
 
-# In[77]:
+    # In[29]:
 
-melted_ndf = pd.melt(ndf,id_vars=list(cols),var_name="Technology")
-melted_ndf.head()
+    ndf.head()
+
+    len(ndf)
+
+    len(ndf[ndf['BECCS'].isnull()])
 
 
-# In[78]:
+    # In[77]:
 
-ct_sum = melted_ndf.groupby(['cluster', 'Technology']).agg({
-    'value': 'sum'
-})
+    melted_ndf = pd.melt(ndf,id_vars=list(cols),var_name="Technology")
+    melted_ndf.head()
 
-ct_sum = ct_sum.reset_index().sort_values('cluster')
 
-ct_totals = ct_sum.groupby(['cluster']).sum().rename(columns={'value':'total'}).reset_index()
+    # In[78]:
 
-ct_sum = ct_sum.merge(ct_totals)
+    ct_sum = melted_ndf.groupby(['cluster', 'Technology']).agg({
+        'value': 'sum'
+    })
 
-ct_sum['prop'] = ct_sum['value'] / ct_sum['total'] * 100
+    ct_sum = ct_sum.reset_index().sort_values('cluster')
 
-ct_sum = ct_sum.sort_values(['cluster','prop'], ascending=[True, False])
+    ct_totals = ct_sum.groupby(['cluster']).sum().rename(columns={'value':'total'}).reset_index()
 
-ct_sum.to_excel('bib_data/cluster_totals.xlsx')
+    ct_sum = ct_sum.merge(ct_totals)
 
-ct_sum.head(15)
+    ct_sum['prop'] = ct_sum['value'] / ct_sum['total'] * 100
+
+    ct_sum = ct_sum.sort_values(['cluster','prop'], ascending=[True, False])
+
+    ct_sum.to_excel(fname+'_cluster_totals.xlsx')
+
 
 
 # In[ ]:
-
-
-
