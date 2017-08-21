@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # In[1]:
-
+from bs4 import BeautifulSoup
 import os, sys, time, resource, re, gc, shutil
 from multiprocess import Pool
 from functools import partial
@@ -46,6 +46,7 @@ for fname in fnames:
 
     df.head()
 
+    q = Query.objects.get(pk=1558)
 
 
     # In[28]:
@@ -58,13 +59,25 @@ for fname in fnames:
     def istech(x,t):
         doi = str(x['url']).replace('http://dx.doi.org/','').strip()
 
+        soup = BeautifulSoup(x['description'])
+        rows = soup.find_all('tr')
+        arow = [r for r in rows if r.find_all(text=re.compile('Authors'))]
+        trow = [r for r in rows if r.find_all(text=re.compile('Title'))]
+        title = trow[0].find_all('td')[1].text
+
         try:
             doc = Doc.objects.get(
                     wosarticle__di=doi
                 )
         except:
-            print(doi)
-            return(np.nan)
+            try:
+                doc = Doc.objects.get(
+                    query=q,
+                    title__icontains=title
+                )
+            except:
+                print(doi)
+                return(np.nan)
 
         if doc.technology.name==t:
             return(1)
