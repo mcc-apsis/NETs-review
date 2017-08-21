@@ -40,7 +40,7 @@ fnames = [
 
 for fname in fnames:
 
-    df = pd.read_csv('bib_data/NETS [Nodes].csv')
+    df = pd.read_csv(fname)
 
     cols = df.columns
 
