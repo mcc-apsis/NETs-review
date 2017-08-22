@@ -131,4 +131,10 @@ for fname in fnames:
 
 
 
-# In[ ]:
+# # In[ ]:
+# Forest FF608E pink
+# Biochar FF8A06 orange
+# Soil 00C8EB blue
+# Ocean Fert C793FF purple
+# Syn Beccs 53C336 green
+# DAC 6A6C5D grey
