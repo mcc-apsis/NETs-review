@@ -33,9 +33,8 @@ qid = 1498
 # In[20]:
 
 fnames = [
-    'bib_data/pre_1998 [Nodes].csv',
-    'bib_data/pre_2006 [Nodes].csv',
-    'bib_data/pre_2013 [Nodes].csv'
+    'bib_data/1990-2005/pre_2006 [Nodes].csv',
+    'bib_data/1990-2017/all_years [Nodes].csv',
 ]
 
 for fname in fnames:
@@ -59,11 +58,15 @@ for fname in fnames:
     def istech(x,t):
         doi = str(x['url']).replace('http://dx.doi.org/','').strip()
 
+
         soup = BeautifulSoup(x['description'])
         rows = soup.find_all('tr')
         arow = [r for r in rows if r.find_all(text=re.compile('Authors'))]
         trow = [r for r in rows if r.find_all(text=re.compile('Title'))]
-        title = trow[0].find_all('td')[1].text
+        try:
+            title = trow[0].find_all('td')[1].text
+        except:
+            title = None
 
         try:
             doc = Doc.objects.get(
@@ -127,7 +130,7 @@ for fname in fnames:
 
     ct_sum = ct_sum.sort_values(['cluster','prop'], ascending=[True, False])
 
-    ct_sum.to_excel(fname+'_cluster_totals.xlsx')
+    ct_sum.to_excel(fname.replace('.csv','')+'_cluster_totals.xlsx')
 
 
 
