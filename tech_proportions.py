@@ -33,7 +33,7 @@ qid = 1498
 # In[20]:
 
 fnames = [
-    'bib_data/1990-2005/pre_2006 [Nodes].csv',
+    'bib_data/1990-2005/pre_2006_2 [Nodes].csv',
     'bib_data/1990-2017/all_years [Nodes].csv',
 ]
 
@@ -46,6 +46,8 @@ for fname in fnames:
     df.head()
 
     q = Query.objects.get(pk=1558)
+
+    docs = Doc.objects.filter(query=q)
 
 
     # In[28]:
@@ -69,13 +71,12 @@ for fname in fnames:
             title = None
 
         try:
-            doc = Doc.objects.get(
+            doc = docs.get(
                     wosarticle__di=doi
                 )
         except:
             try:
-                doc = Doc.objects.get(
-                    query=q,
+                doc = docs.get(
                     title__icontains=title
                 )
             except:
