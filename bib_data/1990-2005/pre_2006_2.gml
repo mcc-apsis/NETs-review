@@ -12,10 +12,10 @@ graph
     weight<links> 25
     weight<total_link_strength> 30
     weight<citations> 12
-    weight<norm._citations> 0.09
+    weight<norm._citations> 0.1064
     score<pub._year> 2004
     score<citations> 12
-    score<norm._citations> 0.09
+    score<norm._citations> 0.1064
   ]
   node
   [
@@ -29,10 +29,10 @@ graph
     weight<links> 58
     weight<total_link_strength> 235
     weight<citations> 963
-    weight<norm._citations> 7.2258
+    weight<norm._citations> 8.5396
     score<pub._year> 2004
     score<citations> 963
-    score<norm._citations> 7.2258
+    score<norm._citations> 8.5396
   ]
   node
   [
@@ -45,10 +45,10 @@ graph
     weight<links> 45
     weight<total_link_strength> 83
     weight<citations> 90
-    weight<norm._citations> 0.5353
+    weight<norm._citations> 0.6372
     score<pub._year> 2000
     score<citations> 90
-    score<norm._citations> 0.5353
+    score<norm._citations> 0.6372
   ]
   node
   [
@@ -62,10 +62,10 @@ graph
     weight<links> 18
     weight<total_link_strength> 20
     weight<citations> 62
-    weight<norm._citations> 1.8015
+    weight<norm._citations> 2.1017
     score<pub._year> 1993
     score<citations> 62
-    score<norm._citations> 1.8015
+    score<norm._citations> 2.1017
   ]
   node
   [
@@ -79,10 +79,10 @@ graph
     weight<links> 14
     weight<total_link_strength> 17
     weight<citations> 209
-    weight<norm._citations> 2.4229
+    weight<norm._citations> 2.6024
     score<pub._year> 2003
     score<citations> 209
-    score<norm._citations> 2.4229
+    score<norm._citations> 2.6024
   ]
   node
   [
@@ -96,10 +96,10 @@ graph
     weight<links> 8
     weight<total_link_strength> 8
     weight<citations> 14
-    weight<norm._citations> 0.1623
+    weight<norm._citations> 0.1743
     score<pub._year> 2003
     score<citations> 14
-    score<norm._citations> 0.1623
+    score<norm._citations> 0.1743
   ]
   node
   [
@@ -113,10 +113,10 @@ graph
     weight<links> 29
     weight<total_link_strength> 60
     weight<citations> 383
-    weight<norm._citations> 2.8738
+    weight<norm._citations> 3.3963
     score<pub._year> 2004
     score<citations> 383
-    score<norm._citations> 2.8738
+    score<norm._citations> 3.3963
   ]
   node
   [
@@ -130,10 +130,10 @@ graph
     weight<links> 45
     weight<total_link_strength> 100
     weight<citations> 84
-    weight<norm._citations> 0.9738
+    weight<norm._citations> 1.0459
     score<pub._year> 2003
     score<citations> 84
-    score<norm._citations> 0.9738
+    score<norm._citations> 1.0459
   ]
   node
   [
@@ -147,10 +147,10 @@ graph
     weight<links> 31
     weight<total_link_strength> 49
     weight<citations> 21
-    weight<norm._citations> 0.4118
+    weight<norm._citations> 0.5765
     score<pub._year> 1997
     score<citations> 21
-    score<norm._citations> 0.4118
+    score<norm._citations> 0.5765
   ]
   node
   [
@@ -164,10 +164,10 @@ graph
     weight<links> 28
     weight<total_link_strength> 56
     weight<citations> 3
-    weight<norm._citations> 0.0441
+    weight<norm._citations> 0.0554
     score<pub._year> 2005
     score<citations> 3
-    score<norm._citations> 0.0441
+    score<norm._citations> 0.0554
   ]
   node
   [
@@ -181,10 +181,10 @@ graph
     weight<links> 6
     weight<total_link_strength> 6
     weight<citations> 33
-    weight<norm._citations> 0.4843
+    weight<norm._citations> 0.5708
     score<pub._year> 2001
     score<citations> 33
-    score<norm._citations> 0.4843
+    score<norm._citations> 0.5708
   ]
   node
   [
@@ -197,10 +197,10 @@ graph
     weight<links> 3
     weight<total_link_strength> 7
     weight<citations> 44
-    weight<norm._citations> 0.5101
+    weight<norm._citations> 0.5479
     score<pub._year> 2003
     score<citations> 44
-    score<norm._citations> 0.5101
+    score<norm._citations> 0.5479
   ]
   node
   [
@@ -213,10 +213,10 @@ graph
     weight<links> 35
     weight<total_link_strength> 49
     weight<citations> 14
-    weight<norm._citations> 0.2055
+    weight<norm._citations> 0.2421
     score<pub._year> 2001
     score<citations> 14
-    score<norm._citations> 0.2055
+    score<norm._citations> 0.2421
   ]
   node
   [
@@ -230,10 +230,10 @@ graph
     weight<links> 52
     weight<total_link_strength> 138
     weight<citations> 114
-    weight<norm._citations> 1.6769
+    weight<norm._citations> 2.1038
     score<pub._year> 2005
     score<citations> 114
-    score<norm._citations> 1.6769
+    score<norm._citations> 2.1038
   ]
   node
   [
@@ -246,10 +246,10 @@ graph
     weight<links> 17
     weight<total_link_strength> 50
     weight<citations> 26
-    weight<norm._citations> 0.1546
+    weight<norm._citations> 0.1841
     score<pub._year> 2000
     score<citations> 26
-    score<norm._citations> 0.1546
+    score<norm._citations> 0.1841
   ]
   node
   [
@@ -279,10 +279,10 @@ graph
     weight<links> 47
     weight<total_link_strength> 80
     weight<citations> 74
-    weight<norm._citations> 0.5553
+    weight<norm._citations> 0.6562
     score<pub._year> 2004
     score<citations> 74
-    score<norm._citations> 0.5553
+    score<norm._citations> 0.6562
   ]
   node
   [
@@ -295,10 +295,10 @@ graph
     weight<links> 40
     weight<total_link_strength> 44
     weight<citations> 17
-    weight<norm._citations> 0.3528
+    weight<norm._citations> 0.441
     score<pub._year> 2002
     score<citations> 17
-    score<norm._citations> 0.3528
+    score<norm._citations> 0.441
   ]
   node
   [
@@ -311,10 +311,10 @@ graph
     weight<links> 41
     weight<total_link_strength> 153
     weight<citations> 76
-    weight<norm._citations> 2.2353
+    weight<norm._citations> 2.5792
     score<pub._year> 1995
     score<citations> 76
-    score<norm._citations> 2.2353
+    score<norm._citations> 2.5792
   ]
   node
   [
@@ -327,10 +327,10 @@ graph
     weight<links> 48
     weight<total_link_strength> 226
     weight<citations> 112
-    weight<norm._citations> 2.29
+    weight<norm._citations> 2.9145
     score<pub._year> 1999
     score<citations> 112
-    score<norm._citations> 2.29
+    score<norm._citations> 2.9145
   ]
   node
   [
@@ -344,26 +344,27 @@ graph
     weight<links> 45
     weight<total_link_strength> 109
     weight<citations> 41
-    weight<norm._citations> 0.6031
+    weight<norm._citations> 0.7566
     score<pub._year> 2005
     score<citations> 41
-    score<norm._citations> 0.6031
+    score<norm._citations> 0.7566
   ]
   node
   [
     id 47
-    label "boer"
-    description "<table><tr><td>Authors:</td><td>boer, r.</td></tr></table>"
+    label "boer (2001)"
+    description "<table><tr><td>Authors:</td><td>boer, r.</td></tr><tr><td>Title:</td><td>economic assessment of mitigation options for enhancing and maintaining carbon sink capacity in indonesia</td></tr><tr><td>Source:</td><td>mitigation adapt. strateg. global change, 6, 257-290</td></tr><tr><td>Year:</td><td>2001</td></tr></table>"
+    url "http://dx.doi.org/10.1023/a:1013387305062"
     x -0.5178
     y 0.2398
     cluster 4
     weight<links> 6
     weight<total_link_strength> 7
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 2001
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
@@ -377,10 +378,10 @@ graph
     weight<links> 53
     weight<total_link_strength> 101
     weight<citations> 16
-    weight<norm._citations> 0.1201
+    weight<norm._citations> 0.1419
     score<pub._year> 2004
     score<citations> 16
-    score<norm._citations> 0.1201
+    score<norm._citations> 0.1419
   ]
   node
   [
@@ -394,16 +395,17 @@ graph
     weight<links> 38
     weight<total_link_strength> 75
     weight<citations> 624
-    weight<norm._citations> 9.1572
+    weight<norm._citations> 10.7925
     score<pub._year> 2001
     score<citations> 624
-    score<norm._citations> 9.1572
+    score<norm._citations> 10.7925
   ]
   node
   [
     id 50
-    label "michaelis"
-    description "<table><tr><td>Authors:</td><td>michaelis, a, r.</td></tr></table>"
+    label "michaelis (1982)"
+    description "<table><tr><td>Authors:</td><td>michaelis, a, r.</td></tr><tr><td>Title:</td><td>the progress of agriculture</td></tr><tr><td>Source:</td><td>interdiscip. sci. rev., 7, 162-162</td></tr><tr><td>Year:</td><td>1982</td></tr></table>"
+    url "http://dx.doi.org/10.1179/isr.1982.7.3.162"
     x -0.5579
     y 0.3106
     cluster 4
@@ -411,7 +413,7 @@ graph
     weight<total_link_strength> 102
     weight<citations> 0
     weight<norm._citations> 1
-    score<pub._year> -1
+    score<pub._year> 1982
     score<citations> 0
     score<norm._citations> 1
   ]
@@ -427,10 +429,10 @@ graph
     weight<links> 39
     weight<total_link_strength> 66
     weight<citations> 16
-    weight<norm._citations> 0.2354
+    weight<norm._citations> 0.2953
     score<pub._year> 2005
     score<citations> 16
-    score<norm._citations> 0.2354
+    score<norm._citations> 0.2953
   ]
   node
   [
@@ -444,26 +446,27 @@ graph
     weight<links> 24
     weight<total_link_strength> 46
     weight<citations> 47
-    weight<norm._citations> 0.3527
+    weight<norm._citations> 0.4168
     score<pub._year> 2004
     score<citations> 47
-    score<norm._citations> 0.3527
+    score<norm._citations> 0.4168
   ]
   node
   [
     id 57
-    label "niskanen"
-    description "<table><tr><td>Authors:</td><td>niskanen, a.</td></tr></table>"
+    label "niskanen (1997)"
+    description "<table><tr><td>Authors:</td><td>niskanen, a.</td></tr><tr><td>Title:</td><td>economic profitability of afforestation in thailand and the philippines</td></tr><tr><td>Source:</td><td>proj. appraisal, 12, 193-203</td></tr><tr><td>Year:</td><td>1997</td></tr></table>"
+    url "http://dx.doi.org/10.1080/02688867.1997.9727058"
     x -0.5644
     y 0.1944
     cluster 4
     weight<links> 8
     weight<total_link_strength> 15
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 1997
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
@@ -477,26 +480,26 @@ graph
     weight<links> 61
     weight<total_link_strength> 147
     weight<citations> 105
-    weight<norm._citations> 3.0882
+    weight<norm._citations> 3.5633
     score<pub._year> 1995
     score<citations> 105
-    score<norm._citations> 3.0882
+    score<norm._citations> 3.5633
   ]
   node
   [
     id 60
-    label "cui"
-    description "<table><tr><td>Authors:</td><td>cui, l.; gao, z.; liu, j.; shi, j.</td></tr></table>"
+    label "cui (2005)"
+    description "<table><tr><td>Authors:</td><td>cui, l.; gao, z.; liu, j.; shi, j.</td></tr><tr><td>Title:</td><td>a review on the influence of afforestation on soil carbon storage</td></tr><tr><td>Source:</td><td>chinese j. ecol., 24, 410-416</td></tr><tr><td>Year:</td><td>2005</td></tr></table>"
     x -0.3439
     y 0.207
     cluster 4
     weight<links> 21
     weight<total_link_strength> 49
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 2005
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
@@ -510,26 +513,27 @@ graph
     weight<links> 3
     weight<total_link_strength> 3
     weight<citations> 22
-    weight<norm._citations> 0.255
+    weight<norm._citations> 0.2739
     score<pub._year> 2003
     score<citations> 22
-    score<norm._citations> 0.255
+    score<norm._citations> 0.2739
   ]
   node
   [
     id 65
-    label "weber"
-    description "<table><tr><td>Authors:</td><td>weber, m.</td></tr></table>"
+    label "weber (1993)"
+    description "<table><tr><td>Authors:</td><td>weber, m.</td></tr><tr><td>Title:</td><td>present role of german forests and forestry in the national carbon budget and options to its increase</td></tr><tr><td>Source:</td><td>water air soil pollut, 70, 325-340</td></tr><tr><td>Year:</td><td>1993</td></tr></table>"
+    url "http://dx.doi.org/10.1007/bf01105005"
     x -0.4673
     y 0.2698
     cluster 4
     weight<links> 1
     weight<total_link_strength> 1
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 1993
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
@@ -543,58 +547,59 @@ graph
     weight<links> 1
     weight<total_link_strength> 2
     weight<citations> 80
-    weight<norm._citations> 1.1768
+    weight<norm._citations> 1.4763
     score<pub._year> 2005
     score<citations> 80
-    score<norm._citations> 1.1768
+    score<norm._citations> 1.4763
   ]
   node
   [
     id 67
-    label "rykowski"
-    description "<table><tr><td>Authors:</td><td>rykowski, k.</td></tr></table>"
+    label "rykowski (1999)"
+    description "<table><tr><td>Authors:</td><td>rykowski, k.</td></tr><tr><td>Title:</td><td>assessment of the importance of forests in reducing global climatic change (counteracting and mitigating the impacts of greenhouse gases)</td></tr><tr><td>Source:</td><td>geogr. pol., 72, 41-43</td></tr><tr><td>Year:</td><td>1999</td></tr></table>"
     x -0.4518
     y 0.2621
     cluster 4
     weight<links> 8
     weight<total_link_strength> 10
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 1999
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
     id 73
-    label "wu"
-    description "<table><tr><td>Authors:</td><td>wu, j.; xu, d.; zhang, x.</td></tr></table>"
+    label "wu (2004)"
+    description "<table><tr><td>Authors:</td><td>wu, j.; xu, d.; zhang, x.</td></tr><tr><td>Title:</td><td>impact of land-use change on soil carbon storage</td></tr><tr><td>Source:</td><td>chin. j. appl. ecol., 15, 593-599</td></tr><tr><td>Year:</td><td>2004</td></tr></table>"
     x -0.4592
     y 0.2272
     cluster 4
     weight<links> 14
     weight<total_link_strength> 32
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 2004
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
     id 77
-    label "khanna"
-    description "<table><tr><td>Authors:</td><td>khanna, p, k.; nyakuengama, j, g.; paul, k, i.; polglase, p, j.</td></tr></table>"
+    label "khanna (2002)"
+    description "<table><tr><td>Authors:</td><td>khanna, p, k.; nyakuengama, j, g.; paul, k, i.; polglase, p, j.</td></tr><tr><td>Title:</td><td>change in soil carbon following afforestation</td></tr><tr><td>Source:</td><td>for. ecol. manage., 168, 241-257</td></tr><tr><td>Year:</td><td>2002</td></tr></table>"
+    url "http://dx.doi.org/10.1016/s0378-1127(01)00740-x"
     x -0.4133
     y 0.2676
     cluster 4
     weight<links> 12
     weight<total_link_strength> 44
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 2002
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
@@ -608,10 +613,10 @@ graph
     weight<links> 19
     weight<total_link_strength> 26
     weight<citations> 15
-    weight<norm._citations> 0.2206
+    weight<norm._citations> 0.2768
     score<pub._year> 2005
     score<citations> 15
-    score<norm._citations> 0.2206
+    score<norm._citations> 0.2768
   ]
   node
   [
@@ -625,10 +630,10 @@ graph
     weight<links> 2
     weight<total_link_strength> 2
     weight<citations> 30
-    weight<norm._citations> 0.4413
+    weight<norm._citations> 0.5536
     score<pub._year> 2005
     score<citations> 30
-    score<norm._citations> 0.4413
+    score<norm._citations> 0.5536
   ]
   node
   [
@@ -642,10 +647,10 @@ graph
     weight<links> 50
     weight<total_link_strength> 178
     weight<citations> 48
-    weight<norm._citations> 0.7061
+    weight<norm._citations> 0.8858
     score<pub._year> 2005
     score<citations> 48
-    score<norm._citations> 0.7061
+    score<norm._citations> 0.8858
   ]
   node
   [
@@ -659,10 +664,10 @@ graph
     weight<links> 52
     weight<total_link_strength> 162
     weight<citations> 6
-    weight<norm._citations> 0.0883
+    weight<norm._citations> 0.1107
     score<pub._year> 2005
     score<citations> 6
-    score<norm._citations> 0.0883
+    score<norm._citations> 0.1107
   ]
   node
   [
@@ -676,10 +681,10 @@ graph
     weight<links> 54
     weight<total_link_strength> 195
     weight<citations> 13
-    weight<norm._citations> 0.1912
+    weight<norm._citations> 0.2399
     score<pub._year> 2005
     score<citations> 13
-    score<norm._citations> 0.1912
+    score<norm._citations> 0.2399
   ]
   node
   [
@@ -693,10 +698,10 @@ graph
     weight<links> 54
     weight<total_link_strength> 209
     weight<citations> 46
-    weight<norm._citations> 0.6767
+    weight<norm._citations> 0.8489
     score<pub._year> 2005
     score<citations> 46
-    score<norm._citations> 0.6767
+    score<norm._citations> 0.8489
   ]
   node
   [
@@ -710,10 +715,10 @@ graph
     weight<links> 51
     weight<total_link_strength> 185
     weight<citations> 24
-    weight<norm._citations> 0.353
+    weight<norm._citations> 0.4429
     score<pub._year> 2005
     score<citations> 24
-    score<norm._citations> 0.353
+    score<norm._citations> 0.4429
   ]
   node
   [
@@ -727,10 +732,10 @@ graph
     weight<links> 18
     weight<total_link_strength> 40
     weight<citations> 19
-    weight<norm._citations> 0.2795
+    weight<norm._citations> 0.3506
     score<pub._year> 2005
     score<citations> 19
-    score<norm._citations> 0.2795
+    score<norm._citations> 0.3506
   ]
   node
   [
@@ -744,10 +749,10 @@ graph
     weight<links> 9
     weight<total_link_strength> 10
     weight<citations> 24
-    weight<norm._citations> 0.1801
+    weight<norm._citations> 0.2128
     score<pub._year> 2004
     score<citations> 24
-    score<norm._citations> 0.1801
+    score<norm._citations> 0.2128
   ]
   node
   [
@@ -761,10 +766,10 @@ graph
     weight<links> 57
     weight<total_link_strength> 234
     weight<citations> 44
-    weight<norm._citations> 0.3302
+    weight<norm._citations> 0.3902
     score<pub._year> 2004
     score<citations> 44
-    score<norm._citations> 0.3302
+    score<norm._citations> 0.3902
   ]
   node
   [
@@ -778,10 +783,10 @@ graph
     weight<links> 45
     weight<total_link_strength> 80
     weight<citations> 58
-    weight<norm._citations> 0.6724
+    weight<norm._citations> 0.7222
     score<pub._year> 2003
     score<citations> 58
-    score<norm._citations> 0.6724
+    score<norm._citations> 0.7222
   ]
   node
   [
@@ -795,10 +800,10 @@ graph
     weight<links> 13
     weight<total_link_strength> 15
     weight<citations> 47
-    weight<norm._citations> 0.5449
+    weight<norm._citations> 0.5852
     score<pub._year> 2003
     score<citations> 47
-    score<norm._citations> 0.5449
+    score<norm._citations> 0.5852
   ]
   node
   [
@@ -812,10 +817,10 @@ graph
     weight<links> 51
     weight<total_link_strength> 105
     weight<citations> 30
-    weight<norm._citations> 0.6226
+    weight<norm._citations> 0.7782
     score<pub._year> 2002
     score<citations> 30
-    score<norm._citations> 0.6226
+    score<norm._citations> 0.7782
   ]
   node
   [
@@ -829,10 +834,10 @@ graph
     weight<links> 47
     weight<total_link_strength> 64
     weight<citations> 91
-    weight<norm._citations> 1.8885
+    weight<norm._citations> 2.3606
     score<pub._year> 2002
     score<citations> 91
-    score<norm._citations> 1.8885
+    score<norm._citations> 2.3606
   ]
   node
   [
@@ -846,10 +851,10 @@ graph
     weight<links> 50
     weight<total_link_strength> 244
     weight<citations> 75
-    weight<norm._citations> 1.1006
+    weight<norm._citations> 1.2972
     score<pub._year> 2001
     score<citations> 75
-    score<norm._citations> 1.1006
+    score<norm._citations> 1.2972
   ]
   node
   [
@@ -863,10 +868,10 @@ graph
     weight<links> 53
     weight<total_link_strength> 355
     weight<citations> 68
-    weight<norm._citations> 0.9979
+    weight<norm._citations> 1.1761
     score<pub._year> 2001
     score<citations> 68
-    score<norm._citations> 0.9979
+    score<norm._citations> 1.1761
   ]
   node
   [
@@ -880,10 +885,10 @@ graph
     weight<links> 58
     weight<total_link_strength> 372
     weight<citations> 71
-    weight<norm._citations> 1.0419
+    weight<norm._citations> 1.228
     score<pub._year> 2001
     score<citations> 71
-    score<norm._citations> 1.0419
+    score<norm._citations> 1.228
   ]
   node
   [
@@ -897,10 +902,10 @@ graph
     weight<links> 4
     weight<total_link_strength> 7
     weight<citations> 4
-    weight<norm._citations> 0.0587
+    weight<norm._citations> 0.0692
     score<pub._year> 2001
     score<citations> 4
-    score<norm._citations> 0.0587
+    score<norm._citations> 0.0692
   ]
   node
   [
@@ -914,10 +919,10 @@ graph
     weight<links> 46
     weight<total_link_strength> 180
     weight<citations> 79
-    weight<norm._citations> 0.4698
+    weight<norm._citations> 0.5593
     score<pub._year> 2000
     score<citations> 79
-    score<norm._citations> 0.4698
+    score<norm._citations> 0.5593
   ]
   node
   [
@@ -931,10 +936,10 @@ graph
     weight<links> 49
     weight<total_link_strength> 60
     weight<citations> 40
-    weight<norm._citations> 0.2379
+    weight<norm._citations> 0.2832
     score<pub._year> 2000
     score<citations> 40
-    score<norm._citations> 0.2379
+    score<norm._citations> 0.2832
   ]
   node
   [
@@ -948,10 +953,10 @@ graph
     weight<links> 8
     weight<total_link_strength> 16
     weight<citations> 57
-    weight<norm._citations> 0.339
+    weight<norm._citations> 0.4036
     score<pub._year> 2000
     score<citations> 57
-    score<norm._citations> 0.339
+    score<norm._citations> 0.4036
   ]
   node
   [
@@ -965,10 +970,10 @@ graph
     weight<links> 5
     weight<total_link_strength> 11
     weight<citations> 44
-    weight<norm._citations> 0.8996
+    weight<norm._citations> 1.145
     score<pub._year> 1999
     score<citations> 44
-    score<norm._citations> 0.8996
+    score<norm._citations> 1.145
   ]
   node
   [
@@ -990,210 +995,216 @@ graph
   node
   [
     id 104
-    label "unruh"
-    description "<table><tr><td>Authors:</td><td>unruh, j, d.</td></tr></table>"
+    label "unruh (1995)"
+    description "<table><tr><td>Authors:</td><td>unruh, j, d.</td></tr><tr><td>Title:</td><td>agroforestry, reforestry, and the carbon problem: the role of land and tree tenure</td></tr><tr><td>Source:</td><td>interdiscip. sci. rev., 20, 215-227</td></tr><tr><td>Year:</td><td>1995</td></tr></table>"
+    url "http://dx.doi.org/10.1179/isr.1995.20.3.215"
     x -0.5583
     y 0.3105
     cluster 4
     weight<links> 9
     weight<total_link_strength> 102
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 1995
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
     id 105
-    label "audus"
-    description "<table><tr><td>Authors:</td><td>audus, h.; freund, p.</td></tr></table>"
+    label "audus (2005)"
+    description "<table><tr><td>Authors:</td><td>audus, h.; freund, p.</td></tr><tr><td>Title:</td><td>climate change mitigation by biomass gasification combined with co2 capture and storage</td></tr><tr><td>Source:</td><td>greenhouse gas con. tech., , 187-197</td></tr><tr><td>Year:</td><td>2005</td></tr></table>"
+    url "http://dx.doi.org/10.1016/b978-008044704-9/50020-3"
     x -0.3672
     y -0.1423
     cluster 5
     weight<links> 1
     weight<total_link_strength> 1
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 2005
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
     id 107
-    label "chang"
-    description "<table><tr><td>Authors:</td><td>chang, c.-c.</td></tr></table>"
+    label "chang (1999)"
+    description "<table><tr><td>Authors:</td><td>chang, c.-c.</td></tr><tr><td>Title:</td><td>carbon sequestration cost by afforestation in taiwan</td></tr><tr><td>Source:</td><td>environ. econ. policy stud., 2, 199-213</td></tr><tr><td>Year:</td><td>1999</td></tr></table>"
+    url "http://dx.doi.org/10.1007/bf03353911"
     x -0.4588
     y 0.298
     cluster 4
     weight<links> 1
     weight<total_link_strength> 2
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 1999
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
     id 108
-    label "chen"
-    description "<table><tr><td>Authors:</td><td>chen, g.; yang, y.; yu, z.</td></tr></table>"
+    label "chen (2004)"
+    description "<table><tr><td>Authors:</td><td>chen, g.; yang, y.; yu, z.</td></tr><tr><td>Title:</td><td>changes of carbon storage and carbon sequestration in plantation ecosystems on purple soil</td></tr><tr><td>Source:</td><td>chin. j. appl. ecol., 15, 1837-1841</td></tr><tr><td>Year:</td><td>2004</td></tr></table>"
     x -0.4264
     y 0.2636
     cluster 4
     weight<links> 9
     weight<total_link_strength> 11
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 2004
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
     id 109
-    label "baumgartner"
-    description "<table><tr><td>Authors:</td><td>baumgartner, a.</td></tr></table>"
+    label "baumgartner (2000)"
+    description "<table><tr><td>Authors:</td><td>baumgartner, a.</td></tr><tr><td>Title:</td><td>agroforestry in the prairie landscape: opportunities for climate change mitigation through carbon sequestration</td></tr><tr><td>Source:</td><td>prairie forum, 25, 195-213</td></tr><tr><td>Year:</td><td>2000</td></tr></table>"
     x -0.5278
     y 0.1418
     cluster 4
     weight<links> 11
     weight<total_link_strength> 11
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 2000
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
     id 110
-    label "adegbulugbe"
-    description "<table><tr><td>Authors:</td><td>adegbulugbe, a, o.; adesina, f, a.; ojo, l, o.; oketola, f, o.; pelemo, d, a.; siyanbola, w, o.</td></tr></table>"
+    label "adegbulugbe (2002)"
+    description "<table><tr><td>Authors:</td><td>adegbulugbe, a, o.; adesina, f, a.; ojo, l, o.; oketola, f, o.; pelemo, d, a.; siyanbola, w, o.</td></tr><tr><td>Title:</td><td>towards global climate change mitigation: assessment of an afforestation option for nigeria</td></tr><tr><td>Source:</td><td>environmentalist, 22, 83-92</td></tr><tr><td>Year:</td><td>2002</td></tr></table>"
+    url "http://dx.doi.org/10.1023/a:1014528326762"
     x -0.5597
     y 0.2316
     cluster 4
     weight<links> 1
     weight<total_link_strength> 1
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 2002
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
     id 111
-    label "cerón"
-    description "<table><tr><td>Authors:</td><td>cerón, a, d.; masera, o, r.; ordóñez, a.</td></tr></table>"
+    label "cerón (2001)"
+    description "<table><tr><td>Authors:</td><td>cerón, a, d.; masera, o, r.; ordóñez, a.</td></tr><tr><td>Title:</td><td>forestry mitigation options for mexico: finding synergies between national sustainable development priorities and global concerns</td></tr><tr><td>Source:</td><td>mitigation adapt. strateg. global change, 6, 291-312</td></tr><tr><td>Year:</td><td>2001</td></tr></table>"
+    url "http://dx.doi.org/10.1023/a:1013327019175"
     x -0.5254
     y 0.2365
     cluster 4
     weight<links> 4
     weight<total_link_strength> 5
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 2001
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
     id 112
-    label "rao"
-    description "<table><tr><td>Authors:</td><td>rao, s.; ravindranath, n, h.; sudha, p.</td></tr></table>"
+    label "rao (2001)"
+    description "<table><tr><td>Authors:</td><td>rao, s.; ravindranath, n, h.; sudha, p.</td></tr><tr><td>Title:</td><td>forestry for sustainable biomass production and carbon sequesteration in india</td></tr><tr><td>Source:</td><td>mitigation adapt. strateg. global change, 6, 233-256</td></tr><tr><td>Year:</td><td>2001</td></tr></table>"
+    url "http://dx.doi.org/10.1023/a:1013331220083"
     x -0.557
     y 0.2259
     cluster 4
     weight<links> 6
     weight<total_link_strength> 9
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 2001
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
     id 113
-    label "rykowski"
-    description "<table><tr><td>Authors:</td><td>rykowski, k.</td></tr></table>"
+    label "rykowski (2000)"
+    description "<table><tr><td>Authors:</td><td>rykowski, k.</td></tr><tr><td>Title:</td><td>the role of forest ecosystems and wood in controlling the absorption and emission of carbon dioxide</td></tr><tr><td>Source:</td><td>geogr. pol., 73, 65-88</td></tr><tr><td>Year:</td><td>2000</td></tr></table>"
     x -0.4479
     y 0.2724
     cluster 4
     weight<links> 12
     weight<total_link_strength> 21
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 2000
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
     id 114
-    label "lee"
-    description "<table><tr><td>Authors:</td><td>lee, j, j.</td></tr></table>"
+    label "lee (1996)"
+    description "<table><tr><td>Authors:</td><td>lee, j, j.</td></tr><tr><td>Title:</td><td>carbon dynamics of the conservation and wetland reserve programs</td></tr><tr><td>Source:</td><td>j. soil water conserv., 51, 340-346</td></tr><tr><td>Year:</td><td>1996</td></tr></table>"
     x -0.4062
     y 0.2271
     cluster 4
     weight<links> 19
     weight<total_link_strength> 24
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 1996
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
     id 115
-    label "rantala"
-    description "<table><tr><td>Authors:</td><td>rantala, t.</td></tr></table>"
+    label "rantala (1996)"
+    description "<table><tr><td>Authors:</td><td>rantala, t.</td></tr><tr><td>Title:</td><td>economic impacts of carbon sequestration in reforestation: examples from boreal and moist tropical conditions</td></tr><tr><td>Source:</td><td>silva fenn., 30, 269-278</td></tr><tr><td>Year:</td><td>1996</td></tr></table>"
     x -0.5715
     y 0.1815
     cluster 4
     weight<links> 7
     weight<total_link_strength> 13
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 1996
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
     id 117
-    label "maclaren"
-    description "<table><tr><td>Authors:</td><td>maclaren, p.</td></tr></table>"
+    label "maclaren (1999)"
+    description "<table><tr><td>Authors:</td><td>maclaren, p.</td></tr><tr><td>Title:</td><td>modelling the effect of land-use practices on greenhouse gas emissions and sinks in new zealand</td></tr><tr><td>Source:</td><td>environ. sci. policy, 2, 135-144</td></tr><tr><td>Year:</td><td>1999</td></tr></table>"
     x -0.4103
     y 0.2976
     cluster 4
     weight<links> 1
     weight<total_link_strength> 1
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 1999
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
     id 118
-    label "alig"
-    description "<table><tr><td>Authors:</td><td>alig, r.</td></tr></table>"
+    label "alig (2000)"
+    description "<table><tr><td>Authors:</td><td>alig, r.</td></tr><tr><td>Title:</td><td>mitigation, adaptation, and climate change: results from recent research on us timber markets</td></tr><tr><td>Source:</td><td>environ. sci. policy, 3, 235-248</td></tr><tr><td>Year:</td><td>2000</td></tr></table>"
     x -0.4582
     y 0.2909
     cluster 4
     weight<links> 7
     weight<total_link_strength> 10
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 2000
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
@@ -1207,10 +1218,10 @@ graph
     weight<links> 7
     weight<total_link_strength> 9
     weight<citations> 64
-    weight<norm._citations> 1.8824
+    weight<norm._citations> 2.1719
     score<pub._year> 1995
     score<citations> 64
-    score<norm._citations> 1.8824
+    score<norm._citations> 2.1719
   ]
   node
   [
@@ -1224,10 +1235,10 @@ graph
     weight<links> 40
     weight<total_link_strength> 68
     weight<citations> 36
-    weight<norm._citations> 1.046
+    weight<norm._citations> 1.2203
     score<pub._year> 1993
     score<citations> 36
-    score<norm._citations> 1.046
+    score<norm._citations> 1.2203
   ]
   node
   [
@@ -1241,10 +1252,10 @@ graph
     weight<links> 56
     weight<total_link_strength> 93
     weight<citations> 29
-    weight<norm._citations> 0.8426
+    weight<norm._citations> 0.9831
     score<pub._year> 1993
     score<citations> 29
-    score<norm._citations> 0.8426
+    score<norm._citations> 0.9831
   ]
   node
   [
@@ -1257,10 +1268,10 @@ graph
     weight<links> 39
     weight<total_link_strength> 81
     weight<citations> 27
-    weight<norm._citations> 0.9507
+    weight<norm._citations> 1.0458
     score<pub._year> 1991
     score<citations> 27
-    score<norm._citations> 0.9507
+    score<norm._citations> 1.0458
   ]
   node
   [
@@ -1274,10 +1285,10 @@ graph
     weight<links> 22
     weight<total_link_strength> 34
     weight<citations> 21
-    weight<norm._citations> 0.7394
+    weight<norm._citations> 0.8134
     score<pub._year> 1991
     score<citations> 21
-    score<norm._citations> 0.7394
+    score<norm._citations> 0.8134
   ]
   node
   [
@@ -1291,10 +1302,10 @@ graph
     weight<links> 13
     weight<total_link_strength> 13
     weight<citations> 47
-    weight<norm._citations> 0.6914
+    weight<norm._citations> 0.8673
     score<pub._year> 2005
     score<citations> 47
-    score<norm._citations> 0.6914
+    score<norm._citations> 0.8673
   ]
   node
   [
@@ -1308,10 +1319,10 @@ graph
     weight<links> 47
     weight<total_link_strength> 157
     weight<citations> 15
-    weight<norm._citations> 0.2206
+    weight<norm._citations> 0.2768
     score<pub._year> 2005
     score<citations> 15
-    score<norm._citations> 0.2206
+    score<norm._citations> 0.2768
   ]
   node
   [
@@ -1324,10 +1335,10 @@ graph
     weight<links> 56
     weight<total_link_strength> 173
     weight<citations> 31
-    weight<norm._citations> 0.456
+    weight<norm._citations> 0.5721
     score<pub._year> 2005
     score<citations> 31
-    score<norm._citations> 0.456
+    score<norm._citations> 0.5721
   ]
   node
   [
@@ -1341,10 +1352,10 @@ graph
     weight<links> 6
     weight<total_link_strength> 11
     weight<citations> 40
-    weight<norm._citations> 0.3001
+    weight<norm._citations> 0.3547
     score<pub._year> 2004
     score<citations> 40
-    score<norm._citations> 0.3001
+    score<norm._citations> 0.3547
   ]
   node
   [
@@ -1357,10 +1368,10 @@ graph
     weight<links> 52
     weight<total_link_strength> 158
     weight<citations> 1
-    weight<norm._citations> 0.0208
+    weight<norm._citations> 0.0259
     score<pub._year> 2002
     score<citations> 1
-    score<norm._citations> 0.0208
+    score<norm._citations> 0.0259
   ]
   node
   [
@@ -1374,10 +1385,10 @@ graph
     weight<links> 3
     weight<total_link_strength> 3
     weight<citations> 44
-    weight<norm._citations> 0.9131
+    weight<norm._citations> 1.1414
     score<pub._year> 2002
     score<citations> 44
-    score<norm._citations> 0.9131
+    score<norm._citations> 1.1414
   ]
   node
   [
@@ -1391,10 +1402,10 @@ graph
     weight<links> 16
     weight<total_link_strength> 17
     weight<citations> 31
-    weight<norm._citations> 0.3594
+    weight<norm._citations> 0.386
     score<pub._year> 2003
     score<citations> 31
-    score<norm._citations> 0.3594
+    score<norm._citations> 0.386
   ]
   node
   [
@@ -1408,10 +1419,10 @@ graph
     weight<links> 39
     weight<total_link_strength> 117
     weight<citations> 76
-    weight<norm._citations> 1.1153
+    weight<norm._citations> 1.3145
     score<pub._year> 2001
     score<citations> 76
-    score<norm._citations> 1.1153
+    score<norm._citations> 1.3145
   ]
   node
   [
@@ -1425,10 +1436,10 @@ graph
     weight<links> 38
     weight<total_link_strength> 57
     weight<citations> 182
-    weight<norm._citations> 1.0824
+    weight<norm._citations> 1.2886
     score<pub._year> 2000
     score<citations> 182
-    score<norm._citations> 1.0824
+    score<norm._citations> 1.2886
   ]
   node
   [
@@ -1442,10 +1453,10 @@ graph
     weight<links> 45
     weight<total_link_strength> 169
     weight<citations> 149
-    weight<norm._citations> 0.8862
+    weight<norm._citations> 1.0549
     score<pub._year> 2000
     score<citations> 149
-    score<norm._citations> 0.8862
+    score<norm._citations> 1.0549
   ]
   node
   [
@@ -1459,10 +1470,10 @@ graph
     weight<links> 33
     weight<total_link_strength> 71
     weight<citations> 233
-    weight<norm._citations> 1.3857
+    weight<norm._citations> 1.6497
     score<pub._year> 2000
     score<citations> 233
-    score<norm._citations> 1.3857
+    score<norm._citations> 1.6497
   ]
   node
   [
@@ -1475,90 +1486,94 @@ graph
     weight<links> 16
     weight<total_link_strength> 26
     weight<citations> 2
-    weight<norm._citations> 0.0392
+    weight<norm._citations> 0.0549
     score<pub._year> 1997
     score<citations> 2
-    score<norm._citations> 0.0392
+    score<norm._citations> 0.0549
   ]
   node
   [
     id 144
-    label "birdsey"
-    description "<table><tr><td>Authors:</td><td>birdsey, r, a.; karnosky, d, f.; king, j.; kinouchi, m.; kubiske, m, e.; sharma, p.; thakur, r, c.</td></tr></table>"
+    label "birdsey (2003)"
+    description "<table><tr><td>Authors:</td><td>birdsey, r, a.; karnosky, d, f.; king, j.; kinouchi, m.; kubiske, m, e.; sharma, p.; thakur, r, c.</td></tr><tr><td>Title:</td><td>changing atmospheric carbon dioxide: a threat or benefit?</td></tr><tr><td>Source:</td><td>dev. environ. sci., 3, 57-84</td></tr><tr><td>Year:</td><td>2003</td></tr></table>"
+    url "http://dx.doi.org/10.1016/s1474-8177(03)03003-1"
     x -0.3545
     y 0.2369
     cluster 4
     weight<links> 18
     weight<total_link_strength> 28
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 2003
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
     id 149
-    label "batjes"
-    description "<table><tr><td>Authors:</td><td>batjes, n, h.</td></tr></table>"
+    label "batjes (2004)"
+    description "<table><tr><td>Authors:</td><td>batjes, n, h.</td></tr><tr><td>Title:</td><td>estimation of soil carbon gains upon improved management within croplands and grasslands of africa</td></tr><tr><td>Source:</td><td>environ. dev. sustainability, 6, 133-143</td></tr><tr><td>Year:</td><td>2004</td></tr></table>"
+    url "http://dx.doi.org/10.1023/b:envi.0000003633.14591.fd"
     x -0.5348
     y 0.2297
     cluster 4
     weight<links> 2
     weight<total_link_strength> 2
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 2004
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
     id 150
-    label "nabuurs"
-    description "<table><tr><td>Authors:</td><td>nabuurs, g, j.; schelhaas, m, j.</td></tr></table>"
+    label "nabuurs (2001)"
+    description "<table><tr><td>Authors:</td><td>nabuurs, g, j.; schelhaas, m, j.</td></tr><tr><td>Title:</td><td>carbon profiles of typical forest types across europe assessed with co2fix</td></tr><tr><td>Source:</td><td>ecol. indic., 1, 213-223</td></tr><tr><td>Year:</td><td>2001</td></tr></table>"
     x -0.4032
     y 0.2715
     cluster 4
     weight<links> 4
     weight<total_link_strength> 6
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 2001
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
     id 152
-    label "king"
-    description "<table><tr><td>Authors:</td><td>king, d.; shabman, l.; wainger, l.; zepp, l.</td></tr></table>"
+    label "king (2002)"
+    description "<table><tr><td>Authors:</td><td>king, d.; shabman, l.; wainger, l.; zepp, l.</td></tr><tr><td>Title:</td><td>incentives for reforestation of agricultural land: what will a market for carbon sequestration credits contribute?</td></tr><tr><td>Source:</td><td>am. j. altern. agric., 17, 116-124</td></tr><tr><td>Year:</td><td>2002</td></tr></table>"
+    url "http://dx.doi.org/10.1079/ajaa200213"
     x -0.4482
     y 0.2734
     cluster 4
     weight<links> 4
     weight<total_link_strength> 4
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 2002
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
     id 153
-    label "freedman"
-    description "<table><tr><td>Authors:</td><td>freedman, b.; stinson, g.</td></tr></table>"
+    label "freedman (2001)"
+    description "<table><tr><td>Authors:</td><td>freedman, b.; stinson, g.</td></tr><tr><td>Title:</td><td>potential for carbon sequestration in canadian forests and agroecosystems</td></tr><tr><td>Source:</td><td>mitigation adapt. strateg. global change, 6, 1-23</td></tr><tr><td>Year:</td><td>2001</td></tr></table>"
+    url "http://dx.doi.org/10.1023/a:1011396115488"
     x -0.4655
     y 0.2541
     cluster 4
     weight<links> 19
     weight<total_link_strength> 24
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 2001
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
@@ -1589,10 +1604,10 @@ graph
     weight<links> 40
     weight<total_link_strength> 88
     weight<citations> 4
-    weight<norm._citations> 0.1176
+    weight<norm._citations> 0.1357
     score<pub._year> 1995
     score<citations> 4
-    score<norm._citations> 0.1176
+    score<norm._citations> 0.1357
   ]
   node
   [
@@ -1605,10 +1620,10 @@ graph
     weight<links> 53
     weight<total_link_strength> 95
     weight<citations> 3
-    weight<norm._citations> 0.1389
+    weight<norm._citations> 0.1944
     score<pub._year> 1996
     score<citations> 3
-    score<norm._citations> 0.1389
+    score<norm._citations> 0.1944
   ]
   node
   [
@@ -1622,10 +1637,10 @@ graph
     weight<links> 21
     weight<total_link_strength> 63
     weight<citations> 102
-    weight<norm._citations> 2.0855
+    weight<norm._citations> 2.6543
     score<pub._year> 1999
     score<citations> 102
-    score<norm._citations> 2.0855
+    score<norm._citations> 2.6543
   ]
   node
   [
@@ -1639,10 +1654,10 @@ graph
     weight<links> 1
     weight<total_link_strength> 1
     weight<citations> 28
-    weight<norm._citations> 0.8235
+    weight<norm._citations> 0.9502
     score<pub._year> 1995
     score<citations> 28
-    score<norm._citations> 0.8235
+    score<norm._citations> 0.9502
   ]
   node
   [
@@ -1656,10 +1671,10 @@ graph
     weight<links> 50
     weight<total_link_strength> 221
     weight<citations> 36
-    weight<norm._citations> 0.5283
+    weight<norm._citations> 0.6226
     score<pub._year> 2001
     score<citations> 36
-    score<norm._citations> 0.5283
+    score<norm._citations> 0.6226
   ]
   node
   [
@@ -1673,10 +1688,10 @@ graph
     weight<links> 21
     weight<total_link_strength> 25
     weight<citations> 7
-    weight<norm._citations> 0.3241
+    weight<norm._citations> 0.4537
     score<pub._year> 1996
     score<citations> 7
-    score<norm._citations> 0.3241
+    score<norm._citations> 0.4537
   ]
   node
   [
@@ -1707,10 +1722,10 @@ graph
     weight<links> 26
     weight<total_link_strength> 35
     weight<citations> 41
-    weight<norm._citations> 0.2438
+    weight<norm._citations> 0.2903
     score<pub._year> 2000
     score<citations> 41
-    score<norm._citations> 0.2438
+    score<norm._citations> 0.2903
   ]
   node
   [
@@ -1741,10 +1756,10 @@ graph
     weight<links> 4
     weight<total_link_strength> 4
     weight<citations> 75
-    weight<norm._citations> 1.5564
+    weight<norm._citations> 1.9455
     score<pub._year> 2002
     score<citations> 75
-    score<norm._citations> 1.5564
+    score<norm._citations> 1.9455
   ]
   node
   [
@@ -1758,10 +1773,10 @@ graph
     weight<links> 43
     weight<total_link_strength> 83
     weight<citations> 20
-    weight<norm._citations> 0.2935
+    weight<norm._citations> 0.3459
     score<pub._year> 2001
     score<citations> 20
-    score<norm._citations> 0.2935
+    score<norm._citations> 0.3459
   ]
   node
   [
@@ -1774,10 +1789,10 @@ graph
     weight<links> 29
     weight<total_link_strength> 72
     weight<citations> 6
-    weight<norm._citations> 0.1765
+    weight<norm._citations> 0.2036
     score<pub._year> 1995
     score<citations> 6
-    score<norm._citations> 0.1765
+    score<norm._citations> 0.2036
   ]
   node
   [
@@ -1791,10 +1806,10 @@ graph
     weight<links> 48
     weight<total_link_strength> 270
     weight<citations> 114
-    weight<norm._citations> 1.673
+    weight<norm._citations> 1.9717
     score<pub._year> 2001
     score<citations> 114
-    score<norm._citations> 1.673
+    score<norm._citations> 1.9717
   ]
   node
   [
@@ -1808,10 +1823,10 @@ graph
     weight<links> 61
     weight<total_link_strength> 142
     weight<citations> 1065
-    weight<norm._citations> 6.3339
+    weight<norm._citations> 7.5404
     score<pub._year> 2000
     score<citations> 1065
-    score<norm._citations> 6.3339
+    score<norm._citations> 7.5404
   ]
   node
   [
@@ -1825,10 +1840,10 @@ graph
     weight<links> 55
     weight<total_link_strength> 153
     weight<citations> 232
-    weight<norm._citations> 1.3798
+    weight<norm._citations> 1.6426
     score<pub._year> 2000
     score<citations> 232
-    score<norm._citations> 1.3798
+    score<norm._citations> 1.6426
   ]
   node
   [
@@ -1841,10 +1856,10 @@ graph
     weight<links> 57
     weight<total_link_strength> 129
     weight<citations> 58
-    weight<norm._citations> 0.8512
+    weight<norm._citations> 1.0031
     score<pub._year> 2001
     score<citations> 58
-    score<norm._citations> 0.8512
+    score<norm._citations> 1.0031
   ]
   node
   [
@@ -1875,10 +1890,10 @@ graph
     weight<links> 12
     weight<total_link_strength> 13
     weight<citations> 28
-    weight<norm._citations> 0.1665
+    weight<norm._citations> 0.1982
     score<pub._year> 2000
     score<citations> 28
-    score<norm._citations> 0.1665
+    score<norm._citations> 0.1982
   ]
   node
   [
@@ -1892,10 +1907,10 @@ graph
     weight<links> 42
     weight<total_link_strength> 177
     weight<citations> 108
-    weight<norm._citations> 1.5849
+    weight<norm._citations> 1.8679
     score<pub._year> 2001
     score<citations> 108
-    score<norm._citations> 1.5849
+    score<norm._citations> 1.8679
   ]
   node
   [
@@ -1909,10 +1924,10 @@ graph
     weight<links> 27
     weight<total_link_strength> 50
     weight<citations> 102
-    weight<norm._citations> 2.0855
+    weight<norm._citations> 2.6543
     score<pub._year> 1999
     score<citations> 102
-    score<norm._citations> 2.0855
+    score<norm._citations> 2.6543
   ]
   node
   [
@@ -1926,10 +1941,10 @@ graph
     weight<links> 30
     weight<total_link_strength> 37
     weight<citations> 2
-    weight<norm._citations> 0.0581
+    weight<norm._citations> 0.0678
     score<pub._year> 1993
     score<citations> 2
-    score<norm._citations> 0.0581
+    score<norm._citations> 0.0678
   ]
   node
   [
@@ -1943,10 +1958,10 @@ graph
     weight<links> 18
     weight<total_link_strength> 38
     weight<citations> 51
-    weight<norm._citations> 0.5912
+    weight<norm._citations> 0.635
     score<pub._year> 2003
     score<citations> 51
-    score<norm._citations> 0.5912
+    score<norm._citations> 0.635
   ]
   node
   [
@@ -1960,10 +1975,10 @@ graph
     weight<links> 38
     weight<total_link_strength> 125
     weight<citations> 52
-    weight<norm._citations> 0.6028
+    weight<norm._citations> 0.6475
     score<pub._year> 2003
     score<citations> 52
-    score<norm._citations> 0.6028
+    score<norm._citations> 0.6475
   ]
   node
   [
@@ -1977,10 +1992,10 @@ graph
     weight<links> 50
     weight<total_link_strength> 88
     weight<citations> 33
-    weight<norm._citations> 0.9706
+    weight<norm._citations> 1.1199
     score<pub._year> 1995
     score<citations> 33
-    score<norm._citations> 0.9706
+    score<norm._citations> 1.1199
   ]
   node
   [
@@ -1993,10 +2008,10 @@ graph
     weight<links> 19
     weight<total_link_strength> 59
     weight<citations> 30
-    weight<norm._citations> 0.1784
+    weight<norm._citations> 0.2124
     score<pub._year> 2000
     score<citations> 30
-    score<norm._citations> 0.1784
+    score<norm._citations> 0.2124
   ]
   node
   [
@@ -2010,10 +2025,10 @@ graph
     weight<links> 60
     weight<total_link_strength> 118
     weight<citations> 55
-    weight<norm._citations> 1.1414
+    weight<norm._citations> 1.4267
     score<pub._year> 2002
     score<citations> 55
-    score<norm._citations> 1.1414
+    score<norm._citations> 1.4267
   ]
   node
   [
@@ -2044,10 +2059,10 @@ graph
     weight<links> 52
     weight<total_link_strength> 172
     weight<citations> 31
-    weight<norm._citations> 0.4549
+    weight<norm._citations> 0.5362
     score<pub._year> 2001
     score<citations> 31
-    score<norm._citations> 0.4549
+    score<norm._citations> 0.5362
   ]
   node
   [
@@ -2061,10 +2076,10 @@ graph
     weight<links> 28
     weight<total_link_strength> 33
     weight<citations> 63
-    weight<norm._citations> 0.3747
+    weight<norm._citations> 0.446
     score<pub._year> 2000
     score<citations> 63
-    score<norm._citations> 0.3747
+    score<norm._citations> 0.446
   ]
   node
   [
@@ -2078,10 +2093,10 @@ graph
     weight<links> 53
     weight<total_link_strength> 137
     weight<citations> 99
-    weight<norm._citations> 1.4528
+    weight<norm._citations> 1.7123
     score<pub._year> 2001
     score<citations> 99
-    score<norm._citations> 1.4528
+    score<norm._citations> 1.7123
   ]
   node
   [
@@ -2095,10 +2110,10 @@ graph
     weight<links> 40
     weight<total_link_strength> 76
     weight<citations> 161
-    weight<norm._citations> 1.208
+    weight<norm._citations> 1.4277
     score<pub._year> 2004
     score<citations> 161
-    score<norm._citations> 1.208
+    score<norm._citations> 1.4277
   ]
   node
   [
@@ -2129,10 +2144,10 @@ graph
     weight<links> 37
     weight<total_link_strength> 56
     weight<citations> 37
-    weight<norm._citations> 1.0751
+    weight<norm._citations> 1.2542
     score<pub._year> 1993
     score<citations> 37
-    score<norm._citations> 1.0751
+    score<norm._citations> 1.2542
   ]
   node
   [
@@ -2146,10 +2161,10 @@ graph
     weight<links> 16
     weight<total_link_strength> 51
     weight<citations> 43
-    weight<norm._citations> 0.8923
+    weight<norm._citations> 1.1154
     score<pub._year> 2002
     score<citations> 43
-    score<norm._citations> 0.8923
+    score<norm._citations> 1.1154
   ]
   node
   [
@@ -2179,10 +2194,10 @@ graph
     weight<links> 65
     weight<total_link_strength> 307
     weight<citations> 50
-    weight<norm._citations> 0.7338
+    weight<norm._citations> 0.8648
     score<pub._year> 2001
     score<citations> 50
-    score<norm._citations> 0.7338
+    score<norm._citations> 0.8648
   ]
   node
   [
@@ -2196,10 +2211,10 @@ graph
     weight<links> 15
     weight<total_link_strength> 40
     weight<citations> 217
-    weight<norm._citations> 4.2549
+    weight<norm._citations> 5.9569
     score<pub._year> 1997
     score<citations> 217
-    score<norm._citations> 4.2549
+    score<norm._citations> 5.9569
   ]
   node
   [
@@ -2213,10 +2228,10 @@ graph
     weight<links> 43
     weight<total_link_strength> 66
     weight<citations> 119
-    weight<norm._citations> 1.3796
+    weight<norm._citations> 1.4818
     score<pub._year> 2003
     score<citations> 119
-    score<norm._citations> 1.3796
+    score<norm._citations> 1.4818
   ]
   node
   [
@@ -2230,10 +2245,10 @@ graph
     weight<links> 13
     weight<total_link_strength> 21
     weight<citations> 96
-    weight<norm._citations> 1.1129
+    weight<norm._citations> 1.1954
     score<pub._year> 2003
     score<citations> 96
-    score<norm._citations> 1.1129
+    score<norm._citations> 1.1954
   ]
   node
   [
@@ -2247,10 +2262,10 @@ graph
     weight<links> 40
     weight<total_link_strength> 73
     weight<citations> 190
-    weight<norm._citations> 3.9429
+    weight<norm._citations> 4.9287
     score<pub._year> 2002
     score<citations> 190
-    score<norm._citations> 3.9429
+    score<norm._citations> 4.9287
   ]
   node
   [
@@ -2264,10 +2279,10 @@ graph
     weight<links> 47
     weight<total_link_strength> 180
     weight<citations> 55
-    weight<norm._citations> 0.8071
+    weight<norm._citations> 0.9513
     score<pub._year> 2001
     score<citations> 55
-    score<norm._citations> 0.8071
+    score<norm._citations> 0.9513
   ]
   node
   [
@@ -2281,10 +2296,10 @@ graph
     weight<links> 43
     weight<total_link_strength> 106
     weight<citations> 94
-    weight<norm._citations> 0.559
+    weight<norm._citations> 0.6655
     score<pub._year> 2000
     score<citations> 94
-    score<norm._citations> 0.559
+    score<norm._citations> 0.6655
   ]
   node
   [
@@ -2298,10 +2313,10 @@ graph
     weight<links> 29
     weight<total_link_strength> 45
     weight<citations> 42
-    weight<norm._citations> 0.8716
+    weight<norm._citations> 1.0895
     score<pub._year> 2002
     score<citations> 42
-    score<norm._citations> 0.8716
+    score<norm._citations> 1.0895
   ]
   node
   [
@@ -2315,10 +2330,10 @@ graph
     weight<links> 56
     weight<total_link_strength> 142
     weight<citations> 24
-    weight<norm._citations> 0.2782
+    weight<norm._citations> 0.2988
     score<pub._year> 2003
     score<citations> 24
-    score<norm._citations> 0.2782
+    score<norm._citations> 0.2988
   ]
   node
   [
@@ -2364,10 +2379,10 @@ graph
     weight<links> 47
     weight<total_link_strength> 115
     weight<citations> 56
-    weight<norm._citations> 0.4202
+    weight<norm._citations> 0.4966
     score<pub._year> 2004
     score<citations> 56
-    score<norm._citations> 0.4202
+    score<norm._citations> 0.4966
   ]
   node
   [
@@ -2381,10 +2396,10 @@ graph
     weight<links> 27
     weight<total_link_strength> 74
     weight<citations> 14
-    weight<norm._citations> 0.2055
+    weight<norm._citations> 0.2421
     score<pub._year> 2001
     score<citations> 14
-    score<norm._citations> 0.2055
+    score<norm._citations> 0.2421
   ]
   node
   [
@@ -2397,10 +2412,10 @@ graph
     weight<links> 39
     weight<total_link_strength> 96
     weight<citations> 35
-    weight<norm._citations> 0.7156
+    weight<norm._citations> 0.9108
     score<pub._year> 1999
     score<citations> 35
-    score<norm._citations> 0.7156
+    score<norm._citations> 0.9108
   ]
   node
   [
@@ -2414,10 +2429,10 @@ graph
     weight<links> 37
     weight<total_link_strength> 66
     weight<citations> 52
-    weight<norm._citations> 1.0791
+    weight<norm._citations> 1.3489
     score<pub._year> 2002
     score<citations> 52
-    score<norm._citations> 1.0791
+    score<norm._citations> 1.3489
   ]
   node
   [
@@ -2431,10 +2446,10 @@ graph
     weight<links> 27
     weight<total_link_strength> 59
     weight<citations> 36
-    weight<norm._citations> 0.7471
+    weight<norm._citations> 0.9339
     score<pub._year> 2002
     score<citations> 36
-    score<norm._citations> 0.7471
+    score<norm._citations> 0.9339
   ]
   node
   [
@@ -2448,10 +2463,10 @@ graph
     weight<links> 26
     weight<total_link_strength> 28
     weight<citations> 6
-    weight<norm._citations> 0.0881
+    weight<norm._citations> 0.1038
     score<pub._year> 2001
     score<citations> 6
-    score<norm._citations> 0.0881
+    score<norm._citations> 0.1038
   ]
   node
   [
@@ -2465,10 +2480,10 @@ graph
     weight<links> 28
     weight<total_link_strength> 33
     weight<citations> 215
-    weight<norm._citations> 1.6132
+    weight<norm._citations> 1.9065
     score<pub._year> 2004
     score<citations> 215
-    score<norm._citations> 1.6132
+    score<norm._citations> 1.9065
   ]
   node
   [
@@ -2482,10 +2497,10 @@ graph
     weight<links> 24
     weight<total_link_strength> 60
     weight<citations> 1696
-    weight<norm._citations> 12.7258
+    weight<norm._citations> 15.0396
     score<pub._year> 2004
     score<citations> 1696
-    score<norm._citations> 12.7258
+    score<norm._citations> 15.0396
   ]
   node
   [
@@ -2499,10 +2514,10 @@ graph
     weight<links> 13
     weight<total_link_strength> 18
     weight<citations> 20
-    weight<norm._citations> 0.1501
+    weight<norm._citations> 0.1774
     score<pub._year> 2004
     score<citations> 20
-    score<norm._citations> 0.1501
+    score<norm._citations> 0.1774
   ]
   node
   [
@@ -2515,10 +2530,10 @@ graph
     weight<links> 14
     weight<total_link_strength> 19
     weight<citations> 27
-    weight<norm._citations> 0.552
+    weight<norm._citations> 0.7026
     score<pub._year> 1999
     score<citations> 27
-    score<norm._citations> 0.552
+    score<norm._citations> 0.7026
   ]
   node
   [
@@ -2532,10 +2547,10 @@ graph
     weight<links> 10
     weight<total_link_strength> 14
     weight<citations> 47
-    weight<norm._citations> 0.5449
+    weight<norm._citations> 0.5852
     score<pub._year> 2003
     score<citations> 47
-    score<norm._citations> 0.5449
+    score<norm._citations> 0.5852
   ]
   node
   [
@@ -2549,10 +2564,10 @@ graph
     weight<links> 53
     weight<total_link_strength> 253
     weight<citations> 956
-    weight<norm._citations> 5.6856
+    weight<norm._citations> 6.7686
     score<pub._year> 2000
     score<citations> 956
-    score<norm._citations> 5.6856
+    score<norm._citations> 6.7686
   ]
   node
   [
@@ -2566,10 +2581,10 @@ graph
     weight<links> 19
     weight<total_link_strength> 49
     weight<citations> 47
-    weight<norm._citations> 0.961
+    weight<norm._citations> 1.223
     score<pub._year> 1999
     score<citations> 47
-    score<norm._citations> 0.961
+    score<norm._citations> 1.223
   ]
   node
   [
@@ -2583,10 +2598,10 @@ graph
     weight<links> 38
     weight<total_link_strength> 58
     weight<citations> 21
-    weight<norm._citations> 0.1576
+    weight<norm._citations> 0.1862
     score<pub._year> 2004
     score<citations> 21
-    score<norm._citations> 0.1576
+    score<norm._citations> 0.1862
   ]
   node
   [
@@ -2600,10 +2615,10 @@ graph
     weight<links> 20
     weight<total_link_strength> 20
     weight<citations> 17
-    weight<norm._citations> 0.2495
+    weight<norm._citations> 0.294
     score<pub._year> 2001
     score<citations> 17
-    score<norm._citations> 0.2495
+    score<norm._citations> 0.294
   ]
   node
   [
@@ -2617,10 +2632,10 @@ graph
     weight<links> 49
     weight<total_link_strength> 201
     weight<citations> 17
-    weight<norm._citations> 0.2501
+    weight<norm._citations> 0.3137
     score<pub._year> 2005
     score<citations> 17
-    score<norm._citations> 0.2501
+    score<norm._citations> 0.3137
   ]
   node
   [
@@ -2634,10 +2649,10 @@ graph
     weight<links> 25
     weight<total_link_strength> 29
     weight<citations> 89
-    weight<norm._citations> 0.6678
+    weight<norm._citations> 0.7892
     score<pub._year> 2004
     score<citations> 89
-    score<norm._citations> 0.6678
+    score<norm._citations> 0.7892
   ]
   node
   [
@@ -2650,10 +2665,10 @@ graph
     weight<links> 59
     weight<total_link_strength> 112
     weight<citations> 38
-    weight<norm._citations> 0.226
+    weight<norm._citations> 0.269
     score<pub._year> 2000
     score<citations> 38
-    score<norm._citations> 0.226
+    score<norm._citations> 0.269
   ]
   node
   [
@@ -2667,10 +2682,10 @@ graph
     weight<links> 43
     weight<total_link_strength> 72
     weight<citations> 103
-    weight<norm._citations> 0.6126
+    weight<norm._citations> 0.7293
     score<pub._year> 2000
     score<citations> 103
-    score<norm._citations> 0.6126
+    score<norm._citations> 0.7293
   ]
   node
   [
@@ -2684,10 +2699,10 @@ graph
     weight<links> 29
     weight<total_link_strength> 77
     weight<citations> 36
-    weight<norm._citations> 0.2701
+    weight<norm._citations> 0.3192
     score<pub._year> 2004
     score<citations> 36
-    score<norm._citations> 0.2701
+    score<norm._citations> 0.3192
   ]
   node
   [
@@ -2701,10 +2716,10 @@ graph
     weight<links> 51
     weight<total_link_strength> 101
     weight<citations> 9
-    weight<norm._citations> 0.0675
+    weight<norm._citations> 0.0798
     score<pub._year> 2004
     score<citations> 9
-    score<norm._citations> 0.0675
+    score<norm._citations> 0.0798
   ]
   node
   [
@@ -2718,10 +2733,10 @@ graph
     weight<links> 48
     weight<total_link_strength> 85
     weight<citations> 73
-    weight<norm._citations> 1.0738
+    weight<norm._citations> 1.3472
     score<pub._year> 2005
     score<citations> 73
-    score<norm._citations> 1.0738
+    score<norm._citations> 1.3472
   ]
   node
   [
@@ -2735,10 +2750,10 @@ graph
     weight<links> 12
     weight<total_link_strength> 35
     weight<citations> 47
-    weight<norm._citations> 0.3527
+    weight<norm._citations> 0.4168
     score<pub._year> 2004
     score<citations> 47
-    score<norm._citations> 0.3527
+    score<norm._citations> 0.4168
   ]
   node
   [
@@ -2752,10 +2767,10 @@ graph
     weight<links> 40
     weight<total_link_strength> 83
     weight<citations> 29
-    weight<norm._citations> 0.3362
+    weight<norm._citations> 0.3611
     score<pub._year> 2003
     score<citations> 29
-    score<norm._citations> 0.3362
+    score<norm._citations> 0.3611
   ]
   node
   [
@@ -2769,10 +2784,10 @@ graph
     weight<links> 17
     weight<total_link_strength> 28
     weight<citations> 42
-    weight<norm._citations> 0.8716
+    weight<norm._citations> 1.0895
     score<pub._year> 2002
     score<citations> 42
-    score<norm._citations> 0.8716
+    score<norm._citations> 1.0895
   ]
   node
   [
@@ -2786,10 +2801,10 @@ graph
     weight<links> 9
     weight<total_link_strength> 9
     weight<citations> 35
-    weight<norm._citations> 0.5136
+    weight<norm._citations> 0.6053
     score<pub._year> 2001
     score<citations> 35
-    score<norm._citations> 0.5136
+    score<norm._citations> 0.6053
   ]
   node
   [
@@ -2803,10 +2818,10 @@ graph
     weight<links> 3
     weight<total_link_strength> 3
     weight<citations> 27
-    weight<norm._citations> 0.2026
+    weight<norm._citations> 0.2394
     score<pub._year> 2004
     score<citations> 27
-    score<norm._citations> 0.2026
+    score<norm._citations> 0.2394
   ]
   node
   [
@@ -2820,10 +2835,10 @@ graph
     weight<links> 48
     weight<total_link_strength> 123
     weight<citations> 12
-    weight<norm._citations> 0.1765
+    weight<norm._citations> 0.2214
     score<pub._year> 2005
     score<citations> 12
-    score<norm._citations> 0.1765
+    score<norm._citations> 0.2214
   ]
   node
   [
@@ -2837,10 +2852,10 @@ graph
     weight<links> 67
     weight<total_link_strength> 288
     weight<citations> 116
-    weight<norm._citations> 1.3448
+    weight<norm._citations> 1.4444
     score<pub._year> 2003
     score<citations> 116
-    score<norm._citations> 1.3448
+    score<norm._citations> 1.4444
   ]
   node
   [
@@ -2854,10 +2869,10 @@ graph
     weight<links> 6
     weight<total_link_strength> 7
     weight<citations> 88
-    weight<norm._citations> 1.2945
+    weight<norm._citations> 1.624
     score<pub._year> 2005
     score<citations> 88
-    score<norm._citations> 1.2945
+    score<norm._citations> 1.624
   ]
   node
   [
@@ -2871,10 +2886,10 @@ graph
     weight<links> 21
     weight<total_link_strength> 22
     weight<citations> 32
-    weight<norm._citations> 0.371
+    weight<norm._citations> 0.3985
     score<pub._year> 2003
     score<citations> 32
-    score<norm._citations> 0.371
+    score<norm._citations> 0.3985
   ]
   node
   [
@@ -2888,10 +2903,10 @@ graph
     weight<links> 35
     weight<total_link_strength> 61
     weight<citations> 61
-    weight<norm._citations> 0.8973
+    weight<norm._citations> 1.1257
     score<pub._year> 2005
     score<citations> 61
-    score<norm._citations> 0.8973
+    score<norm._citations> 1.1257
   ]
   node
   [
@@ -2905,10 +2920,10 @@ graph
     weight<links> 11
     weight<total_link_strength> 11
     weight<citations> 32
-    weight<norm._citations> 0.2401
+    weight<norm._citations> 0.2838
     score<pub._year> 2004
     score<citations> 32
-    score<norm._citations> 0.2401
+    score<norm._citations> 0.2838
   ]
   node
   [
@@ -2922,10 +2937,10 @@ graph
     weight<links> 19
     weight<total_link_strength> 20
     weight<citations> 47
-    weight<norm._citations> 0.9754
+    weight<norm._citations> 1.2192
     score<pub._year> 2002
     score<citations> 47
-    score<norm._citations> 0.9754
+    score<norm._citations> 1.2192
   ]
   node
   [
@@ -2939,10 +2954,10 @@ graph
     weight<links> 30
     weight<total_link_strength> 48
     weight<citations> 62
-    weight<norm._citations> 0.7188
+    weight<norm._citations> 0.772
     score<pub._year> 2003
     score<citations> 62
-    score<norm._citations> 0.7188
+    score<norm._citations> 0.772
   ]
   node
   [
@@ -2956,10 +2971,10 @@ graph
     weight<links> 2
     weight<total_link_strength> 2
     weight<citations> 12
-    weight<norm._citations> 0.1391
+    weight<norm._citations> 0.1494
     score<pub._year> 2003
     score<citations> 12
-    score<norm._citations> 0.1391
+    score<norm._citations> 0.1494
   ]
   node
   [
@@ -2973,10 +2988,10 @@ graph
     weight<links> 47
     weight<total_link_strength> 248
     weight<citations> 236
-    weight<norm._citations> 3.4715
+    weight<norm._citations> 4.3552
     score<pub._year> 2005
     score<citations> 236
-    score<norm._citations> 3.4715
+    score<norm._citations> 4.3552
   ]
   node
   [
@@ -2990,10 +3005,10 @@ graph
     weight<links> 38
     weight<total_link_strength> 62
     weight<citations> 50
-    weight<norm._citations> 0.7355
+    weight<norm._citations> 0.9227
     score<pub._year> 2005
     score<citations> 50
-    score<norm._citations> 0.7355
+    score<norm._citations> 0.9227
   ]
   node
   [
@@ -3007,10 +3022,10 @@ graph
     weight<links> 60
     weight<total_link_strength> 283
     weight<citations> 209
-    weight<norm._citations> 2.4229
+    weight<norm._citations> 2.6024
     score<pub._year> 2003
     score<citations> 209
-    score<norm._citations> 2.4229
+    score<norm._citations> 2.6024
   ]
   node
   [
@@ -3024,10 +3039,10 @@ graph
     weight<links> 21
     weight<total_link_strength> 23
     weight<citations> 14
-    weight<norm._citations> 0.2059
+    weight<norm._citations> 0.2584
     score<pub._year> 2005
     score<citations> 14
-    score<norm._citations> 0.2059
+    score<norm._citations> 0.2584
   ]
   node
   [
@@ -3041,10 +3056,10 @@ graph
     weight<links> 19
     weight<total_link_strength> 36
     weight<citations> 73
-    weight<norm._citations> 1.0738
+    weight<norm._citations> 1.3472
     score<pub._year> 2005
     score<citations> 73
-    score<norm._citations> 1.0738
+    score<norm._citations> 1.3472
   ]
   node
   [
@@ -3058,10 +3073,10 @@ graph
     weight<links> 49
     weight<total_link_strength> 91
     weight<citations> 43
-    weight<norm._citations> 0.6325
+    weight<norm._citations> 0.7935
     score<pub._year> 2005
     score<citations> 43
-    score<norm._citations> 0.6325
+    score<norm._citations> 0.7935
   ]
   node
   [
@@ -3075,10 +3090,10 @@ graph
     weight<links> 24
     weight<total_link_strength> 28
     weight<citations> 8
-    weight<norm._citations> 0.06
+    weight<norm._citations> 0.0709
     score<pub._year> 2004
     score<citations> 8
-    score<norm._citations> 0.06
+    score<norm._citations> 0.0709
   ]
   node
   [
@@ -3092,10 +3107,10 @@ graph
     weight<links> 11
     weight<total_link_strength> 14
     weight<citations> 13
-    weight<norm._citations> 0.1912
+    weight<norm._citations> 0.2399
     score<pub._year> 2005
     score<citations> 13
-    score<norm._citations> 0.1912
+    score<norm._citations> 0.2399
   ]
   node
   [
@@ -3109,10 +3124,10 @@ graph
     weight<links> 4
     weight<total_link_strength> 5
     weight<citations> 8
-    weight<norm._citations> 0.0927
+    weight<norm._citations> 0.0996
     score<pub._year> 2003
     score<citations> 8
-    score<norm._citations> 0.0927
+    score<norm._citations> 0.0996
   ]
   node
   [
@@ -3126,10 +3141,10 @@ graph
     weight<links> 50
     weight<total_link_strength> 188
     weight<citations> 19
-    weight<norm._citations> 0.2795
+    weight<norm._citations> 0.3506
     score<pub._year> 2005
     score<citations> 19
-    score<norm._citations> 0.2795
+    score<norm._citations> 0.3506
   ]
   node
   [
@@ -3143,10 +3158,10 @@ graph
     weight<links> 3
     weight<total_link_strength> 3
     weight<citations> 9
-    weight<norm._citations> 0.0675
+    weight<norm._citations> 0.0798
     score<pub._year> 2004
     score<citations> 9
-    score<norm._citations> 0.0675
+    score<norm._citations> 0.0798
   ]
   node
   [
@@ -3160,10 +3175,10 @@ graph
     weight<links> 30
     weight<total_link_strength> 44
     weight<citations> 52
-    weight<norm._citations> 0.7649
+    weight<norm._citations> 0.9596
     score<pub._year> 2005
     score<citations> 52
-    score<norm._citations> 0.7649
+    score<norm._citations> 0.9596
   ]
   node
   [
@@ -3177,10 +3192,10 @@ graph
     weight<links> 1
     weight<total_link_strength> 1
     weight<citations> 43
-    weight<norm._citations> 0.6325
+    weight<norm._citations> 0.7935
     score<pub._year> 2005
     score<citations> 43
-    score<norm._citations> 0.6325
+    score<norm._citations> 0.7935
   ]
   node
   [
@@ -3194,10 +3209,10 @@ graph
     weight<links> 50
     weight<total_link_strength> 173
     weight<citations> 25
-    weight<norm._citations> 0.3677
+    weight<norm._citations> 0.4614
     score<pub._year> 2005
     score<citations> 25
-    score<norm._citations> 0.3677
+    score<norm._citations> 0.4614
   ]
   node
   [
@@ -3211,10 +3226,10 @@ graph
     weight<links> 18
     weight<total_link_strength> 32
     weight<citations> 49
-    weight<norm._citations> 0.7208
+    weight<norm._citations> 0.9043
     score<pub._year> 2005
     score<citations> 49
-    score<norm._citations> 0.7208
+    score<norm._citations> 0.9043
   ]
   node
   [
@@ -3228,10 +3243,10 @@ graph
     weight<links> 50
     weight<total_link_strength> 111
     weight<citations> 30
-    weight<norm._citations> 0.2251
+    weight<norm._citations> 0.266
     score<pub._year> 2004
     score<citations> 30
-    score<norm._citations> 0.2251
+    score<norm._citations> 0.266
   ]
   node
   [
@@ -3245,10 +3260,10 @@ graph
     weight<links> 63
     weight<total_link_strength> 146
     weight<citations> 121
-    weight<norm._citations> 0.9079
+    weight<norm._citations> 1.073
     score<pub._year> 2004
     score<citations> 121
-    score<norm._citations> 0.9079
+    score<norm._citations> 1.073
   ]
   node
   [
@@ -3262,10 +3277,10 @@ graph
     weight<links> 2
     weight<total_link_strength> 3
     weight<citations> 1
-    weight<norm._citations> 0.0075
+    weight<norm._citations> 0.0089
     score<pub._year> 2004
     score<citations> 1
-    score<norm._citations> 0.0075
+    score<norm._citations> 0.0089
   ]
   node
   [
@@ -3279,10 +3294,10 @@ graph
     weight<links> 25
     weight<total_link_strength> 46
     weight<citations> 51
-    weight<norm._citations> 0.3827
+    weight<norm._citations> 0.4523
     score<pub._year> 2004
     score<citations> 51
-    score<norm._citations> 0.3827
+    score<norm._citations> 0.4523
   ]
   node
   [
@@ -3296,10 +3311,10 @@ graph
     weight<links> 35
     weight<total_link_strength> 77
     weight<citations> 188
-    weight<norm._citations> 1.4106
+    weight<norm._citations> 1.6671
     score<pub._year> 2004
     score<citations> 188
-    score<norm._citations> 1.4106
+    score<norm._citations> 1.6671
   ]
   node
   [
@@ -3313,10 +3328,10 @@ graph
     weight<links> 48
     weight<total_link_strength> 132
     weight<citations> 153
-    weight<norm._citations> 1.148
+    weight<norm._citations> 1.3568
     score<pub._year> 2004
     score<citations> 153
-    score<norm._citations> 1.148
+    score<norm._citations> 1.3568
   ]
   node
   [
@@ -3330,10 +3345,10 @@ graph
     weight<links> 18
     weight<total_link_strength> 28
     weight<citations> 498
-    weight<norm._citations> 7.3255
+    weight<norm._citations> 9.1902
     score<pub._year> 2005
     score<citations> 498
-    score<norm._citations> 7.3255
+    score<norm._citations> 9.1902
   ]
   node
   [
@@ -3347,10 +3362,10 @@ graph
     weight<links> 55
     weight<total_link_strength> 225
     weight<citations> 28
-    weight<norm._citations> 0.4119
+    weight<norm._citations> 0.5167
     score<pub._year> 2005
     score<citations> 28
-    score<norm._citations> 0.4119
+    score<norm._citations> 0.5167
   ]
   node
   [
@@ -3363,10 +3378,10 @@ graph
     weight<links> 40
     weight<total_link_strength> 91
     weight<citations> 13
-    weight<norm._citations> 0.1912
+    weight<norm._citations> 0.2399
     score<pub._year> 2005
     score<citations> 13
-    score<norm._citations> 0.1912
+    score<norm._citations> 0.2399
   ]
   node
   [
@@ -3380,10 +3395,10 @@ graph
     weight<links> 31
     weight<total_link_strength> 60
     weight<citations> 18
-    weight<norm._citations> 0.1351
+    weight<norm._citations> 0.1596
     score<pub._year> 2004
     score<citations> 18
-    score<norm._citations> 0.1351
+    score<norm._citations> 0.1596
   ]
   node
   [
@@ -3397,10 +3412,10 @@ graph
     weight<links> 63
     weight<total_link_strength> 157
     weight<citations> 75
-    weight<norm._citations> 0.5628
+    weight<norm._citations> 0.6651
     score<pub._year> 2004
     score<citations> 75
-    score<norm._citations> 0.5628
+    score<norm._citations> 0.6651
   ]
   node
   [
@@ -3414,10 +3429,10 @@ graph
     weight<links> 17
     weight<total_link_strength> 41
     weight<citations> 25
-    weight<norm._citations> 0.1876
+    weight<norm._citations> 0.2217
     score<pub._year> 2004
     score<citations> 25
-    score<norm._citations> 0.1876
+    score<norm._citations> 0.2217
   ]
   node
   [
@@ -3431,10 +3446,10 @@ graph
     weight<links> 39
     weight<total_link_strength> 61
     weight<citations> 37
-    weight<norm._citations> 0.2776
+    weight<norm._citations> 0.3281
     score<pub._year> 2004
     score<citations> 37
-    score<norm._citations> 0.2776
+    score<norm._citations> 0.3281
   ]
   node
   [
@@ -3448,10 +3463,10 @@ graph
     weight<links> 3
     weight<total_link_strength> 3
     weight<citations> 16
-    weight<norm._citations> 0.2354
+    weight<norm._citations> 0.2953
     score<pub._year> 2005
     score<citations> 16
-    score<norm._citations> 0.2354
+    score<norm._citations> 0.2953
   ]
   node
   [
@@ -3465,10 +3480,10 @@ graph
     weight<links> 57
     weight<total_link_strength> 272
     weight<citations> 13
-    weight<norm._citations> 0.1912
+    weight<norm._citations> 0.2399
     score<pub._year> 2005
     score<citations> 13
-    score<norm._citations> 0.1912
+    score<norm._citations> 0.2399
   ]
   node
   [
@@ -3482,10 +3497,10 @@ graph
     weight<links> 23
     weight<total_link_strength> 43
     weight<citations> 82
-    weight<norm._citations> 1.2062
+    weight<norm._citations> 1.5132
     score<pub._year> 2005
     score<citations> 82
-    score<norm._citations> 1.2062
+    score<norm._citations> 1.5132
   ]
   node
   [
@@ -3499,10 +3514,10 @@ graph
     weight<links> 12
     weight<total_link_strength> 19
     weight<citations> 349
-    weight<norm._citations> 5.1337
+    weight<norm._citations> 6.4405
     score<pub._year> 2005
     score<citations> 349
-    score<norm._citations> 5.1337
+    score<norm._citations> 6.4405
   ]
   node
   [
@@ -3516,10 +3531,10 @@ graph
     weight<links> 56
     weight<total_link_strength> 144
     weight<citations> 37
-    weight<norm._citations> 0.5443
+    weight<norm._citations> 0.6828
     score<pub._year> 2005
     score<citations> 37
-    score<norm._citations> 0.5443
+    score<norm._citations> 0.6828
   ]
   node
   [
@@ -3533,10 +3548,10 @@ graph
     weight<links> 28
     weight<total_link_strength> 34
     weight<citations> 17
-    weight<norm._citations> 0.2501
+    weight<norm._citations> 0.3137
     score<pub._year> 2005
     score<citations> 17
-    score<norm._citations> 0.2501
+    score<norm._citations> 0.3137
   ]
   node
   [
@@ -3550,10 +3565,10 @@ graph
     weight<links> 28
     weight<total_link_strength> 43
     weight<citations> 167
-    weight<norm._citations> 2.4565
+    weight<norm._citations> 3.0818
     score<pub._year> 2005
     score<citations> 167
-    score<norm._citations> 2.4565
+    score<norm._citations> 3.0818
   ]
   node
   [
@@ -3567,10 +3582,10 @@ graph
     weight<links> 18
     weight<total_link_strength> 35
     weight<citations> 27
-    weight<norm._citations> 0.3972
+    weight<norm._citations> 0.4983
     score<pub._year> 2005
     score<citations> 27
-    score<norm._citations> 0.3972
+    score<norm._citations> 0.4983
   ]
   node
   [
@@ -3600,10 +3615,10 @@ graph
     weight<links> 15
     weight<total_link_strength> 18
     weight<citations> 15
-    weight<norm._citations> 0.4839
+    weight<norm._citations> 0.8468
     score<pub._year> 1992
     score<citations> 15
-    score<norm._citations> 0.4839
+    score<norm._citations> 0.8468
   ]
   node
   [
@@ -3617,10 +3632,10 @@ graph
     weight<links> 45
     weight<total_link_strength> 90
     weight<citations> 79
-    weight<norm._citations> 2.7817
+    weight<norm._citations> 3.0599
     score<pub._year> 1991
     score<citations> 79
-    score<norm._citations> 2.7817
+    score<norm._citations> 3.0599
   ]
   node
   [
@@ -3634,10 +3649,10 @@ graph
     weight<links> 8
     weight<total_link_strength> 11
     weight<citations> 23
-    weight<norm._citations> 0.7419
+    weight<norm._citations> 1.2984
     score<pub._year> 1992
     score<citations> 23
-    score<norm._citations> 0.7419
+    score<norm._citations> 1.2984
   ]
   node
   [
@@ -3651,10 +3666,10 @@ graph
     weight<links> 28
     weight<total_link_strength> 50
     weight<citations> 8
-    weight<norm._citations> 0.2817
+    weight<norm._citations> 0.3099
     score<pub._year> 1991
     score<citations> 8
-    score<norm._citations> 0.2817
+    score<norm._citations> 0.3099
   ]
   node
   [
@@ -3667,10 +3682,10 @@ graph
     weight<links> 19
     weight<total_link_strength> 28
     weight<citations> 11
-    weight<norm._citations> 0.5093
+    weight<norm._citations> 0.713
     score<pub._year> 1996
     score<citations> 11
-    score<norm._citations> 0.5093
+    score<norm._citations> 0.713
   ]
   node
   [
@@ -3684,10 +3699,10 @@ graph
     weight<links> 10
     weight<total_link_strength> 13
     weight<citations> 2
-    weight<norm._citations> 0.0926
+    weight<norm._citations> 0.1296
     score<pub._year> 1996
     score<citations> 2
-    score<norm._citations> 0.0926
+    score<norm._citations> 0.1296
   ]
   node
   [
@@ -3701,10 +3716,10 @@ graph
     weight<links> 21
     weight<total_link_strength> 29
     weight<citations> 12
-    weight<norm._citations> 0.3529
+    weight<norm._citations> 0.4072
     score<pub._year> 1995
     score<citations> 12
-    score<norm._citations> 0.3529
+    score<norm._citations> 0.4072
   ]
   node
   [
@@ -3718,10 +3733,10 @@ graph
     weight<links> 44
     weight<total_link_strength> 86
     weight<citations> 42
-    weight<norm._citations> 1.2203
+    weight<norm._citations> 1.4237
     score<pub._year> 1993
     score<citations> 42
-    score<norm._citations> 1.2203
+    score<norm._citations> 1.4237
   ]
   node
   [
@@ -3735,10 +3750,10 @@ graph
     weight<links> 32
     weight<total_link_strength> 40
     weight<citations> 47
-    weight<norm._citations> 1.3656
+    weight<norm._citations> 1.5932
     score<pub._year> 1993
     score<citations> 47
-    score<norm._citations> 1.3656
+    score<norm._citations> 1.5932
   ]
   node
   [
@@ -3752,10 +3767,10 @@ graph
     weight<links> 30
     weight<total_link_strength> 60
     weight<citations> 79
-    weight<norm._citations> 2.5484
+    weight<norm._citations> 4.4597
     score<pub._year> 1992
     score<citations> 79
-    score<norm._citations> 2.5484
+    score<norm._citations> 4.4597
   ]
   node
   [
@@ -3768,10 +3783,10 @@ graph
     weight<links> 28
     weight<total_link_strength> 58
     weight<citations> 59
-    weight<norm._citations> 2.0775
+    weight<norm._citations> 2.2852
     score<pub._year> 1991
     score<citations> 59
-    score<norm._citations> 2.0775
+    score<norm._citations> 2.2852
   ]
   node
   [
@@ -3785,10 +3800,10 @@ graph
     weight<links> 24
     weight<total_link_strength> 38
     weight<citations> 68
-    weight<norm._citations> 2.3944
+    weight<norm._citations> 2.6338
     score<pub._year> 1991
     score<citations> 68
-    score<norm._citations> 2.3944
+    score<norm._citations> 2.6338
   ]
   node
   [
@@ -3802,10 +3817,10 @@ graph
     weight<links> 13
     weight<total_link_strength> 18
     weight<citations> 507
-    weight<norm._citations> 7.4579
+    weight<norm._citations> 9.3562
     score<pub._year> 2005
     score<citations> 507
-    score<norm._citations> 7.4579
+    score<norm._citations> 9.3562
   ]
   node
   [
@@ -3818,10 +3833,10 @@ graph
     weight<links> 8
     weight<total_link_strength> 8
     weight<citations> 4
-    weight<norm._citations> 0.0238
+    weight<norm._citations> 0.0283
     score<pub._year> 2000
     score<citations> 4
-    score<norm._citations> 0.0238
+    score<norm._citations> 0.0283
   ]
   node
   [
@@ -3835,10 +3850,10 @@ graph
     weight<links> 3
     weight<total_link_strength> 7
     weight<citations> 169
-    weight<norm._citations> 2.486
+    weight<norm._citations> 3.1187
     score<pub._year> 2005
     score<citations> 169
-    score<norm._citations> 2.486
+    score<norm._citations> 3.1187
   ]
   node
   [
@@ -3852,26 +3867,27 @@ graph
     weight<links> 1
     weight<total_link_strength> 2
     weight<citations> 35
-    weight<norm._citations> 0.5148
+    weight<norm._citations> 0.6459
     score<pub._year> 2005
     score<citations> 35
-    score<norm._citations> 0.5148
+    score<norm._citations> 0.6459
   ]
   node
   [
     id 305
-    label "rodríguez-kuhl"
-    description "<table><tr><td>Authors:</td><td>rodríguez-kuhl, g.; sommer, r.; vlek, p, l.g.</td></tr></table>"
+    label "rodríguez-kuhl (2004)"
+    description "<table><tr><td>Authors:</td><td>rodríguez-kuhl, g.; sommer, r.; vlek, p, l.g.</td></tr><tr><td>Title:</td><td>energy use and co2 production in tropical agriculture and means and strategies for reduction or mitigation</td></tr><tr><td>Source:</td><td>environ. dev. sustainability, 6, 213-233</td></tr><tr><td>Year:</td><td>2004</td></tr></table>"
+    url "http://dx.doi.org/10.1023/b:envi.0000003638.42750.36"
     x -0.4321
     y 0.2262
     cluster 4
     weight<links> 15
     weight<total_link_strength> 18
     weight<citations> 0
-    weight<norm._citations> 1
-    score<pub._year> -1
+    weight<norm._citations> 0
+    score<pub._year> 2004
     score<citations> 0
-    score<norm._citations> 1
+    score<norm._citations> 0
   ]
   node
   [
@@ -3885,10 +3901,10 @@ graph
     weight<links> 44
     weight<total_link_strength> 137
     weight<citations> 37
-    weight<norm._citations> 0.7565
+    weight<norm._citations> 0.9628
     score<pub._year> 1999
     score<citations> 37
-    score<norm._citations> 0.7565
+    score<norm._citations> 0.9628
   ]
   node
   [
@@ -3902,10 +3918,10 @@ graph
     weight<links> 44
     weight<total_link_strength> 102
     weight<citations> 214
-    weight<norm._citations> 1.6057
+    weight<norm._citations> 1.8977
     score<pub._year> 2004
     score<citations> 214
-    score<norm._citations> 1.6057
+    score<norm._citations> 1.8977
   ]
   node
   [
@@ -3919,10 +3935,10 @@ graph
     weight<links> 50
     weight<total_link_strength> 120
     weight<citations> 60
-    weight<norm._citations> 0.4502
+    weight<norm._citations> 0.5321
     score<pub._year> 2004
     score<citations> 60
-    score<norm._citations> 0.4502
+    score<norm._citations> 0.5321
   ]
   node
   [
@@ -3936,10 +3952,10 @@ graph
     weight<links> 14
     weight<total_link_strength> 17
     weight<citations> 146
-    weight<norm._citations> 2.1426
+    weight<norm._citations> 2.5252
     score<pub._year> 2001
     score<citations> 146
-    score<norm._citations> 2.1426
+    score<norm._citations> 2.5252
   ]
   node
   [
@@ -3953,10 +3969,10 @@ graph
     weight<links> 9
     weight<total_link_strength> 26
     weight<citations> 32
-    weight<norm._citations> 0.6543
+    weight<norm._citations> 0.8327
     score<pub._year> 1999
     score<citations> 32
-    score<norm._citations> 0.6543
+    score<norm._citations> 0.8327
   ]
   node
   [
@@ -3970,10 +3986,10 @@ graph
     weight<links> 21
     weight<total_link_strength> 42
     weight<citations> 61
-    weight<norm._citations> 0.8952
+    weight<norm._citations> 1.055
     score<pub._year> 2001
     score<citations> 61
-    score<norm._citations> 0.8952
+    score<norm._citations> 1.055
   ]
   node
   [
@@ -3987,10 +4003,10 @@ graph
     weight<links> 9
     weight<total_link_strength> 21
     weight<citations> 21
-    weight<norm._citations> 0.1249
+    weight<norm._citations> 0.1487
     score<pub._year> 2000
     score<citations> 21
-    score<norm._citations> 0.1249
+    score<norm._citations> 0.1487
   ]
   node
   [
@@ -4004,10 +4020,10 @@ graph
     weight<links> 17
     weight<total_link_strength> 37
     weight<citations> 296
-    weight<norm._citations> 3.4315
+    weight<norm._citations> 3.6857
     score<pub._year> 2003
     score<citations> 296
-    score<norm._citations> 3.4315
+    score<norm._citations> 3.6857
   ]
   node
   [
@@ -4021,10 +4037,10 @@ graph
     weight<links> 29
     weight<total_link_strength> 43
     weight<citations> 464
-    weight<norm._citations> 5.3791
+    weight<norm._citations> 5.7776
     score<pub._year> 2003
     score<citations> 464
-    score<norm._citations> 5.3791
+    score<norm._citations> 5.7776
   ]
   node
   [
@@ -4038,10 +4054,10 @@ graph
     weight<links> 12
     weight<total_link_strength> 31
     weight<citations> 211
-    weight<norm._citations> 3.1038
+    weight<norm._citations> 3.8938
     score<pub._year> 2005
     score<citations> 211
-    score<norm._citations> 3.1038
+    score<norm._citations> 3.8938
   ]
   edge
   [
