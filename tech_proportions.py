@@ -33,7 +33,7 @@ qid = 1498
 # In[20]:
 
 fnames = [
-    #'bib_data/1990-2005/pre_2006_2 [Nodes].csv',
+    'bib_data/1990-2005/pre_2006_2 [Nodes].csv',
     'bib_data/1990-2017/all_years [Nodes].csv',
 ]
 
@@ -65,7 +65,7 @@ for fname in fnames:
         arow = [r for r in rows if r.find_all(text=re.compile('Authors'))]
         trow = [r for r in rows if r.find_all(text=re.compile('Title'))]
         a = x['label'].split()[0]
-        
+
         try:
             title = trow[0].find_all('td')[1].text
         except:
@@ -87,7 +87,7 @@ for fname in fnames:
                         docauthinst__AU__icontains=a,
                         PY=py
                     )
-                
+
                     print("found doc {} using auth and py".format(doc.title))
                 except:
                     try:
@@ -110,8 +110,8 @@ for fname in fnames:
         else:
             return(0)
 
-    #for t in techs:
-    for t in ['BECCS']:
+    for t in techs:
+    #for t in ['BECCS']:
         ndf[t] = ndf.apply(lambda x: istech(x,t),axis=1)
 
     ndf.head()
