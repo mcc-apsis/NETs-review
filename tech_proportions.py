@@ -33,8 +33,8 @@ qid = 1498
 # In[20]:
 
 fnames = [
-    'bib_data/1990-2005/pre_2006_2 [Nodes].csv',
-    'bib_data/1990-2017/all_years [Nodes].csv',
+    'bib_data/1990-2005/pre_2006_3 [Nodes].csv',
+    'bib_data/1990-2017/all_years_3 [Nodes].csv',
 ]
 
 for fname in fnames:
