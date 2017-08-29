@@ -1,6 +1,6 @@
 rm(list=ls())
 #==== USER SECTION ==========
-u_sheetName <- "Bioenergy"
+u_sheetName <- "Storage"
 #u_sheetName <- "Afforestation and Reforestation"
 #u_sheetName <- "DAC"
 #u_sheetName <- "BECCS (Bioenergy)"
@@ -23,24 +23,19 @@ gs_auth()
 gs  <- gs_title("NETs Review")
 ss  <- gs_read(gs, ws = u_sheetName, verbose=DEBUG)
 
-data <- get_data(ss,2)
-names(data) <- make.names(names(data))
-
+data <- get_data(ss,3)
 
 ################################################
 ## Generate a new df of ranges
 
 # Adjust the maximum here to change the scale
-ranges <- seq(1,200)
+ranges <- seq(1,500)
 df <- data.frame(v=ranges)
 
-data_copy <- data %>%
-  filter(variable=="totalPotential") %>%
-  mutate(variable = Data.categorisationresource)
 
 # Get a list of resources, or define it yourself
 resources <- unique(
-  data_copy[data_copy$measurement=="max" & data_copy$variable!="cost",]$variable
+  data[data$measurement=="max" & data$variable!="cost",]$variable
 )
 resources <- resources[!is.na(resources)]
 
@@ -53,30 +48,19 @@ costs <- unique(
 
 
 
+
 # Count the studies with a maximum under each range for each resource
 # Add any additional "Dimension" filters too
-res2050 <- countranges(
-  df, 
-  filter(
-    data_copy, Data.categorisationyear == 2050 & 
-      Data.categorisationsystem.boundaries == "Global"
-    ), 
-  resources, "max"
-  )
-heatbar(filter(res2050,!is.na(pcnt)),"pcnt") + 
-  labs(x="Variable",y="Resources")
-ggsave("plots/BECCS/bioenergyResource.png",width=8,height=5)
-
-filtered_data<- filter(data, Data.categorisationyear == 2050 & Data.categorisationsystem.boundaries == "Global")
-
-res2050 <- countranges(df, 
-                       filter(data, Data.categorisationyear == 2050 & Data.categorisationsystem.boundaries == "Global"), 
-                       TotalEstimates, "max")
-
+res2050 <- countranges(df, filter(data), costs, "max")
 heatbar(res2050,"pcnt") + 
-  labs(x="Variable",y="Estimate") +
-  ylim(c(0,60))
-ggsave("plots/BECCS/bioenergypotential.png",width=8,height=5)
+  labs(x="Variable",y="Cost")
+ggsave("plots/afforestation/max.png",width=8,height=5)
+
+res2050 <- countranges(df, filter(data), costs, "min")
+heatbar(res2050,"pcnt") + 
+  labs(x="Variable",y="Cost") +
+  ylim(c(0,200))
+ggsave("plots/afforestation/min.png",width=8,height=5)
 
 
 res2050 <- countranges(df, filter(data, PY > 2004), costs, "max")
@@ -96,4 +80,6 @@ ggsave("plots/afforestation/min_gt_2004.png",width=8,height=5)
 
 
 #ggsave("heatbar_example.png",width=8,height=5)
+
+
 

@@ -13,7 +13,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 
-source("heatbar_functions.R")
+source("heatbars/heatbar_functions.R")
 
 # Authorise googlesheets to access your Google Sheets account
 gs_auth()
@@ -23,15 +23,14 @@ gs_auth()
 gs  <- gs_title("NETs Review")
 ss  <- gs_read(gs, ws = u_sheetName, verbose=DEBUG)
 
-data <- get_data(ss)
+data <- get_data(ss,2)
 names(data) <- make.names(names(data))
-
 
 ################################################
 ## Generate a new df of ranges
 
 # Adjust the maximum here to change the scale
-ranges <- seq(1,60)
+ranges <- seq(1,600)
 df <- data.frame(v=ranges)
 
 
@@ -63,7 +62,11 @@ heatbar(res2050,"pcnt") +
   labs(x="Variable",y="Cost")
 ggsave("plots/BECCS/max.png",width=8,height=5)
 
-res2050 <- countranges(df, filter(data, Data.categorisationyear == 2050 & Data.categorisationsystem.boundaries == "Global"), totalPotential, "max")
+res2050 <- countranges(df, 
+                       filter(data, Data.categorisationyear == 2050 & Data.categorisationsystem.boundaries == "Global"),
+                       resources,
+                       "max"
+                       )
 heatbar(res2050,"pcnt") + 
   labs(x="Variable",y="Estimate") +
   ylim(c(0,60))
