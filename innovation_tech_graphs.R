@@ -1,1 +1,2 @@
-df <- read.table("NETS_INNOVATION.csv")
+df <- read.csv("NETS_INNOVATION.csv")
+
