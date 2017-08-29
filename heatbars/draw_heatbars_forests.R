@@ -20,7 +20,7 @@ gs_auth()
 
 
 #==== READ IN SPREADSHEET ==========
-gs  <- gs_title("Copy of NETs Review")
+gs  <- gs_title("NETs Review")
 ss  <- gs_read(gs, ws = u_sheetName, verbose=DEBUG)
 
 data <- get_data(ss)
@@ -46,36 +46,6 @@ costs <- unique(
        ]$variable
 )
 
-
-
-
-# Count the studies with a maximum under each range for each resource
-# Add any additional "Dimension" filters too
-res2050 <- countranges(df, filter(data), costs, "max")
-heatbar(res2050,"pcnt") + 
-  labs(x="Variable",y="Cost")
-ggsave("plots/heatbars/afforestation/max.png",width=8,height=5)
-
-res2050 <- countranges(df, filter(data), costs, "min")
-heatbar(res2050,"pcnt") + 
-  labs(x="Variable",y="Cost") +
-  ylim(c(0,200))
-ggsave("plots/heatbars/afforestation/min.png",width=8,height=5)
-
-
-res2050 <- countranges(df, filter(data, PY > 2004), costs, "range")
-heatbar(res2050,"pcnt") + 
-  labs(x="Variable",y="Cost")
-ggsave("plots/heatbars/afforestation/max_gt_2004.png",width=8,height=5)
-
-res2050 <- countranges(df, filter(data, PY > 2004), costs, "min")
-
-heatbar(res2050,"pcnt") + 
-  labs(x="Variable",y="Cost") +
-  ylim(c(0,200))
-
-ggsave("plots/heatbars/afforestation/min_gt_2004.png",width=8,height=5)
-
 ### Range
 res2050 <- countranges(df, filter(data, PY > 2004), costs, "range")
 
@@ -84,7 +54,7 @@ heatbar(res2050,"pcnt") +
   ylim(c(0,200))
 
 
-ggsave("plots/heatbars/afforestation/range_gt_2004.png",width=8,height=5)
+ggsave("plots/heatbars/afforestation/costs/range_gt_2004.png",width=8,height=5)
 
 res2050 <- countranges(df, filter(data), costs, "range")
 
@@ -92,7 +62,7 @@ heatbar(res2050,"pcnt") +
   labs(x="Variable",y="Cost") #+
   #ylim(c(0,200))
 
-ggsave("plots/heatbars/afforestation/range.png",width=8,height=5)
+ggsave("plots/heatbars/afforestation/costs/range.png",width=8,height=5)
 
 
 
@@ -113,8 +83,12 @@ dataf <- filter(
   mutate(
     PY = as.numeric(PY),
     jitter= (1/gtot)*(pn-1),
-    PYJ = PY + (1/gtot)*(pn-1)
+    PYJ = PY + (1/gtot)*(pn-1),
+    country= substr(`Data categorisationsystem boundaries`,1,15),
+    region = countrycode(`Data categorisationsystem boundaries`,"country.name","ar5")
   )
+
+dataf$region[dataf$`Data categorisationsystem boundaries`=="Global"] <- "Global"
 
 
 
@@ -123,6 +97,7 @@ y = 1980
 f <- "pcnt"
 df <- res2050[res2050[[f]]>0,]
 flab <- if (f=="pcnt") "% of Studies" else "Number of Studies" 
+
 ggplot() +
   theme_bw() +
   geom_bar(
@@ -150,13 +125,17 @@ ggplot() +
   guides(fill = guide_colourbar(reverse = TRUE)) +
   geom_linerange(
     data=dataf,
-    aes(x=PYJ,ymin=min,ymax=max)
+    aes(x=PYJ,
+        ymin=min,
+        ymax=max,
+        colour=region)
   ) + labs(
     x = "Year",y="Costs in $US(2011)/tCO2"
   )
 
+dataf$`Data categorisationsystem boundaries`
 
-ggsave("plots/heatbars/afforestation/ranges_years.png",width=8,height=5)
+ggsave("plots/heatbars/afforestation/costs/ranges_years.png",width=8,height=5)
 
 
 
