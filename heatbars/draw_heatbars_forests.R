@@ -6,12 +6,21 @@ u_sheetName <- "Afforestation and Reforestation"
 #u_sheetName <- "BECCS (Bioenergy)"
 DEBUG       <- TRUE
 
+dir.create(paste0("plots/heatbars/",u_sheetName))
+
+costsdir = paste0("plots/heatbars/",u_sheetName,"/costs")
+potsdir = paste0("plots/heatbars/",u_sheetName,"/potentials")
+
+dir.create(costsdir)
+dir.create(potsdir)
+
 #==== INITIALISE ==========
 # Load libraries
 library(googlesheets)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(countrycode)
 
 source("heatbars/heatbar_functions.R")
 
@@ -29,7 +38,7 @@ data <- get_data(ss)
 ## Generate a new df of ranges
 
 # Adjust the maximum here to change the scale
-ranges <- seq(1,300)
+ranges <- seq(0,300)
 df <- data.frame(v=ranges)
 
 
@@ -46,96 +55,65 @@ costs <- unique(
        ]$variable
 )
 
+costs <- c("cost")
+
+
 ### Range
 res2050 <- countranges(df, filter(data, PY > 2004), costs, "range")
 
 heatbar(res2050,"pcnt") + 
-  labs(x="Variable",y="Cost") +
-  ylim(c(0,200))
+  labs(x="",y="Costs in $US(2011)/tCO2") 
 
+ggsave(paste0(costsdir,"/range_gt_2004.png"),width=8,height=5)
 
-ggsave("plots/heatbars/afforestation/costs/range_gt_2004.png",width=8,height=5)
 
 res2050 <- countranges(df, filter(data), costs, "range")
 
 heatbar(res2050,"pcnt") + 
-  labs(x="Variable",y="Cost") #+
-  #ylim(c(0,200))
+  labs(x="",y="Costs in $US(2011)/tCO2") 
 
-ggsave("plots/heatbars/afforestation/costs/range.png",width=8,height=5)
+ggsave(paste0(costsdir,"/range.png"),width=8,height=5)
 
+######################################################
+## Plot year bars (coloured)
 
+heatbar_years(data, res2050, "pcnt")
 
-dataf <- filter(
-  suppressWarnings(mutate(data,value=as.numeric(value))),
-  measurement %in% c("min","max"),
-  variable==costs[1],
-  !is.na(value)
-) %>% spread(
-  measurement, value
-) %>%
-  group_by(PY) %>%
+ggsave(paste0(costsdir,"/range_years.png"),width=8,height=5)
+
+heatbar_years(data, res2050, "pcnt", "region")
+
+ggsave(paste0(costsdir,"/range_years_region.png"),width=8,height=5)
+
+#########################################################################
+## Now do potentials
+
+ranges <- seq(0,10,by=0.1)
+
+df <- data.frame(v=ranges)
+
+pots2050 <- countranges(
+  df, 
   mutate(
-    gtot = n(),
-    pn = row_number()
-  ) %>%
-  ungroup() %>%
-  mutate(
-    PY = as.numeric(PY),
-    jitter= (1/gtot)*(pn-1),
-    PYJ = PY + (1/gtot)*(pn-1),
-    country= substr(`Data categorisationsystem boundaries`,1,15),
-    region = countrycode(`Data categorisationsystem boundaries`,"country.name","ar5")
+    filter(
+      data,`Data categorisationsystem boundaries`=="Global", `Data categorisationyear`==2050
+      ),
+    value=as.numeric(value)/1000
+  ),
+  c("totalPotential"), 
+  "max"
   )
 
-dataf$region[dataf$`Data categorisationsystem boundaries`=="Global"] <- "Global"
+heatbar(pots2050,"pcnt",step=0.1) + 
+  labs(x="",y="Potentials (2050) Gt CO2/year")
+
+ggsave(paste0(potsdir,"/max_2050.png"),width=8,height=5)
 
 
-
-w = 20
-y = 1980
-f <- "pcnt"
-df <- res2050[res2050[[f]]>0,]
-flab <- if (f=="pcnt") "% of Studies" else "Number of Studies" 
-
-ggplot() +
-  theme_bw() +
-  geom_bar(
-    data=df,
-    aes_string(x=y,y=1,fill=f),
-    stat="identity",
-    width=w,
-    color=NA
-  ) +
-  geom_bar(
-    data=df,
-    aes(x=y),
-    fill=NA,
-    color="grey22",
-    width=w
-  ) +
-  scale_fill_gradientn(
-    colours=c(NA,"#fffcef","#fcf0ba","#d30000"),
-    values = scales::rescale(c(0,min(df[[f]]),max(df[[f]])/2,max(df[[f]]))),
-    name=flab
-  ) +
-  scale_x_continuous(
-    breaks = c(1990,2000,2010)
-  ) +
-  guides(fill = guide_colourbar(reverse = TRUE)) +
-  geom_linerange(
-    data=dataf,
-    aes(x=PYJ,
-        ymin=min,
-        ymax=max,
-        colour=region)
-  ) + labs(
-    x = "Year",y="Costs in $US(2011)/tCO2"
-  )
-
-dataf$`Data categorisationsystem boundaries`
-
-ggsave("plots/heatbars/afforestation/costs/ranges_years.png",width=8,height=5)
-
-
-
+dataf <- data %>%
+  filter(
+    variable=="totalPotential",
+    `Data categorisationsystem boundaries`=="Global",
+    `Data categorisationyear`==2100,
+    measurement=="max"
+    )
