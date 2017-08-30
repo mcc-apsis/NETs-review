@@ -13,7 +13,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 
-source("heatbar_functions.R")
+source("heatbars/heatbar_functions.R")
 
 # Authorise googlesheets to access your Google Sheets account
 gs_auth()
