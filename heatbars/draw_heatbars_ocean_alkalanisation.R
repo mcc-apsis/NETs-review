@@ -2,7 +2,7 @@
 
 rm(list=ls())
 #==== USER SECTION ==========
-u_sheetName <- "Enhanced weathering (terrestrial and ocean)"
+u_sheetName <- "Ocean alkalinisation"
 DEBUG       <- TRUE
 
 dir.create(paste0("plots/heatbars/",u_sheetName))
@@ -66,21 +66,3 @@ ggsave(paste0(costsdir,"/range.png"),width=8,height=5)
 heatbar_years(data, res2050, "pcnt")
 
 ggsave(paste0(costsdir,"/range_years.png"),width=8,height=5)
-
-
-
-ranges <- seq(0,10,by=0.1)
-
-df <- data.frame(v=ranges)
-
-pots2050 <- countranges(
-  df, 
-  mutate(
-    filter(
-      data,`Data categorisationsystem boundaries`=="global"
-    ),
-    value=as.numeric(value)/1000
-  ),
-  c("totalPotential"), 
-  "max"
-)

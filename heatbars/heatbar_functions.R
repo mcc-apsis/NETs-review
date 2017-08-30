@@ -59,13 +59,21 @@ countranges <- function(df,data,headers, measure) {
         max >=x
       )
     } else {
+      onames <- names(data)
+      dataf <- suppressWarnings(mutate(data,value=as.numeric(value))) %>%
+        filter(variable==resource) %>%
+        spread(measurement, value )
+      dataf$max[is.na(dataf$max)] <- dataf$estimate[is.na(dataf$max)]
+      newnames <- names(dataf)[!(names(dataf) %in% onames)]
+      dataf <- dataf %>%
+        gather_("measurement","value",newnames)
       dataf <- filter(
-        suppressWarnings(mutate(data,value=as.numeric(value))),
+        dataf,
         measurement==measure,
-        variable==resource,
         !is.na(value),
         value>=x
       )      
+      
     }
 
     dataf$TI <- if ("TI" %in% names(dataf)) dataf$TI else dataf$UT
@@ -83,21 +91,34 @@ countranges <- function(df,data,headers, measure) {
     df[[r]] <- as.numeric(lapply(df$v,countrange, r, measure))
   }
   
-  data_r_sum <- filter(
+  if (measure == "range") {
+    data_r_sum <- filter(
       suppressWarnings(mutate(data,value=as.numeric(value))),
       measurement %in% c("min","max"),
       !is.na(value)
     ) %>% spread(
       measurement, value
     ) %>%
-    filter(
-      !is.na(min),
-      !is.na(max)
+      filter(
+        !is.na(min),
+        !is.na(max)
+      ) %>% 
+      group_by(variable) %>%
+      summarise(
+        maxvalue = n()
+      )      
+  } else {
+    data_r_sum <- filter(
+      suppressWarnings(mutate(data,value=as.numeric(value))),
+      measurement == measure,
+      !is.na(value)
     ) %>% 
-    group_by(variable) %>%
-    summarise(
-      maxvalue = n()
-    )
+      group_by(variable) %>%
+      summarise(
+        maxvalue = n()
+      )    
+  }
+
     
   
   
