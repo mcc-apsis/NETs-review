@@ -76,11 +76,16 @@ countranges <- function(df,data,headers, measure) {
     if (length(dataf$TI) > length(unique(dataf$TI))) {
         print("warning, some titles seem to be duplicated, do you
             need to filter by a dimension?") 
-      dataf <- dataf %>% 
-        group_by(TI) %>% 
-        filter(
-          value == max(value)
-        ) %>% ungroup()
+      if (measure=="range") {
+    
+      } else {
+        dataf <- dataf %>% 
+          group_by(TI) %>% 
+          filter(
+            value == max(value)
+          ) %>% ungroup()  
+      }
+
     } 
     return(as.numeric(count(dataf)))
     }
