@@ -26,12 +26,12 @@ get_data <- function(ss,offset){
     names(data)[col] <- var
   } 
   
-  exclusions <- paste0("-",names(data)[1])
-  
+
   # Switch the data to long format
   data <- data %>% 
     gather("variable", "value",
-            8:(dim(ss)[2]-offset)
+            #8:(dim(ss)[2]-offset)
+           names(data)[8:(dim(ss)[2]-offset)]
             ) %>% 
     separate(variable, into=c("category", "subcategory", "variable"), sep="Â§") %>%
     separate(

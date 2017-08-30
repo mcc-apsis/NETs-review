@@ -9,8 +9,9 @@ DEBUG       <- TRUE
 #==== INITIALISE ==========
 # Load libraries
 library(googlesheets)
-library(dplyr)
-library(tidyr)
+# library(dplyr)
+# library(tidyr)
+library(tidyverse)
 library(ggplot2)
 
 source("heatbars/heatbar_functions.R")
@@ -62,7 +63,6 @@ heatbar(filter(res2050,!is.na(pcnt)),"pcnt") +
   labs(x="Variable",y="Resources")
 ggsave("plots/BECCS/bioenergyResource2050.png",width=8,height=5)
 
-filtered_data<- filter(data,Data.categorisationsystem.boundaries == "Global" & Data.categorisationyear !> 20)
 
 res2050 <- countranges(df, 
                        filter(data, Data.categorisationyear == 2050 & Data.categorisationsystem.boundaries == "Global"), 
@@ -72,22 +72,6 @@ heatbar(res2050,"pcnt") +
   labs(x="Variable",y="Estimate") +
   ylim(c(0,60))
 ggsave("plots/BECCS/bioenergypotential.png",width=8,height=5)
-
-
-res2050 <- countranges(df, filter(data, PY > 2004), costs, "max")
-heatbar(res2050,"pcnt") + 
-  labs(x="Variable",y="Cost")
-ggsave("plots/afforestation/max_gt_2004.png",width=8,height=5)
-
-res2050 <- countranges(df, filter(data, PY > 2004), costs, "min")
-heatbar(res2050,"pcnt") + 
-  labs(x="Variable",y="Cost") +
-  ylim(c(0,200))
-
-ggsave("plots/afforestation/min_gt_2004.png",width=8,height=5)
-
-
-
 
 
 #ggsave("heatbar_example.png",width=8,height=5)
