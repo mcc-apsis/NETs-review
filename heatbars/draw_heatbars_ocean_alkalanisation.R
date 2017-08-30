@@ -66,3 +66,29 @@ ggsave(paste0(costsdir,"/range.png"),width=8,height=5)
 heatbar_years(data, res2050, "pcnt")
 
 ggsave(paste0(costsdir,"/range_years.png"),width=8,height=5)
+
+
+###############################################
+## Potentials
+
+
+ranges <- seq(0,100)
+
+df <- data.frame(v=ranges)
+
+pots2050 <- countranges(
+  df, 
+  mutate(
+    filter(
+      data,`Data categorisationsystem boundaries`=="global"
+    ),
+    value=as.numeric(gsub("[^0-9\\.]", "", value))
+  ),
+  c("totalPotential"), 
+  "max"
+)
+
+heatbar(pots2050,"pcnt") + 
+  labs(x="",y="Potential in unit?") 
+
+ggsave(paste0(potsdir,"/total_potential.png"),width=8,height=5)

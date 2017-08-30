@@ -42,7 +42,22 @@ get_data <- function(ss){
   return(data)
 }
 
-countranges <- function(df,data,headers, measure) {
+countranges <- function(df, data, headers, measure) {
+  
+  if (measure !="range") {
+    onames <- names(data)
+    dataf <- suppressWarnings(mutate(data,value=as.numeric(value))) %>%
+      group_by(variable) %>%
+      filter(!is.na(measurement)) %>%
+      spread(measurement, value )
+    dataf$max[is.na(dataf$max)] <- dataf$estimate[is.na(dataf$max)]
+    newnames <- names(dataf)[!(names(dataf) %in% onames)]
+    newnames <- newnames[nchar(newnames)>0]
+    data_cleaned <- dataf %>%
+      gather_("measurement","value",newnames)    
+  }
+  
+
   
   countrange <- function(x, resource, measure) {
     if (measure=="range") {
@@ -59,20 +74,14 @@ countranges <- function(df,data,headers, measure) {
         max >=x
       )
     } else {
-      onames <- names(data)
-      dataf <- suppressWarnings(mutate(data,value=as.numeric(value))) %>%
-        filter(variable==resource) %>%
-        spread(measurement, value )
-      dataf$max[is.na(dataf$max)] <- dataf$estimate[is.na(dataf$max)]
-      newnames <- names(dataf)[!(names(dataf) %in% onames)]
-      dataf <- dataf %>%
-        gather_("measurement","value",newnames)
+
       dataf <- filter(
-        dataf,
+        data_cleaned,
         measurement==measure,
+        variable==resource,
         !is.na(value),
         value>=x
-      )      
+      )   
       
     }
 
@@ -81,7 +90,8 @@ countranges <- function(df,data,headers, measure) {
         print("warning, some titles seem to be duplicated, do you
             need to filter by a dimension?")       
     } 
-    return(as.numeric(count(dataf)))
+    
+    return(nrow(dataf))
     }
   
   
@@ -109,7 +119,7 @@ countranges <- function(df,data,headers, measure) {
       )      
   } else {
     data_r_sum <- filter(
-      suppressWarnings(mutate(data,value=as.numeric(value))),
+      data_cleaned,
       measurement == measure,
       !is.na(value)
     ) %>% 
@@ -132,7 +142,7 @@ countranges <- function(df,data,headers, measure) {
   return(res)
 }
 
-heatbar <- function(df,f,step=1) {
+heatbar <- function(df,f,step=1, fixed=T) {
   flab <- if (f=="pcnt") "% of Studies" else "Number of Studies" 
   #df <- df[df[[f]]>0,]
   df <- df %>%
@@ -141,6 +151,22 @@ heatbar <- function(df,f,step=1) {
            dfmax = max(df$v[df$value>0]) 
            ) %>%
     filter(v <  max(df$v[df$value>0]))
+  
+  if (fixed==TRUE) {
+    cscale <- scale_fill_gradientn(
+      colours=c("#fffcef","#ffeda0","#feb24c","#f03b20"),
+      values = scales::rescale(c(0,33,66,100)),
+      limits = c(0,100),
+      name=flab
+    )
+  } else {
+    cscale <- scale_fill_gradientn(
+      colours=c(NA,"#fffcef","#fcf0ba","#d30000"),
+      values = scales::rescale(c(0,min(df[[f]]),max(df[[f]])/2,max(df[[f]]))),
+      name=flab
+    )
+  }
+  
   ggplot() +
     theme_bw() +
     geom_bar(
@@ -158,13 +184,10 @@ heatbar <- function(df,f,step=1) {
       color="grey22",
       width=0.6
     ) +
-    scale_fill_gradientn(
-      colours=c(NA,"#fffcef","#fcf0ba","#d30000"),
-      values = scales::rescale(c(0,min(df[[f]]),max(df[[f]])/2,max(df[[f]]))),
-      name=flab
-    ) +
+    cscale +
     guides(fill = guide_colourbar(reverse = TRUE))
 }
+
 
 heatbar_years <- function(data, df, f, grp=NA) {
   dataf <- filter(
