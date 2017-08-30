@@ -204,7 +204,7 @@ heatbar_years <- function(data, df, f, grp=NA) {
     )
   } 
   
-  ggplot() +
+  p <- ggplot() +
     theme_bw() +
     geom_bar(
       data=df,
@@ -233,4 +233,8 @@ heatbar_years <- function(data, df, f, grp=NA) {
     ylines + labs(
       x = "Year",y="Costs in $US(2011)/tCO2"
     )
+  
+  print(p)
+  
+  return(dataf)
 }

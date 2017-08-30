@@ -64,6 +64,15 @@ ggsave(paste0(costsdir,"/range.png"),width=8,height=5)
 ######################################################
 ## Plot year bars (coloured)
 
-heatbar_years(data, res2050, "pcnt")
+dataf <- heatbar_years(  
+  filter(
+  data,
+  `Data categorisationsystem conditions`!="MIL-101" | 
+    is.na(`Data categorisationsystem conditions`)
+  ), 
+  res2050, 
+  "pcnt")
+
+
 
 ggsave(paste0(costsdir,"/range_years.png"),width=8,height=5)
