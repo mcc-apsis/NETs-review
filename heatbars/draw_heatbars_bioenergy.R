@@ -31,7 +31,7 @@ names(data) <- make.names(names(data))
 ## Generate a new df of ranges
 
 # Adjust the maximum here to change the scale
-ranges <- seq(1,200)
+ranges <- seq(1,675)
 df <- data.frame(v=ranges)
 
 data_copy <- data %>%
@@ -39,22 +39,17 @@ data_copy <- data %>%
   mutate(variable = Data.categorisationresource)
 
 # Get a list of resources, or define it yourself
-resources <- unique(
-  data_copy[data_copy$measurement=="max" & data_copy$variable!="cost",]$variable
-)
-resources <- resources[!is.na(resources)]
-
-
-costs <- unique(
-  data[data$measurement=="max" & 
-         data$variable=="cost",
-       ]$variable
-)
+# resources <- unique(
+#   data_copy[data_copy$measurement=="max" & data_copy$variable!="cost",]$variable
+# )
+# resources <- resources[!is.na(resources)]
+resources<- list("Forestry", "Total", "Bioenergy Crops", "Residues")
 
 
 
 # Count the studies with a maximum under each range for each resource
 # Add any additional "Dimension" filters too
+# 2050, Global estimates by resource category
 res2050 <- countranges(
   df, 
   filter(
@@ -65,9 +60,9 @@ res2050 <- countranges(
   )
 heatbar(filter(res2050,!is.na(pcnt)),"pcnt") + 
   labs(x="Variable",y="Resources")
-ggsave("plots/BECCS/bioenergyResource.png",width=8,height=5)
+ggsave("plots/BECCS/bioenergyResource2050.png",width=8,height=5)
 
-filtered_data<- filter(data, Data.categorisationyear == 2050 & Data.categorisationsystem.boundaries == "Global")
+filtered_data<- filter(data,Data.categorisationsystem.boundaries == "Global" & Data.categorisationyear !> 20)
 
 res2050 <- countranges(df, 
                        filter(data, Data.categorisationyear == 2050 & Data.categorisationsystem.boundaries == "Global"), 
