@@ -23,15 +23,14 @@ gs_auth()
 gs  <- gs_title("NETs Review")
 ss  <- gs_read(gs, ws = u_sheetName, verbose=DEBUG)
 
-data <- get_data(ss)
+data <- get_data(ss,2)
 names(data) <- make.names(names(data))
-
 
 ################################################
 ## Generate a new df of ranges
 
 # Adjust the maximum here to change the scale
-ranges <- seq(1,60)
+ranges <- seq(1,20)
 df <- data.frame(v=ranges)
 
 
@@ -42,13 +41,6 @@ resources <- unique(
 resources <- resources[!is.na(resources)]
 
 
-costs <- unique(
-  data[data$measurement=="max" & 
-         data$variable=="cost",
-       ]$variable
-)
-
-TotalEstimates <- "totalPotential"
 #   unique(
 #   data[data$measurement == "max" &
 #          data&variable == "totalPotential",
@@ -58,17 +50,35 @@ TotalEstimates <- "totalPotential"
 
 # Count the studies with a maximum under each range for each resource
 # Add any additional "Dimension" filters too
-res2050 <- countranges(df, filter(data), costs, "max")
+
+
+#potentials <----
+res2050 <- countranges(df, 
+                       filter(data, Data.categorisationyear == 2050 & Data.categorisationsystem.boundaries == "Global"),
+                       resources,
+                       "max"
+                       )
+heatbar(res2050,"pcnt") + 
+  labs(x="Variable",y="Estimate") +
+  ylim(c(0,20))
+ggsave("plots/BECCS/potential.png",width=8,height=5)
+
+#### Costs <----
+data_copy <- data %>%
+  filter(variable=="cost") %>%
+  mutate(variable = Data.categorisationresource)
+
+# costs <- unique(
+#   data_copy[data_copy$measurement=="max",
+#        ]$variable
+# )
+
+costs <- list()
+
+res2050 <- countranges(df, filter(data_copy), costs, "max")
 heatbar(res2050,"pcnt") + 
   labs(x="Variable",y="Cost")
 ggsave("plots/BECCS/max.png",width=8,height=5)
-
-res2050 <- countranges(df, filter(data, Data.categorisationyear == 2050 & Data.categorisationsystem.boundaries == "Global"), totalPotential, "max")
-heatbar(res2050,"pcnt") + 
-  labs(x="Variable",y="Estimate") +
-  ylim(c(0,60))
-ggsave("plots/BECCS/potential.png",width=8,height=5)
-
 
 res2050 <- countranges(df, filter(data, PY > 2004), costs, "max")
 heatbar(res2050,"pcnt") + 
