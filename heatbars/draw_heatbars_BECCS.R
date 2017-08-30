@@ -38,6 +38,7 @@ data <- get_data(ss,2)
 ################################################
 ## Generate a new df of ranges
 
+##### POTENTIALS
 # Adjust the maximum here to change the scale
 ranges <- seq(1,20)
 df <- data.frame(v=ranges)
@@ -61,7 +62,6 @@ resources <- resources[!is.na(resources)]
 # Add any additional "Dimension" filters too
 
 
-#potentials <----
 # max
 res2050 <- countranges(df, 
                        filter(data, `Data categorisationyear` == 2050 & `Data categorisationsystem boundaries` == "Global"),
@@ -86,7 +86,7 @@ heatbar(res2050,"pcnt") +
 ggsave(paste0(potsdir,"/range_2050.png"),width=8,height=5)
 
 
-#### Costs <----
+###### Costs 
 
 ranges <- seq(1,400)
 df <- data.frame(v=ranges)
@@ -109,7 +109,7 @@ heatbar_years(data, res2050, "pcnt")
 
 ggsave(paste0(costsdir,"/range_years.png"),width=8,height=5)
 
-heatbar_years(data, res2050, "pcnt", "region")
+heatbar_years(data, res2050, "pcnt", "`Data categorisationresource`")
 
 ggsave(paste0(costsdir,"/range_years_region.png"),width=8,height=5)
 
