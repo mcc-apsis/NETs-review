@@ -99,7 +99,12 @@ dataf <- filter(
   )
 
 ggplot() +
-  geom_linerange(
+  # geom_linerange(
+  #   data=dataf,
+  #   aes(x=PYJ,ymin=min,ymax=max, colour=technology),
+  #   size=1
+  # ) +
+  geom_crossbar(
     data=dataf,
     aes(x=PYJ,ymin=min,ymax=max, colour=technology),
     size=1
@@ -110,4 +115,7 @@ ggplot() +
     size=2   
   ) +
   theme_bw() +
+  scale_color_brewer(palette="Set2")+
   labs(x="Study Year",y="Costs in $US(2011)/tCO2")
+
+ggsave("plots/heatbars/all_costs_years.png")
