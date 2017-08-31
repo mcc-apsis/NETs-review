@@ -1,4 +1,4 @@
-get_data <- function(ss,offset){
+get_data <- function(ss,offset=2){
   if (dim(ss)[1] <= 2) stop("No data in selected spreadsheet")
   
   #==== PROCESS DATA ==========
@@ -26,12 +26,20 @@ get_data <- function(ss,offset){
     names(data)[col] <- var
   } 
   
+  gvars <- c(8:(dim(ss)[2]-offset))
 
+  a <- gvars[1]
+  b <- tail(gvars,1)
+  
+  gnames <- names(data)[8:(dim(ss)[2]-offset)]
+  
+  a <- gnames[1]
+  b <- tail(gnames,1)
+  
   # Switch the data to long format
   data <- data %>% 
-    gather("variable", "value",
-            #8:(dim(ss)[2]-offset)
-           names(data)[8:(dim(ss)[2]-offset)]
+    gather_("variable", "value",
+           paste(names(data)[8:(dim(ss)[2]-offset)])
             ) %>% 
     separate(variable, into=c("category", "subcategory", "variable"), sep="Â§") %>%
     separate(
@@ -143,9 +151,6 @@ countranges <- function(df, data, headers, measure) {
       )    
   }
 
-    
-  
-  
   # Gather the resources
   res <- df %>%
     gather(resource,value,-v) %>% #gather resources into a resource column
@@ -156,16 +161,7 @@ countranges <- function(df, data, headers, measure) {
   return(res)
 }
 
-heatbar <- function(df,f,step=1, fixed=T) {
-  flab <- if (f=="pcnt") "% of Studies" else "Number of Studies" 
-  #df <- df[df[[f]]>0,]
-  df <- df %>%
-    group_by(resource) %>%
-    mutate(resourcelab=paste0(resource,'\n[',max(maxvalue),' studies]'),
-           dfmax = max(df$v[df$value>0]) 
-           ) %>%
-    filter(v <  max(df$v[df$value>0]))
-  
+calc_cscale <- function(df, f, flab, fixed =T) {
   if (fixed==TRUE) {
     cscale <- scale_fill_gradientn(
       colours=c("#fffcef","#ffeda0","#feb24c","#f03b20"),
@@ -180,6 +176,19 @@ heatbar <- function(df,f,step=1, fixed=T) {
       name=flab
     )
   }
+}
+
+heatbar <- function(df,f,step=1, fixed=T) {
+  flab <- if (f=="pcnt") "% of Studies" else "Number of Studies" 
+  #df <- df[df[[f]]>0,]
+  df <- df %>%
+    group_by(resource) %>%
+    mutate(resourcelab=paste0(resource,'\n[',max(maxvalue),' studies]'),
+           dfmax = max(df$v[df$value>0]) 
+           ) %>%
+    filter(v <  max(df$v[df$value>0]))
+  
+  cscale <- calc_cscale(df, f, flab, fixed)
   
   ggplot() +
     theme_bw() +
@@ -203,7 +212,7 @@ heatbar <- function(df,f,step=1, fixed=T) {
 }
 
 
-heatbar_years <- function(data, df, f, grp=NA) {
+heatbar_years <- function(data, df, f, grp=NA, fixed=TRUE) {
   dataf <- filter(
     suppressWarnings(mutate(data,value=as.numeric(value))),
     measurement %in% c("min","max"),
@@ -262,6 +271,9 @@ heatbar_years <- function(data, df, f, grp=NA) {
     )
   } 
   
+  
+  cscale <- calc_cscale(df, f, flab, fixed)
+  
   p <- ggplot() +
     theme_bw() +
     geom_bar(
@@ -279,11 +291,7 @@ heatbar_years <- function(data, df, f, grp=NA) {
       color="grey22",
       width=w
     ) +
-    scale_fill_gradientn(
-      colours=c(NA,"#fffcef","#fcf0ba","#d30000"),
-      values = scales::rescale(c(0,min(df[[f]]),max(df[[f]])/2,max(df[[f]]))),
-      name=flab
-    ) +
+    cscale +
     scale_x_continuous(
       breaks = c(1990,2000,2010)
     ) +

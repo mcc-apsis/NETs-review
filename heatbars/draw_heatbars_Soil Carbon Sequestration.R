@@ -1,8 +1,7 @@
-
-
 rm(list=ls())
 #==== USER SECTION ==========
-u_sheetName <- "Enhanced weathering (terrestrial and ocean)"
+u_sheetName <- "Soil Carbon Sequestration"
+
 DEBUG       <- TRUE
 
 dir.create(paste0("plots/heatbars/",u_sheetName))
@@ -31,13 +30,13 @@ gs_auth()
 gs  <- gs_title("NETs Review")
 ss  <- gs_read(gs, ws = u_sheetName, verbose=DEBUG)
 
-data <- get_data(ss,2)
+data <- get_data(ss)
 
 ################################################
 ## Generate a new df of ranges
 
 # Adjust the maximum here to change the scale
-ranges <- seq(1,1000)
+ranges <- seq(0,1000)
 df <- data.frame(v=ranges)
 
 
@@ -48,10 +47,11 @@ costs <- c("cost")
 ### Range
 res2050 <- countranges(
   df, 
-  filter(
-    data,
-    `Data categorisationsystem conditions`!="MIL-101" | 
-      is.na(`Data categorisationsystem conditions`)
+  mutate(
+    filter(
+      data
+    ),
+    value=as.numeric(gsub("[^0-9\\.]", "", value))
   ), 
   costs, "range")
 
@@ -68,8 +68,11 @@ heatbar_years(data, res2050, "pcnt")
 ggsave(paste0(costsdir,"/range_years.png"),width=8,height=5)
 
 
+###############################################
+## Potentials
 
-ranges <- seq(0,1000)
+
+ranges <- seq(0,10,by=0.1)
 
 df <- data.frame(v=ranges)
 
@@ -77,7 +80,7 @@ pots2050 <- countranges(
   df, 
   mutate(
     filter(
-      data,`Data categorisationsystem boundaries`=="global"
+      data,`Data categorisationsystem boundaries`=="Global"
     ),
     value=as.numeric(gsub("[^0-9\\.]", "", value))
   ),
@@ -85,11 +88,7 @@ pots2050 <- countranges(
   "max"
 )
 
-heatbar(pots2050,"pcnt") + 
-  labs(x="",y="Potential in unit?") 
-
-heatbar(pots2050,"pcnt",fixed=T) + 
-  labs(x="",y="Potential in unit?") 
-
+heatbar(pots2050,"pcnt",step=0.1) + 
+  labs(x="",y="Potential in Gt CO2?") 
 
 ggsave(paste0(potsdir,"/total_potential.png"),width=8,height=5)
