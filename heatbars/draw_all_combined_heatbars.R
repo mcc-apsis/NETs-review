@@ -63,7 +63,51 @@ costs2050 <- countranges(
 
 
 heatbar(costs2050,"pcnt") +
-  theme(axis.text.x = element_text(angle=60, hjust=1,vjust=1))
+  theme(axis.text.x = element_text(angle=60, hjust=1,vjust=1)) + 
+  labs(x="Technology",y="Costs in $US(2011)/tCO2") 
+
+ggsave("plots/heatbars/all_costs.png")
 
 heatbar(costs2050,"pcnt",text=T) +
-  theme(axis.text.x = element_text(angle=60, hjust=1,vjust=1))
+  theme(axis.text.x = element_text(angle=60, hjust=1,vjust=1)) + 
+  labs(x="Technology",y="Costs in $US(2011)/tCO2") 
+
+ggsave("plots/heatbars/all_costs_labelled.png")
+
+
+
+dataf <- filter(
+  suppressWarnings(mutate(all_data,value=as.numeric(value))),
+  measurement %in% c("min","max","estimate"),
+  variable=="cost",
+  !is.na(value)
+) %>% spread(
+  measurement, value
+) %>%
+  group_by(PY) %>%
+  mutate(
+    gtot = n(),
+    pn = row_number()
+  ) %>%
+  ungroup() %>%
+  mutate(
+    PY = as.numeric(PY),
+    jitter= (1/gtot)*(pn-1),
+    PYJ = PY + (1/gtot)*(pn-1),
+    country= substr(`Data categorisationsystem boundaries`,1,15),
+    region = countrycode(`Data categorisationsystem boundaries`,"country.name","ar5")
+  )
+
+ggplot() +
+  geom_linerange(
+    data=dataf,
+    aes(x=PYJ,ymin=min,ymax=max, colour=technology),
+    size=1
+  ) +
+  geom_point(
+    data=dataf,
+    aes(x=PYJ,y=estimate, colour=technology, shape=technology),
+    size=2   
+  ) +
+  theme_bw() +
+  labs(x="Study Year",y="Costs in $US(2011)/tCO2")
