@@ -16,6 +16,13 @@ library(ggplot2)
 
 source("heatbars/heatbar_functions.R")
 
+dir.create(paste0("plots/heatbars/",u_sheetName))
+
+costsdir = paste0("plots/heatbars/",u_sheetName,"/costs")
+potsdir = paste0("plots/heatbars/",u_sheetName,"/potentials")
+
+dir.create(costsdir)
+dir.create(potsdir)
 # Authorise googlesheets to access your Google Sheets account
 gs_auth()
 
