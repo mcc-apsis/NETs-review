@@ -164,8 +164,9 @@ countranges <- function(df, data, headers, measure) {
 calc_cscale <- function(df, f, flab, fixed =T) {
   if (fixed==TRUE) {
     cscale <- scale_fill_gradientn(
-      colours=c("#fffcef","#ffeda0","#feb24c","#f03b20"),
-      values = scales::rescale(c(0,33,66,100)),
+      colours=c("#fffcef","#ffeda0","#feb24c","#f03b20","#f03b20"),
+      #values = scales::rescale(c(0,33,66,100)),
+      values = scales::rescale(c(0,25,50,75,100)),
       limits = c(0,100),
       name=flab
     )
@@ -178,19 +179,37 @@ calc_cscale <- function(df, f, flab, fixed =T) {
   }
 }
 
-heatbar <- function(df,f,step=1, fixed=T) {
+heatbar <- function(df,f,step=1, fixed=T, text=F) {
   flab <- if (f=="pcnt") "% of Studies" else "Number of Studies" 
   #df <- df[df[[f]]>0,]
   df <- df %>%
     group_by(resource) %>%
     mutate(resourcelab=paste0(resource,'\n[',max(maxvalue),' studies]'),
-           dfmax = max(df$v[df$value>0]) 
+           dfmax = max(df$v[df$value>0]),
+           mostagreement = max(value)
            ) %>%
     filter(v <  max(df$v[df$value>0]))
-  
+
+  dfagreement <- df %>%
+    ungroup() %>%
+    group_by(resourcelab) %>%
+    filter(
+      value==mostagreement
+    ) %>%
+    summarise(
+      med = median(v),
+      min = min(v),
+      max = max(v),
+      n = median(value),
+      pcnt = median(pcnt)
+    ) %>%
+    mutate(
+      text = paste0(min,"-",max,": ",round(pcnt),"% agreement")
+    )
+    
   cscale <- calc_cscale(df, f, flab, fixed)
   
-  ggplot() +
+  p <- ggplot() +
     theme_bw() +
     geom_bar(
       data=df,
@@ -209,6 +228,24 @@ heatbar <- function(df,f,step=1, fixed=T) {
     ) +
     cscale +
     guides(fill = guide_colourbar(reverse = TRUE))
+  
+  if (text) {
+    p <- p +
+      geom_crossbar(
+        data=dfagreement,
+        aes(x=resourcelab, ymin=med, ymax=med, y=med, width=scales::rescale(n,to=c(0.2,0.9))),
+        stat="identity"
+      ) +
+      geom_text(
+        data=dfagreement,
+        aes(resourcelab, med, label=text),
+        angle=90,
+        hjust=0,
+        nudge_y=20
+      )
+  }
+    
+  return(p)
 }
 
 
