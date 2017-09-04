@@ -2,6 +2,7 @@
 - Units are in original. **Conversions applied**
 - The potentials are not tied to years. *Can we simply take all estimates as maximum potentials for annual flux over the next century?*
 - System conditions. *Should we filter for any particular subcategory? Or do multiple bars for several categories?*
+- System boundaries. *What do we do with lab scale?*
 
 ## Soil Carbon Sequestration
 - Years are often missing, ranges or descriptions - *can we take take all estimates 
