@@ -32,6 +32,8 @@ get_data <- function(ss,offset=2){
   b <- tail(gvars,1)
   
   gnames <- names(data)[8:(dim(ss)[2]-offset)]
+  except <- "Potentials in tCO2/yrÂ§Â§conversion factor to common unit"
+  gnames <- gnames[gnames!=except]
   
   a <- gnames[1]
   b <- tail(gnames,1)
@@ -39,7 +41,7 @@ get_data <- function(ss,offset=2){
   # Switch the data to long format
   data <- data %>% 
     gather_("variable", "value",
-           paste(names(data)[8:(dim(ss)[2]-offset)])
+           paste(gnames)
             ) %>% 
     separate(variable, into=c("category", "subcategory", "variable"), sep="Â§") %>%
     separate(
@@ -380,5 +382,19 @@ grobHeight.custom_axis = heightDetails.custom_axis = function(x, ...)
 ## END
 ## ##########
 
+
+evcf <- function(x) {
+  if (grepl("[[:alpha:]]",x)) {
+    return(1)
+  }
+  if (is.na(x)) {
+    return(1)
+  }
+  t <- paste0("1*",x)
+  t <- gsub("**","*",t,fixed=T)
+  t <- gsub(",",".",t, fixed=T)
+  f <- eval(parse(text = t))
+  return(f)
+}
 
 

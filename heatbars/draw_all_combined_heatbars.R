@@ -168,3 +168,54 @@ ggplot() +
 ggsave("plots/heatbars/all_costs_years_faceted.png")
 
 
+
+pots <- all_data %>%
+  filter(variable=="totalPotential") %>%
+  mutate(
+    variable=technology,
+    year = `Data categorisationyear`,
+    nyear = as.numeric(year),
+    value = as.numeric(value),
+    cf = `Potentials in tCO2/yrconversion factor to common unit`,
+    cff = evcf(cf)
+    ) %>%
+  filter(tolower(`Data categorisationsystem boundaries`)=="global")
+
+# Transform units
+# Biochar t->gigatons
+pots$value[pots$technology=="Biochar"] <- pots$value[pots$technology=="Biochar"]/1000000000
+pots$value[pots$technology=="Afforestation and Reforestation"] <- pots$value[pots$technology=="Afforestation and Reforestation"]/1000000
+
+ews <- c(
+  "Enhanced weathering (terrestrial and ocean)",
+  "Ocean alkalinisation",
+  "Ocean fertilization"
+  )
+
+pots$cff <- as.numeric(lapply(pots$cf, evcf))
+  
+pots$value[pots$technology %in% ews] <- pots$value[pots$technology %in% ews] * pots$cff[pots$technology %in% ews]
+
+pots$value[pots$technology %in% ews] <- pots$value[pots$technology=="Afforestation and Reforestation"]/1000000
+
+
+pots$measurement <- gsub(" (Gt CO2/yr)","",pots$measurement,fixed=T)
+
+ggplot(pots) +
+  geom_point(
+    aes(year,value,colour=technology,shape=measurement)
+  ) + theme_bw()
+
+ggsave("plots/heatbars/potentials.png")
+
+ggplot(pots) +
+  geom_point(
+    aes(nyear,value,colour=technology,shape=measurement)
+  ) + theme_bw()
+
+ggsave("plots/heatbars/potentials_numeric_year.png")
+
+
+
+
+
