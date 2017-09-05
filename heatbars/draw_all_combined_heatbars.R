@@ -100,35 +100,38 @@ all_data$value[
 
 all_data$include=F
 
-#DAC - include everything - mil-101
+#DAC - remove mil-101, as MG-2 has a bigger range
 all_data$include[
   all_data$technology=="DAC" &
     (is.na(all_data$`Data categorisationsystem conditions`) |
-    all_data$`Data categorisationsystem conditions`=="MG-2")
-    ] <- T
+       all_data$`Data categorisationsystem conditions`=="MG-2")
+  ] <- T
 
-#BECCS - include everything?
+#BECCS - include everything that is not cumulative
 all_data$include[
   all_data$technology=="BECCS" &
     all_data$boundaries!="cumulative"
   ] <- T
 
-#EW 
+#EW include everything global
 all_data$include[
-  all_data$technology=="Enhanced weathering (terrestrial and ocean)"
+  all_data$technology=="Enhanced weathering (terrestrial and ocean)" &
+    grepl("global",all_data$boundaries)
   ] <- T
 
-# Ocean fertilisation
+# Ocean fertilisation - include everything global
 all_data$include[
-  all_data$technology=="Ocean fertilization"
+  all_data$technology=="Ocean fertilization" &
+    grepl("global",all_data$boundaries)
   ] <- T
 
-# Ocean alk
+# Ocean alk - include everything global
 all_data$include[
-  all_data$technology=="Ocean alkalinisation"
+  all_data$technology=="Ocean alkalinisation" &
+    grepl("global",all_data$boundaries)
   ] <- T
 
-# Biochar
+# Biochar - include everything global
 all_data$include[
   all_data$technology=="Biochar" &
     all_data$boundaries=="global"
@@ -140,14 +143,13 @@ all_data$include[
     all_data$boundaries=="global"
   ] <- T
 
-# AR
+# AR - include everything global, in 2050 and flux measurement
 all_data$include[
   all_data$technology=="Afforestation and Reforestation" &
     grepl("global",all_data$boundaries) &
     all_data$nyear==2050 &
     all_data$`Potentials in Mt CO2/yearEstimate type`=="Flux"
   ] <- T
-
 
 all_data$AU[is.na(all_data$AU)] <- all_data$UT[is.na(all_data$AU)]
 
@@ -314,6 +316,21 @@ ggplot() +
 
 ggsave("plots/heatbars/all_potentials.png")
 
+ggplot() +
+  geom_jitter(
+    data=pots,
+    aes(PY,value,colour=technology,shape=measurement)
+  ) + theme_bw() +
+  theme(axis.text.x = element_text(angle=60, hjust=1,vjust=1)) +
+  ggrepel::geom_label_repel(
+    data=filter(pots,value> 30 | value < 0.5),
+    aes(PY, value, label=label)
+  ) +
+  facet_grid(technology~.)
+
+
+ggsave("plots/heatbars/all_potentials_faceted.png",width=16,height=32)
+
 
 
 ggplot(pots) +
@@ -351,7 +368,7 @@ rlabs <- potsranges %>%
 names(pics) <- rlabs$resourcelab
 
 
-heatbar(potsranges,"pcnt",text=T) +
+heatbar(potsranges,"pcnt") +
   theme(axis.text.x = element_text(angle=60, hjust=1,vjust=1)) + 
   labs(x="",y="Potentials in Gt CO2/year") +
   theme(axis.text.x  = my_axis(pics))
