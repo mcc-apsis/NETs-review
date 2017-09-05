@@ -32,7 +32,10 @@ get_data <- function(ss,offset=2){
   b <- tail(gvars,1)
   
   gnames <- names(data)[8:(dim(ss)[2]-offset)]
-  except <- c("Potentials in tCO2/yrÂ§Â§conversion factor to common unit","Costs in $US(2011)/tCO2Â§Â§conversion factor to common unit")
+  except <- c(
+    "Potentials in tCO2/yrÂ§Â§conversion factor to common unit",
+    "Costs in $US(2011)/tCO2Â§Â§conversion factor to common unit",
+    "Potentials in Mt CO2/yearÂ§Â§Estimate type")
   gnames <- gnames[!(gnames %in% except)]
   
   a <- gnames[1]
@@ -68,7 +71,8 @@ countranges <- function(df, data, headers, measure) {
     newnames <- names(dataf)[!(names(dataf) %in% onames)]
     newnames <- newnames[nchar(newnames)>0]
     data_cleaned <- dataf %>%
-      gather_("measurement","value",newnames)    
+      gather_("measurement","value",newnames)   
+    data_cleaned$TI[is.na(data_cleaned$TI)] <- data_cleaned$CITATION[is.na(data_cleaned$TI)]
   }
   
 

@@ -144,14 +144,12 @@ all_data$include[
 all_data$include[
   all_data$technology=="Afforestation and Reforestation" &
     grepl("global",all_data$boundaries) &
-    all_data$nyear==2050
+    all_data$nyear==2050 &
+    all_data$`Potentials in Mt CO2/yearEstimate type`=="Flux"
   ] <- T
 
-# AR
-all_data$include[
-  all_data$technology=="Afforestation and Reforestation" &
-  all_data$AU=="Brown"
-  ] <- F
+
+all_data$AU[is.na(all_data$AU)] <- all_data$UT[is.na(all_data$AU)]
 
 
 
@@ -279,8 +277,7 @@ pots <- all_data %>%
   filter(variable=="totalPotential" & include==T) %>%
   mutate(
     variable=technology
-    ) %>%
-  filter(tolower(`Data categorisationsystem boundaries`)=="global")
+    ) 
 
 # Transform units
 # Biochar t->gigatons
@@ -297,11 +294,23 @@ ggplot(pots) +
 
 ggsave("plots/heatbars/potentials.png")
 
-ggplot(pots) +
+bcomma <- function(x) {
+  return(strsplit(x,",")[[1]][[1]])
+}
+
+pots$label <- as.character(lapply(pots$AU, bcomma))
+
+ggplot() +
   geom_jitter(
+    data=pots,
     aes(technology,value,colour=technology,shape=measurement)
   ) + theme_bw() +
-  theme(axis.text.x = element_text(angle=60, hjust=1,vjust=1))
+  theme(axis.text.x = element_text(angle=60, hjust=1,vjust=1)) +
+  ggrepel::geom_label_repel(
+    data=filter(pots,value> 30 | value < 0.5),
+    aes(technology, value, label=label)
+  )
+  
 
 ggsave("plots/heatbars/all_potentials.png")
 
@@ -316,5 +325,36 @@ ggsave("plots/heatbars/potentials_numeric_year.png")
 
 
 
+techs <- unique(pots$technology)
 
+
+ranges <- seq(0,100)
+df <- data.frame(v=ranges)
+
+potsranges <- countranges(
+  df, 
+  mutate(
+    filter(
+      pots
+    ),
+    value=as.numeric(value)
+  ),
+  techs, "max")
+
+rlabs <- potsranges %>%
+  group_by(resource) %>%
+  summarise(
+    resourcelab=paste0(gsub(" (terrestrial and ocean)","",first(resource),fixed=T),'\n[',max(maxvalue),' studies]')
+  )
+
+
+names(pics) <- rlabs$resourcelab
+
+
+heatbar(potsranges,"pcnt",text=T) +
+  theme(axis.text.x = element_text(angle=60, hjust=1,vjust=1)) + 
+  labs(x="",y="Potentials in Gt CO2/year") +
+  theme(axis.text.x  = my_axis(pics))
+
+ggsave("plots/heatbars/all_potentials_labelled.png", width=16,height=10)
 
