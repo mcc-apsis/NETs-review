@@ -32,6 +32,8 @@ get_data <- function(ss,offset=2){
   b <- tail(gvars,1)
   
   gnames <- names(data)[8:(dim(ss)[2]-offset)]
+  except <- "Potentials in tCO2/yrÂ§Â§conversion factor to common unit"
+  gnames <- gnames[gnames!=except]
   
   a <- gnames[1]
   b <- tail(gnames,1)
@@ -39,7 +41,7 @@ get_data <- function(ss,offset=2){
   # Switch the data to long format
   data <- data %>% 
     gather_("variable", "value",
-           paste(names(data)[8:(dim(ss)[2]-offset)])
+           paste(gnames)
             ) %>% 
     separate(variable, into=c("category", "subcategory", "variable"), sep="Â§") %>%
     separate(
@@ -164,8 +166,9 @@ countranges <- function(df, data, headers, measure) {
 calc_cscale <- function(df, f, flab, fixed =T) {
   if (fixed==TRUE) {
     cscale <- scale_fill_gradientn(
-      colours=c("#fffcef","#ffeda0","#feb24c","#f03b20"),
-      values = scales::rescale(c(0,33,66,100)),
+      colours=c("#fffcef","#ffeda0","#feb24c","#f03b20","#f03b20"),
+      #values = scales::rescale(c(0,33,66,100)),
+      values = scales::rescale(c(0,25,50,75,100)),
       limits = c(0,100),
       name=flab
     )
@@ -178,19 +181,37 @@ calc_cscale <- function(df, f, flab, fixed =T) {
   }
 }
 
-heatbar <- function(df,f,step=1, fixed=T) {
+heatbar <- function(df,f,step=1, fixed=T, text=F) {
   flab <- if (f=="pcnt") "% of Studies" else "Number of Studies" 
   #df <- df[df[[f]]>0,]
   df <- df %>%
     group_by(resource) %>%
     mutate(resourcelab=paste0(resource,'\n[',max(maxvalue),' studies]'),
-           dfmax = max(df$v[df$value>0]) 
+           dfmax = max(df$v[df$value>0]),
+           mostagreement = max(value)
            ) %>%
     filter(v <  max(df$v[df$value>0]))
-  
+
+  dfagreement <- df %>%
+    ungroup() %>%
+    group_by(resourcelab) %>%
+    filter(
+      value==mostagreement
+    ) %>%
+    summarise(
+      med = median(v),
+      min = min(v),
+      max = max(v),
+      n = median(value),
+      pcnt = median(pcnt)
+    ) %>%
+    mutate(
+      text = paste0(min,"-",max,"\n",round(pcnt),"%")
+    )
+    
   cscale <- calc_cscale(df, f, flab, fixed)
   
-  ggplot() +
+  p <- ggplot() +
     theme_bw() +
     geom_bar(
       data=df,
@@ -209,6 +230,25 @@ heatbar <- function(df,f,step=1, fixed=T) {
     ) +
     cscale +
     guides(fill = guide_colourbar(reverse = TRUE))
+  
+  if (text) {
+    p <- p +
+      geom_crossbar(
+        data=dfagreement,
+        aes(x=resourcelab, ymin=med, ymax=med, y=med, width=scales::rescale(n,to=c(0.2,0.9))),
+        stat="identity"
+      ) +
+      geom_text(
+        data=dfagreement,
+        aes(resourcelab, med, label=text),
+        #angle=90,
+        #hjust=0,
+        vjust=0,
+        nudge_y=20
+      )
+  }
+    
+  return(p)
 }
 
 
@@ -306,3 +346,57 @@ heatbar_years <- function(data, df, f, grp=NA, fixed=TRUE, graph = FALSE) {
   }
   return(dataf)
 }
+
+
+
+library(ggplot2)  ## devtools::install_github("hadley/ggplot2)
+library(grid)     ## rasterGrob
+library(EBImage)  ## readImage
+library(ggthemes) ## theme_minimal
+
+## ##########
+## INDEPENDENT CODE TO BE SOURCED:
+## ##########
+# user-level interface to the element grob
+my_axis = function(img) {
+  structure(
+    list(img=img),
+    class = c("element_custom","element_blank", "element") # inheritance test workaround
+  )
+}
+# returns a gTree with two children: the text label, and a rasterGrob below
+element_grob.element_custom <- function(element, x,...)  {
+  stopifnot(length(x) == length(element$img))
+  tag <- names(element$img)
+  # add vertical padding to leave space
+  g1 <- textGrob(paste0(tag, "\n\n\n\n\n"), x=x, vjust=1.2)
+  g2 <- mapply(rasterGrob, x=x, image=element$img[tag], 
+               MoreArgs=list(vjust=0.1, interpolate=FALSE,
+                             height=unit(3,"lines")),
+               SIMPLIFY=FALSE)
+  
+  gTree(children=do.call(gList, c(list(g1), g2)), cl="custom_axis")
+}
+# gTrees don't know their size and ggplot would squash it, so give it room
+grobHeight.custom_axis = heightDetails.custom_axis = function(x, ...)
+  unit(6, "lines")
+## ##########
+## END
+## ##########
+
+
+evcf <- function(x) {
+  if (grepl("[[:alpha:]]",x)) {
+    return(1)
+  }
+  if (is.na(x)) {
+    return(1)
+  }
+  t <- paste0("1*",x)
+  t <- gsub("**","*",t,fixed=T)
+  t <- gsub(",",".",t, fixed=T)
+  f <- eval(parse(text = t))
+  return(f)
+}
+
+
