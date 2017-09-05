@@ -1,0 +1,78 @@
+rm(list=ls())
+#==== USER SECTION ==========
+u_sheetName <- "BECCS (so far only bioenergy potential)"
+u_sheetName <- "Afforestation and Reforestation"
+u_sheetName <- "DAC"
+#u_sheetName <- "BECCS (Bioenergy)"
+DEBUG       <- TRUE
+
+dir.create(paste0("plots/heatbars/",u_sheetName))
+
+costsdir = paste0("plots/heatbars/",u_sheetName,"/costs")
+potsdir = paste0("plots/heatbars/",u_sheetName,"/potentials")
+
+dir.create(costsdir)
+dir.create(potsdir)
+
+#==== INITIALISE ==========
+# Load libraries
+library(googlesheets)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(countrycode)
+
+source("heatbars/heatbar_functions.R")
+
+# Authorise googlesheets to access your Google Sheets account
+gs_auth()
+
+
+#==== READ IN SPREADSHEET ==========
+gs  <- gs_title("NETs Review")
+ss  <- gs_read(gs, ws = u_sheetName, verbose=DEBUG)
+
+data <- get_data(ss)
+
+################################################
+## Generate a new df of ranges
+
+# Adjust the maximum here to change the scale
+ranges <- seq(0,1000)
+df <- data.frame(v=ranges)
+
+
+# Get a list of resources, or define it yourself
+
+costs <- c("cost")
+
+### Range
+res2050 <- countranges(
+  df, 
+  filter(
+    data,
+    `Data categorisationsystem conditions`!="MIL-101" | 
+      is.na(`Data categorisationsystem conditions`)
+    ), 
+  costs, "range")
+
+heatbar(res2050,"pcnt") + 
+  labs(x="",y="Costs in $US(2011)/tCO2") 
+
+ggsave(paste0(costsdir,"/range.png"),width=8,height=5)
+
+######################################################
+## Plot year bars (coloured)
+
+dataf <- heatbar_years(  
+  filter(
+  data,
+  `Data categorisationsystem conditions`!="MIL-101" | 
+    is.na(`Data categorisationsystem conditions`)
+  ), 
+  res2050, 
+  "pcnt")
+
+
+
+ggsave(paste0(costsdir,"/range_years.png"),width=8,height=5)

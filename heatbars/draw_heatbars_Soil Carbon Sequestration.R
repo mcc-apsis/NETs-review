@@ -1,9 +1,7 @@
 rm(list=ls())
 #==== USER SECTION ==========
-u_sheetName <- "BECCS (so far only bioenergy potential)"
-u_sheetName <- "Afforestation and Reforestation"
-#u_sheetName <- "DAC"
-#u_sheetName <- "BECCS (Bioenergy)"
+u_sheetName <- "Soil Carbon Sequestration"
+
 DEBUG       <- TRUE
 
 dir.create(paste0("plots/heatbars/",u_sheetName))
@@ -38,36 +36,24 @@ data <- get_data(ss)
 ## Generate a new df of ranges
 
 # Adjust the maximum here to change the scale
-ranges <- seq(0,300)
+ranges <- seq(0,1000)
 df <- data.frame(v=ranges)
 
 
 # Get a list of resources, or define it yourself
-resources <- unique(
-  data[data$measurement=="max" & data$variable!="cost",]$variable
-)
-resources <- resources[!is.na(resources)]
-
-
-costs <- unique(
-  data[data$measurement=="max" & 
-         data$variable=="cost",
-       ]$variable
-)
 
 costs <- c("cost")
 
-
 ### Range
-res2050 <- countranges(df, filter(data, PY > 2004), costs, "range")
-
-heatbar(res2050,"pcnt") + 
-  labs(x="",y="Costs in $US(2011)/tCO2") 
-
-ggsave(paste0(costsdir,"/range_gt_2004.png"),width=8,height=5)
-
-
-res2050 <- countranges(df, filter(data), costs, "range")
+res2050 <- countranges(
+  df, 
+  mutate(
+    filter(
+      data
+    ),
+    value=as.numeric(gsub("[^0-9\\.]", "", value))
+  ), 
+  costs, "range")
 
 heatbar(res2050,"pcnt") + 
   labs(x="",y="Costs in $US(2011)/tCO2") 
@@ -81,12 +67,10 @@ heatbar_years(data, res2050, "pcnt")
 
 ggsave(paste0(costsdir,"/range_years.png"),width=8,height=5)
 
-heatbar_years(data, res2050, "pcnt", "region")
 
-ggsave(paste0(costsdir,"/range_years_region.png"),width=8,height=5)
+###############################################
+## Potentials
 
-#########################################################################
-## Now do potentials
 
 ranges <- seq(0,10,by=0.1)
 
@@ -96,24 +80,15 @@ pots2050 <- countranges(
   df, 
   mutate(
     filter(
-      data,`Data categorisationsystem boundaries`=="Global", `Data categorisationyear`==2050
-      ),
-    value=as.numeric(value)/1000
+      data,`Data categorisationsystem boundaries`=="Global"
+    ),
+    value=as.numeric(gsub("[^0-9\\.]", "", value))
   ),
   c("totalPotential"), 
   "max"
-  )
+)
 
 heatbar(pots2050,"pcnt",step=0.1) + 
-  labs(x="",y="Potentials (2050) Gt CO2/year")
+  labs(x="",y="Potential in Gt CO2?") 
 
-ggsave(paste0(potsdir,"/max_2050.png"),width=8,height=5)
-
-
-dataf <- data %>%
-  filter(
-    variable=="totalPotential",
-    `Data categorisationsystem boundaries`=="Global",
-    `Data categorisationyear`==2100,
-    measurement=="max"
-    )
+ggsave(paste0(potsdir,"/total_potential.png"),width=8,height=5)

@@ -12,8 +12,18 @@ library(googlesheets)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(countrycode)
 
-source("heatbar_functions.R")
+
+source("heatbars/heatbar_functions.R")
+
+dir.create(paste0("plots/heatbars/",u_sheetName))
+
+costsdir = paste0("plots/heatbars/",u_sheetName,"/costs")
+potsdir = paste0("plots/heatbars/",u_sheetName,"/potentials")
+
+dir.create(costsdir)
+dir.create(potsdir)
 
 # Authorise googlesheets to access your Google Sheets account
 gs_auth()
@@ -23,15 +33,14 @@ gs_auth()
 gs  <- gs_title("NETs Review")
 ss  <- gs_read(gs, ws = u_sheetName, verbose=DEBUG)
 
-data <- get_data(ss)
-names(data) <- make.names(names(data))
-
+data <- get_data(ss,2)
 
 ################################################
 ## Generate a new df of ranges
 
+##### POTENTIALS
 # Adjust the maximum here to change the scale
-ranges <- seq(1,60)
+ranges <- seq(1,20)
 df <- data.frame(v=ranges)
 
 
@@ -42,13 +51,6 @@ resources <- unique(
 resources <- resources[!is.na(resources)]
 
 
-costs <- unique(
-  data[data$measurement=="max" & 
-         data$variable=="cost",
-       ]$variable
-)
-
-TotalEstimates <- "totalPotential"
 #   unique(
 #   data[data$measurement == "max" &
 #          data&variable == "totalPotential",
@@ -58,29 +60,58 @@ TotalEstimates <- "totalPotential"
 
 # Count the studies with a maximum under each range for each resource
 # Add any additional "Dimension" filters too
-res2050 <- countranges(df, filter(data), costs, "max")
-heatbar(res2050,"pcnt") + 
-  labs(x="Variable",y="Cost")
-ggsave("plots/BECCS/max.png",width=8,height=5)
 
-res2050 <- countranges(df, filter(data, Data.categorisationyear == 2050 & Data.categorisationsystem.boundaries == "Global"), totalPotential, "max")
+
+# max
+res2050 <- countranges(df, 
+                       filter(data, `Data categorisationyear` == 2050 & `Data categorisationsystem boundaries` == "Global"),
+                       resources,
+                       "max"
+                       )
 heatbar(res2050,"pcnt") + 
   labs(x="Variable",y="Estimate") +
-  ylim(c(0,60))
-ggsave("plots/BECCS/potential.png",width=8,height=5)
+  ylim(c(0,20))
+ggsave(paste0(potsdir,"/max_2050.png"),width=8,height=5)
 
-
-res2050 <- countranges(df, filter(data, PY > 2004), costs, "max")
+# range
+res2050 <- countranges(df, 
+                       filter(data, `Data categorisationyear` == 2050 & `Data categorisationsystem boundaries` == "Global"),
+                       resources,
+                       "range"
+)
 heatbar(res2050,"pcnt") + 
-  labs(x="Variable",y="Cost")
-ggsave("plots/afforestation/max_gt_2004.png",width=8,height=5)
+  labs(x="Variable",y="Estimate") +
+  ylim(c(0,20))
 
-res2050 <- countranges(df, filter(data, PY > 2004), costs, "min")
-heatbar(res2050,"pcnt") + 
-  labs(x="Variable",y="Cost") +
-  ylim(c(0,200))
+ggsave(paste0(potsdir,"/range_2050.png"),width=8,height=5)
 
-ggsave("plots/afforestation/min_gt_2004.png",width=8,height=5)
+
+###### Costs 
+
+ranges <- seq(1,400)
+df <- data.frame(v=ranges)
+costs <- c("cost")
+
+costs <- unique(
+  data[data$measurement=="max" & 
+         data$variable=="cost",
+       ]$variable
+)
+
+
+res2050 <- countranges(df, 
+                       filter(data),
+                       costs,
+                       "range"
+)
+
+heatbar_years(data, res2050, "pcnt")
+
+ggsave(paste0(costsdir,"/range_years.png"),width=8,height=5)
+
+heatbar_years(data, res2050, "pcnt", "`Data categorisationresource`")
+
+ggsave(paste0(costsdir,"/range_years_region.png"),width=8,height=5)
 
 
 
