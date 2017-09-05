@@ -22,8 +22,8 @@ dir.create(paste0("plots/heatbars/",u_sheetName))
 costsdir = paste0("plots/heatbars/",u_sheetName,"/costs")
 potsdir = paste0("plots/heatbars/",u_sheetName,"/potentials")
 
-dir.create(costsdir)
-dir.create(potsdir)
+# dir.create(costsdir)
+# dir.create(potsdir)
 
 # Authorise googlesheets to access your Google Sheets account
 gs_auth()
@@ -88,7 +88,7 @@ ggsave(paste0(potsdir,"/range_2050.png"),width=8,height=5)
 
 ###### Costs 
 
-ranges <- seq(1,400)
+ranges <- seq(1,450)
 df <- data.frame(v=ranges)
 costs <- c("cost")
 
@@ -104,6 +104,8 @@ res2050 <- countranges(df,
                        costs,
                        "range"
 )
+
+heatbar(res2050, "pcnt")
 
 heatbar_years(data, res2050, "pcnt")
 
