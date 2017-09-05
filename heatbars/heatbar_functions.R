@@ -32,8 +32,8 @@ get_data <- function(ss,offset=2){
   b <- tail(gvars,1)
   
   gnames <- names(data)[8:(dim(ss)[2]-offset)]
-  except <- "Potentials in tCO2/yrÂ§Â§conversion factor to common unit"
-  gnames <- gnames[gnames!=except]
+  except <- c("Potentials in tCO2/yrÂ§Â§conversion factor to common unit","Costs in $US(2011)/tCO2Â§Â§conversion factor to common unit")
+  gnames <- gnames[!(gnames %in% except)]
   
   a <- gnames[1]
   b <- tail(gnames,1)
@@ -387,12 +387,16 @@ evcf <- function(x) {
   if (grepl("[[:alpha:]]",x)) {
     return(1)
   }
+  if (!grepl("[[:digit:]]",x)) {
+    return(1)
+  }
   if (is.na(x)) {
     return(1)
   }
   t <- paste0("1*",x)
   t <- gsub("**","*",t,fixed=T)
   t <- gsub(",",".",t, fixed=T)
+  t <- gsub("*/","/",t, fixed=T)
   f <- eval(parse(text = t))
   return(f)
 }

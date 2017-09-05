@@ -44,7 +44,7 @@ all_data <- data.frame()
 
 for (u_sheetName in sheets) {
   print(u_sheetName)
-  Sys.sleep(3)
+  Sys.sleep(6)
   ss  <- gs_read(gs, ws = u_sheetName, verbose=FALSE)
   data <- get_data(ss)
   data$technology <- u_sheetName
@@ -52,15 +52,119 @@ for (u_sheetName in sheets) {
   all_data <- bind_rows(all_data, data)
 }
 
+#######################################
+## Fix one or two problems in the old data
+
+all_data <- all_data %>%
+  mutate(
+    year = `Data categorisationyear`,
+    nyear = as.numeric(year),
+    value = as.numeric(value),
+    pcf = `Potentials in tCO2/yrconversion factor to common unit`,
+    ccf = `Costs in $US(2011)/tCO2conversion factor to common unit`,
+    boundaries = tolower(`Data categorisationsystem boundaries`)
+  ) 
+
+ews <- c(
+  "Enhanced weathering (terrestrial and ocean)",
+  "Ocean alkalinisation",
+  "Ocean fertilization"
+)
+
+all_data$pcf <- as.numeric(lapply(all_data$pcf, evcf))
+all_data$ccf <- as.numeric(lapply(all_data$ccf, evcf))
+
+all_data$value[
+  all_data$technology %in% ews & 
+    all_data$variable=="totalPotential"
+  ] <- all_data$value[all_data$technology %in% ews & 
+                        all_data$variable=="totalPotential"
+                      ] * all_data$pcf[
+                        all_data$technology %in% ews & 
+                          all_data$variable=="totalPotential"
+                        ]
+
+all_data$value[
+  all_data$technology %in% ews & 
+    all_data$variable=="cost"
+  ] <- all_data$value[all_data$technology %in% ews & 
+                        all_data$variable=="cost"
+                      ] * all_data$ccf[
+                        all_data$technology %in% ews & 
+                          all_data$variable=="cost"
+                        ]
+
+
+#########################################
+## We should define some criteria for each tech - it's always different
+
+all_data$include=F
+
+#DAC - include everything - mil-101
+all_data$include[
+  all_data$technology=="DAC" &
+    (is.na(all_data$`Data categorisationsystem conditions`) |
+    all_data$`Data categorisationsystem conditions`=="MG-2")
+    ] <- T
+
+#BECCS - include everything?
+all_data$include[
+  all_data$technology=="BECCS" &
+    all_data$boundaries!="cumulative"
+  ] <- T
+
+#EW 
+all_data$include[
+  all_data$technology=="Enhanced weathering (terrestrial and ocean)"
+  ] <- T
+
+# Ocean fertilisation
+all_data$include[
+  all_data$technology=="Ocean fertilization"
+  ] <- T
+
+# Ocean alk
+all_data$include[
+  all_data$technology=="Ocean alkalinisation"
+  ] <- T
+
+# Biochar
+all_data$include[
+  all_data$technology=="Biochar" &
+    all_data$boundaries=="global"
+  ] <- T
+
+# Soil Carbon Sequestration
+all_data$include[
+  all_data$technology=="Soil Carbon Sequestration" &
+    all_data$boundaries=="global"
+  ] <- T
+
+# AR
+all_data$include[
+  all_data$technology=="Afforestation and Reforestation" &
+    grepl("global",all_data$boundaries) &
+    all_data$nyear==2050
+  ] <- T
+
+# AR
+all_data$include[
+  all_data$technology=="Afforestation and Reforestation" &
+  all_data$AU=="Brown"
+  ] <- F
+
+
+
+
 ###################################
 ## Plot costs for all estimates and all technologies
 
 
 costs <- all_data %>%
-  filter(variable=="cost") %>%
+  filter(variable=="cost" & include==T) %>%
   mutate(variable=technology)
 
-techs <- unique(all_data$technology)
+techs <- unique(costs$technology)
 
 
 ranges <- seq(0,1000)
@@ -104,9 +208,8 @@ ggsave("plots/heatbars/all_costs_labelled.png", width=16,height=10)
 
 
 dataf <- filter(
-  suppressWarnings(mutate(all_data,value=as.numeric(value))),
+  costs,
   measurement %in% c("min","max","estimate"),
-  variable=="cost",
   !is.na(value)
 ) %>% spread(
   measurement, value
@@ -169,44 +272,40 @@ ggsave("plots/heatbars/all_costs_years_faceted.png")
 
 
 
+###################################
+## Plot potentials for all estimates and all technologies
+
 pots <- all_data %>%
-  filter(variable=="totalPotential") %>%
+  filter(variable=="totalPotential" & include==T) %>%
   mutate(
-    variable=technology,
-    year = `Data categorisationyear`,
-    nyear = as.numeric(year),
-    value = as.numeric(value),
-    cf = `Potentials in tCO2/yrconversion factor to common unit`,
-    cff = evcf(cf)
+    variable=technology
     ) %>%
   filter(tolower(`Data categorisationsystem boundaries`)=="global")
 
 # Transform units
 # Biochar t->gigatons
 pots$value[pots$technology=="Biochar"] <- pots$value[pots$technology=="Biochar"]/1000000000
-pots$value[pots$technology=="Afforestation and Reforestation"] <- pots$value[pots$technology=="Afforestation and Reforestation"]/1000000
-
-ews <- c(
-  "Enhanced weathering (terrestrial and ocean)",
-  "Ocean alkalinisation",
-  "Ocean fertilization"
-  )
-
-pots$cff <- as.numeric(lapply(pots$cf, evcf))
-  
-pots$value[pots$technology %in% ews] <- pots$value[pots$technology %in% ews] * pots$cff[pots$technology %in% ews]
-
-pots$value[pots$technology %in% ews] <- pots$value[pots$technology=="Afforestation and Reforestation"]/1000000
-
+pots$value[pots$technology=="Afforestation and Reforestation"] <- pots$value[pots$technology=="Afforestation and Reforestation"]/1000
+pots$value[pots$technology %in% ews] <- pots$value[pots$technology %in% ews]/1000000000
 
 pots$measurement <- gsub(" (Gt CO2/yr)","",pots$measurement,fixed=T)
 
 ggplot(pots) +
-  geom_point(
+  geom_jitter(
     aes(year,value,colour=technology,shape=measurement)
-  ) + theme_bw()
+  ) + theme_bw() 
 
 ggsave("plots/heatbars/potentials.png")
+
+ggplot(pots) +
+  geom_jitter(
+    aes(technology,value,colour=technology,shape=measurement)
+  ) + theme_bw() +
+  theme(axis.text.x = element_text(angle=60, hjust=1,vjust=1))
+
+ggsave("plots/heatbars/all_potentials.png")
+
+
 
 ggplot(pots) +
   geom_point(
