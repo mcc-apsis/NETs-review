@@ -212,7 +212,7 @@ heatbar <- function(df,f,step=1, fixed=T) {
 }
 
 
-heatbar_years <- function(data, df, f, grp=NA, fixed=TRUE) {
+heatbar_years <- function(data, df, f, grp=NA, fixed=TRUE, graph = FALSE) {
   dataf <- filter(
     suppressWarnings(mutate(data,value=as.numeric(value))),
     measurement %in% c("min","max"),
@@ -299,8 +299,11 @@ heatbar_years <- function(data, df, f, grp=NA, fixed=TRUE) {
     ylines + labs(
       x = "Year",y="Costs in $US(2011)/tCO2"
     )
+  #added + geom text in attempt to add labels. Check with Max or remove
   
   print(p)
-  
+  if(graph){
+    return(p)
+  }
   return(dataf)
 }
