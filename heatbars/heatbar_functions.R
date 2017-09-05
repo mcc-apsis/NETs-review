@@ -252,7 +252,7 @@ heatbar <- function(df,f,step=1, fixed=T, text=F) {
 }
 
 
-heatbar_years <- function(data, df, f, grp=NA, fixed=TRUE) {
+heatbar_years <- function(data, df, f, grp=NA, fixed=TRUE, graph = FALSE, y =1980, w = 20) {
   dataf <- filter(
     suppressWarnings(mutate(data,value=as.numeric(value))),
     measurement %in% c("min","max"),
@@ -280,8 +280,8 @@ heatbar_years <- function(data, df, f, grp=NA, fixed=TRUE) {
   dataf$region[grepl("Latin America", dataf$`Data categorisationsystem boundaries`)] <- "LAM"
   dataf$region[grepl("Ecuador", dataf$`Data categorisationsystem boundaries`)] <- "LAM"
   
-  w = 20
-  y = 1980
+  
+  
   #df <- res2050[res2050[[f]]>0,]
   flab <- if (f=="pcnt") "% of Studies" else "Number of Studies" 
   
@@ -339,9 +339,11 @@ heatbar_years <- function(data, df, f, grp=NA, fixed=TRUE) {
     ylines + labs(
       x = "Year",y="Costs in $US(2011)/tCO2"
     )
-  
+
   print(p)
-  
+  if(graph){
+    return(list(p,dataf))
+  }
   return(dataf)
 }
 
