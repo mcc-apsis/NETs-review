@@ -7,6 +7,8 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(countrycode)
+library(ggrepel)
+library(parallel)
 
 source("heatbars/heatbar_functions.R")
 
@@ -98,62 +100,106 @@ all_data$value[
 #########################################
 ## We should define some criteria for each tech - it's always different
 
-all_data$include=F
+# Do this for costs and potentials
+all_data$costinclude=F
+all_data$potsinclude=F
 
 #DAC - remove mil-101, as MG-2 has a bigger range
-all_data$include[
+#pots
+all_data$costsinclude[
   all_data$technology=="DAC" &
     (is.na(all_data$`Data categorisationsystem conditions`) |
        all_data$`Data categorisationsystem conditions`=="MG-2")
   ] <- T
 
 #BECCS - include everything that is not cumulative
-all_data$include[
+all_data$costsinclude[
   all_data$technology=="BECCS" &
-    all_data$boundaries!="cumulative"
+    (all_data$boundaries!="cumulative" | is.na(all_data$boundaries)),
   ] <- T
 
+all_data$potsinclude[
+  all_data$technology=="BECCS" &
+    (all_data$boundaries!="cumulative" | is.na(all_data$boundaries)),
+  ] <- T
+
+
+b <- all_data[
+  all_data$technology=="BECCS" &
+    (all_data$boundaries!="cumulative" | is.na(all_data$boundaries)),
+  ] 
+
 #EW include everything global
-all_data$include[
+all_data$costsinclude[
+  all_data$technology=="Enhanced weathering (terrestrial and ocean)" &
+    grepl("global",all_data$boundaries)
+  ] <- T
+
+all_data$potsinclude[
   all_data$technology=="Enhanced weathering (terrestrial and ocean)" &
     grepl("global",all_data$boundaries)
   ] <- T
 
 # Ocean fertilisation - include everything global
-all_data$include[
+all_data$costsinclude[
+  all_data$technology=="Ocean fertilization" &
+    grepl("global",all_data$boundaries)
+  ] <- T
+
+all_data$potsinclude[
   all_data$technology=="Ocean fertilization" &
     grepl("global",all_data$boundaries)
   ] <- T
 
 # Ocean alk - include everything global
-all_data$include[
+all_data$costsinclude[
+  all_data$technology=="Ocean alkalinisation" &
+    grepl("global",all_data$boundaries)
+  ] <- T
+
+all_data$potsinclude[
   all_data$technology=="Ocean alkalinisation" &
     grepl("global",all_data$boundaries)
   ] <- T
 
 # Biochar - include everything global
-all_data$include[
+all_data$costsinclude[
+  all_data$technology=="Biochar" &
+    all_data$boundaries=="global"
+  ] <- T
+
+all_data$potsinclude[
   all_data$technology=="Biochar" &
     all_data$boundaries=="global"
   ] <- T
 
 # Soil Carbon Sequestration
-all_data$include[
+all_data$potsinclude[
+  all_data$technology=="Soil Carbon Sequestration" &
+    all_data$boundaries=="global"
+  ] <- T
+
+all_data$costsinclude[
   all_data$technology=="Soil Carbon Sequestration" &
     all_data$boundaries=="global"
   ] <- T
 
 # AR - include everything global, in 2050 and flux measurement
-all_data$include[
+all_data$potsinclude[
   all_data$technology=="Afforestation and Reforestation" &
     grepl("global",all_data$boundaries) &
     all_data$nyear==2050 &
     all_data$`Potentials in Mt CO2/yearEstimate type`=="Flux"
   ] <- T
 
+all_data$costsinclude[
+  all_data$technology=="Afforestation and Reforestation"
+  ] <- T
+
 all_data$AU[is.na(all_data$AU)] <- all_data$UT[is.na(all_data$AU)]
 
 
+save(all_data,file="data/all_data.RData")
 
 
 ###################################
@@ -161,44 +207,41 @@ all_data$AU[is.na(all_data$AU)] <- all_data$UT[is.na(all_data$AU)]
 
 
 costs <- all_data %>%
-  filter(variable=="cost" & include==T) %>%
+  filter(variable=="cost" & costsinclude==T) %>%
   mutate(variable=technology)
 
+
+
+## Get a dataframe with values to 1000 and the number of studies in that range
+## for each tech
+
 techs <- unique(costs$technology)
-
-
 ranges <- seq(0,1000)
 df <- data.frame(v=ranges)
 
-costs2050 <- countranges(
+
+system.time(
+costranges <- countranges(
   df, 
   mutate(
-    filter(
-      costs
-    ),
+    costs,
     value=as.numeric(gsub("[^0-9\\.]", "", value))
   ), 
-  techs, "range")
+  techs, "range"))
 
-rlabs <- costs2050 %>%
+## Make some nicer labels
+
+rlabs <- costranges %>%
   group_by(resource) %>%
   summarise(
     resourcelab=paste0(gsub(" (terrestrial and ocean)","",first(resource),fixed=T),'\n[',max(maxvalue),' studies]')
   )
 
-
 names(pics) <- rlabs$resourcelab
 
+## Plot a heatbar with that text label, and pretty pictures of the technologies
 
-heatbar(costs2050,"pcnt") +
-  theme(axis.text.x = element_text(angle=60, hjust=1,vjust=1)) + 
-  labs(x="Technology",y="Costs in $US(2011)/tCO2") 
-
-ggsave("plots/heatbars/all_costs.png")
-
-
-
-heatbar(costs2050,"pcnt",text=T) +
+heatbar(costranges,"pcnt",text=T) +
   theme(axis.text.x = element_text(angle=60, hjust=1,vjust=1)) + 
   labs(x="",y="Costs in $US(2011)/tCO2") +
   theme(axis.text.x  = my_axis(pics))
@@ -269,6 +312,27 @@ ggplot() +
   facet_grid(technology~.)
 
 ggsave("plots/heatbars/all_costs_years_faceted.png")
+
+bcomma <- function(x) {
+  return(strsplit(x,",")[[1]][[1]])
+}
+
+costs$label <- paste0(as.character(lapply(costs$AU, bcomma)),", ",costs$PY)
+
+for (t in techs) {
+  tranges <- costranges[costranges$resource==t,]
+  tcosts <- costs[costs$technology==t,]
+  y1 <- min(tcosts$PY,na.rm=T)
+  y2 <- max(tcosts$PY,na.rm=T)
+  diff <- y2-y1
+  mid <- y1+diff/2
+  h1<- heatbar_years(tcosts, tranges, "pcnt", graph = TRUE, y = mid, w = diff,var=t)
+  h1[[1]] +  geom_text_repel(data = h1[[2]], 
+                             aes(x = PYJ, y = max, label = label, angle = 90) 
+  )
+  
+  ggsave(paste0("plots/heatbars/",t,"/costs/range_year_studies.png"))
+}
 
 
 

@@ -122,12 +122,25 @@ countranges <- function(df, data, headers, measure) {
     return(nrow(dataf))
     }
   
+  # Calculate the number of cores
+  no_cores <- detectCores() - 1
   
+  # Initiate cluster
+  cl <- makeCluster(no_cores)
+  
+  clusterEvalQ(cl, library(dplyr))
+  clusterEvalQ(cl, library(tidyr))
+  clusterExport(cl, "countrange", envir=environment())
+  clusterExport(cl, "costs", envir=environment())
+  clusterExport(cl, "data", envir=environment())
   
   # For each resource, count the number of values under each threshold
   for (r in headers) {
-    df[[r]] <- as.numeric(lapply(df$v,countrange, r, measure))
+    clusterExport(cl, "r", envir=environment())
+    df[[r]] <- as.numeric(parLapply(cl, df$v,countrange, r, measure))
+    #df[[r]] <- as.numeric(lapply(df$v,countrange, r, measure))
   }
+  stopCluster(cl)
   
   if (measure == "range") {
     data_r_sum <- filter(
@@ -256,11 +269,11 @@ heatbar <- function(df,f,step=1, fixed=T, text=F) {
 }
 
 
-heatbar_years <- function(data, df, f, grp=NA, fixed=TRUE, graph = FALSE, y =1980, w = 20) {
+heatbar_years <- function(data, df, f, var="cost", grp=NA, fixed=TRUE, graph = FALSE, y =1980, w = 20) {
   dataf <- filter(
     suppressWarnings(mutate(data,value=as.numeric(value))),
     measurement %in% c("min","max"),
-    variable==costs[1],
+    #variable==var,
     !is.na(value)
   ) %>% spread(
     measurement, value
