@@ -252,11 +252,11 @@ heatbar <- function(df,f,step=1, fixed=T, text=F) {
 }
 
 
-heatbar_years <- function(data, df, f, grp=NA, fixed=TRUE, graph = FALSE, y =1980, w = 20, type = "costs") {
+heatbar_years <- function(data, df, f, grp=NA, fixed=TRUE, graph = FALSE, y =1980, w = 20) {
   dataf <- filter(
     suppressWarnings(mutate(data,value=as.numeric(value))),
     measurement %in% c("min","max"),
-    variable==type[1],
+    variable==costs[1],
     !is.na(value)
   ) %>% spread(
     measurement, value

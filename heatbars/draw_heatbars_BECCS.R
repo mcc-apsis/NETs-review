@@ -18,7 +18,7 @@ library(ggrepel)
 
 source("heatbars/heatbar_functions.R")
 
-dir.create(paste0("plots/heatbars/",u_sheetName))
+#dir.create(paste0("plots/heatbars/",u_sheetName))
 
 costsdir = paste0("plots/heatbars/",u_sheetName,"/costs")
 potsdir = paste0("plots/heatbars/",u_sheetName,"/potentials")
@@ -125,6 +125,14 @@ h1[[1]] +  geom_text_repel(data = mutate(h1[[2]],UT = paste(substr(UT, 1,10),PY)
                            aes(x = PYJ, y = max, label = UT, angle = 90) 
 )
 ggsave(paste0(costsdir,"/range_years_labels2.png"),width=16,height=5)
+
+
+h2<- heatbar_years(data, res2050, "pcnt","`Data categorisationresource`", graph = TRUE, y = 2010, w = 15)
+h2[[1]] +  geom_text_repel(data = mutate(h2[[2]],UT = paste(substr(UT, 1,10),PY)), 
+                           aes(x = PYJ, y = max, label = UT, angle = 90) 
+)
+ggsave(paste0(costsdir,"/range_years_labels3.png"),width=16,height=5)
+
 ##### costs separated by resource
 # copy resource type to appropriate variable location
 
