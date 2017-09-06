@@ -104,6 +104,8 @@ all_data$value[
 all_data$costsinclude=F
 all_data$potsinclude=F
 
+all_data$boundaries[is.na(all_data$boundaries)] <- ""
+
 #DAC - remove mil-101, as MG-2 has a bigger range
 #pots
 all_data$costsinclude[
@@ -115,12 +117,12 @@ all_data$costsinclude[
 #BECCS - include everything that is not cumulative
 all_data$costsinclude[
   all_data$technology=="BECCS" &
-    (all_data$boundaries!="cumulative" | is.na(all_data$boundaries))
+    !(all_data$boundaries %in% c("cumulative","exclude"))
   ] <- T
 
 all_data$potsinclude[
   all_data$technology=="BECCS" &
-    (all_data$boundaries!="cumulative" | is.na(all_data$boundaries))
+    !(all_data$boundaries %in% c("cumulative","exclude"))
   ] <- T
 
 
@@ -130,8 +132,7 @@ all_data$costsinclude[
   ] <- T
 
 all_data$potsinclude[
-  all_data$technology=="Enhanced weathering (terrestrial and ocean)" &
-    grepl("global",all_data$boundaries)
+  all_data$technology=="Enhanced weathering (terrestrial and ocean)"
   ] <- T
 
 # Ocean fertilisation - include everything global
