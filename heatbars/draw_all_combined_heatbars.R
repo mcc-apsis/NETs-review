@@ -101,7 +101,7 @@ all_data$value[
 ## We should define some criteria for each tech - it's always different
 
 # Do this for costs and potentials
-all_data$costinclude=F
+all_data$costsinclude=F
 all_data$potsinclude=F
 
 #DAC - remove mil-101, as MG-2 has a bigger range
@@ -126,8 +126,7 @@ all_data$potsinclude[
 
 #EW include everything global
 all_data$costsinclude[
-  all_data$technology=="Enhanced weathering (terrestrial and ocean)" &
-    grepl("global",all_data$boundaries)
+  all_data$technology=="Enhanced weathering (terrestrial and ocean)"
   ] <- T
 
 all_data$potsinclude[
@@ -137,8 +136,7 @@ all_data$potsinclude[
 
 # Ocean fertilisation - include everything global
 all_data$costsinclude[
-  all_data$technology=="Ocean fertilization" &
-    grepl("global",all_data$boundaries)
+  all_data$technology=="Ocean fertilization" 
   ] <- T
 
 all_data$potsinclude[
@@ -148,8 +146,7 @@ all_data$potsinclude[
 
 # Ocean alk - include everything global
 all_data$costsinclude[
-  all_data$technology=="Ocean alkalinisation" &
-    grepl("global",all_data$boundaries)
+  all_data$technology=="Ocean alkalinisation" 
   ] <- T
 
 all_data$potsinclude[
@@ -159,8 +156,7 @@ all_data$potsinclude[
 
 # Biochar - include everything global
 all_data$costsinclude[
-  all_data$technology=="Biochar" &
-    all_data$boundaries=="global"
+  all_data$technology=="Biochar" 
   ] <- T
 
 all_data$potsinclude[
@@ -175,8 +171,7 @@ all_data$potsinclude[
   ] <- T
 
 all_data$costsinclude[
-  all_data$technology=="Soil Carbon Sequestration" &
-    all_data$boundaries=="global"
+  all_data$technology=="Soil Carbon Sequestration"
   ] <- T
 
 # AR - include everything global, in 2050 and flux measurement
@@ -222,13 +217,35 @@ all_data$value[
 save(all_data,file="data/all_data.RData")
 
 
+#### Add in max + min 0.5 around estimate
+all_data$TI[is.na(all_data$TI)] <- all_data$CITATION[is.na(all_data$TI)]
+
+onames <- names(all_data)
+dataf <- suppressWarnings(mutate(all_data,value=as.numeric(value))) %>%
+  group_by(TI, variable) %>%
+  filter(!is.na(measurement),!is.na(TI)) %>%
+  spread(measurement, value )
+
+dataf$max[is.na(dataf$max)] <- dataf$estimate[is.na(dataf$max)] + 0.5
+dataf$min[is.na(dataf$min)] <- dataf$estimate[is.na(dataf$min)] - 0.5
+newnames <- names(dataf)[!(names(dataf) %in% onames)]
+newnames <- newnames[nchar(newnames)>0]
+all_data <- dataf %>%
+  gather_("measurement","value",newnames) 
+
+
+all_data <- all_data[,names(all_data[names(all_data)!=""])]
+
+
 ###################################
 ## Plot costs for all estimates and all technologies
 
 
-costs <- all_data %>%
+costs <- as.data.frame(all_data) %>%
   filter(variable=="cost" & costsinclude==T) %>%
   mutate(variable=technology)
+
+
 
 
 
@@ -345,10 +362,10 @@ for (t in techs) {
   h1<- heatbar_years(tcosts, tranges, "pcnt", graph = TRUE, y = mid, w = diff,var=t)
   h1[[1]] +  geom_text_repel(data = h1[[2]], 
                              aes(x = PYJ, y = max, label = label, angle = 90) 
-  )
-  
+  ) + ggtitle(t)
   ggsave(paste0("plots/heatbars/",t,"/costs/range_year_studies.png"))
 }
+
 
 
 
@@ -356,6 +373,7 @@ for (t in techs) {
 ## Plot potentials for all estimates and all technologies
 
 pots <- all_data %>%
+  ungroup() %>%
   filter(variable=="totalPotential" & potsinclude==T) %>%
   mutate(
     variable=technology

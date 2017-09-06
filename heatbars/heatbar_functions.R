@@ -73,6 +73,19 @@ countranges <- function(df, data, headers, measure) {
     data_cleaned <- dataf %>%
       gather_("measurement","value",newnames)   
     data_cleaned$TI[is.na(data_cleaned$TI)] <- data_cleaned$CITATION[is.na(data_cleaned$TI)]
+  } else {
+    onames <- names(data)
+    dataf <- suppressWarnings(mutate(data,value=as.numeric(value))) %>%
+      group_by(variable) %>%
+      filter(!is.na(measurement)) %>%
+      spread(measurement, value )
+    dataf$max[is.na(dataf$max)] <- dataf$estimate[is.na(dataf$max)] + 0.5
+    dataf$min[is.na(dataf$min)] <- dataf$estimate[is.na(dataf$min)] - 0.5
+    newnames <- names(dataf)[!(names(dataf) %in% onames)]
+    newnames <- newnames[nchar(newnames)>0]
+    data_cleaned <- dataf %>%
+      gather_("measurement","value",newnames)   
+    data_cleaned$TI[is.na(data_cleaned$TI)] <- data_cleaned$CITATION[is.na(data_cleaned$TI)]
   }
   
 
@@ -80,7 +93,7 @@ countranges <- function(df, data, headers, measure) {
   countrange <- function(x, resource, measure) {
     if (measure=="range") {
       dataf <- filter(
-        suppressWarnings(mutate(data,value=as.numeric(value))),
+        data_cleaned,
         measurement %in% c("min","max"),
         variable==resource,
         !is.na(value)
@@ -89,7 +102,7 @@ countranges <- function(df, data, headers, measure) {
       ) %>%
       filter(
         min <=x,
-        max >=x
+        max >x
       )
     } else {
 
@@ -396,9 +409,9 @@ heatbar_years <- function(data, df, f, var="cost", grp=NA, fixed=TRUE, graph = F
       width=w
     ) +
     cscale +
-    scale_x_continuous(
-      breaks = c(1990,2000,2010)
-    ) +
+    # scale_x_continuous(
+    #   breaks = c(1990,2000,2010)
+    # ) +
     guides(fill = guide_colourbar(reverse = TRUE)) +
     ylines + labs(
       x = "Year",y="Costs in $US(2011)/tCO2"
