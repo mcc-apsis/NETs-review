@@ -269,7 +269,7 @@ heatbar <- function(df,f,step=1, fixed=T, text=F) {
 }
 
 
-heatbar_years <- function(data, df, f, var="cost", grp=NA, fixed=TRUE, graph = FALSE, y =1980, w = 20) {
+heatbar_years <- function(data, df, f, var="cost", grp=NA, fixed=TRUE, graph = FALSE, y =1980, w = 20, measurement="range", step=1) {
   dataf <- filter(
     suppressWarnings(mutate(data,value=as.numeric(value))),
     measurement %in% c("min","max"),
@@ -291,6 +291,44 @@ heatbar_years <- function(data, df, f, var="cost", grp=NA, fixed=TRUE, graph = F
       country= substr(`Data categorisationsystem boundaries`,1,15),
       region = countrycode(`Data categorisationsystem boundaries`,"country.name","ar5")
     )
+  
+  if (measurement=="max") {
+    
+    onames <- names(data)
+    dataf <- suppressWarnings(mutate(data,value=as.numeric(value))) %>%
+      group_by(variable) %>%
+      filter(!is.na(measurement)) %>%
+      spread(measurement, value )
+    dataf$max[is.na(dataf$max)] <- dataf$estimate[is.na(dataf$max)]
+    newnames <- names(dataf)[!(names(dataf) %in% onames)]
+    newnames <- newnames[nchar(newnames)>0]
+    data_cleaned <- dataf %>%
+      gather_("measurement","value",newnames)   
+    data_cleaned$TI[is.na(data_cleaned$TI)] <- data_cleaned$CITATION[is.na(data_cleaned$TI)]
+    
+    
+    dataf <- filter(
+      data_cleaned,
+      measurement %in% c("max"),
+      #variable==var,
+      !is.na(value)
+    ) %>% spread(
+      measurement, value
+    ) %>%
+      group_by(PY) %>%
+      mutate(
+        gtot = n(),
+        pn = row_number()
+      ) %>%
+      ungroup() %>%
+      mutate(
+        PY = as.numeric(PY),
+        jitter= (1/gtot)*(pn-1),
+        PYJ = PY + (1/gtot)*(pn-1),
+        country= substr(`Data categorisationsystem boundaries`,1,15),
+        region = countrycode(`Data categorisationsystem boundaries`,"country.name","ar5")
+      )
+  }
   
   dataf$region[dataf$`Data categorisationsystem boundaries`=="Global"] <- "Global"
   dataf$region[grepl("Korea", dataf$`Data categorisationsystem boundaries`)] <- "ASIA"
@@ -317,7 +355,7 @@ heatbar_years <- function(data, df, f, var="cost", grp=NA, fixed=TRUE, graph = F
                  ymax="max"),
       size=1.5
     )
-  } else{
+  } else {
     ylines <- geom_linerange(
       data=dataf,
       aes_string(x="PYJ",
@@ -328,6 +366,15 @@ heatbar_years <- function(data, df, f, var="cost", grp=NA, fixed=TRUE, graph = F
     )
   } 
   
+  if (measurement=="max") {
+    ylines <- geom_point(
+      data=dataf,
+      aes_string(x="PYJ",
+                 y="max"),
+      size=1.5
+    )
+  }
+  
   
   cscale <- calc_cscale(df, f, flab, fixed)
   
@@ -335,7 +382,7 @@ heatbar_years <- function(data, df, f, var="cost", grp=NA, fixed=TRUE, graph = F
     theme_bw() +
     geom_bar(
       data=df,
-      aes_string(x=y,y=1,fill=f),
+      aes_string(x=y,y=step,fill=f),
       stat="identity",
       width=w,
       color=NA

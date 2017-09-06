@@ -115,19 +115,14 @@ all_data$costsinclude[
 #BECCS - include everything that is not cumulative
 all_data$costsinclude[
   all_data$technology=="BECCS" &
-    (all_data$boundaries!="cumulative" | is.na(all_data$boundaries)),
+    (all_data$boundaries!="cumulative" | is.na(all_data$boundaries))
   ] <- T
 
 all_data$potsinclude[
   all_data$technology=="BECCS" &
-    (all_data$boundaries!="cumulative" | is.na(all_data$boundaries)),
+    (all_data$boundaries!="cumulative" | is.na(all_data$boundaries))
   ] <- T
 
-
-b <- all_data[
-  all_data$technology=="BECCS" &
-    (all_data$boundaries!="cumulative" | is.na(all_data$boundaries)),
-  ] 
 
 #EW include everything global
 all_data$costsinclude[
@@ -197,6 +192,31 @@ all_data$costsinclude[
   ] <- T
 
 all_data$AU[is.na(all_data$AU)] <- all_data$UT[is.na(all_data$AU)]
+
+bcomma <- function(x) {
+  return(strsplit(x,",")[[1]][[1]])
+}
+
+all_data$label <- paste0(as.character(lapply(all_data$AU, bcomma)),", ",all_data$PY)
+
+
+# t -> gt or mt -> gt
+all_data$value[
+  all_data$technology=="Biochar" &all_data$variable=="totalPotential"
+  ] <- all_data$value[all_data$technology=="Biochar" & all_data$variable=="totalPotential"]/1000000000
+
+all_data$value[
+  all_data$technology=="Afforestation and Reforestation" & all_data$variable=="totalPotential"
+  ] <- all_data$value[
+    all_data$technology=="Afforestation and Reforestation" & all_data$variable=="totalPotential"
+    ]/1000
+
+all_data$value[
+  all_data$technology %in% ews & all_data$variable=="totalPotential"
+  ] <- all_data$value[
+    all_data$technology %in% ews & all_data$variable=="totalPotential"
+    ]/1000000000
+
 
 
 save(all_data,file="data/all_data.RData")
@@ -313,11 +333,7 @@ ggplot() +
 
 ggsave("plots/heatbars/all_costs_years_faceted.png")
 
-bcomma <- function(x) {
-  return(strsplit(x,",")[[1]][[1]])
-}
 
-costs$label <- paste0(as.character(lapply(costs$AU, bcomma)),", ",costs$PY)
 
 for (t in techs) {
   tranges <- costranges[costranges$resource==t,]
@@ -340,16 +356,10 @@ for (t in techs) {
 ## Plot potentials for all estimates and all technologies
 
 pots <- all_data %>%
-  filter(variable=="totalPotential" & include==T) %>%
+  filter(variable=="totalPotential" & potsinclude==T) %>%
   mutate(
     variable=technology
     ) 
-
-# Transform units
-# Biochar t->gigatons
-pots$value[pots$technology=="Biochar"] <- pots$value[pots$technology=="Biochar"]/1000000000
-pots$value[pots$technology=="Afforestation and Reforestation"] <- pots$value[pots$technology=="Afforestation and Reforestation"]/1000
-pots$value[pots$technology %in% ews] <- pots$value[pots$technology %in% ews]/1000000000
 
 pots$measurement <- gsub(" (Gt CO2/yr)","",pots$measurement,fixed=T)
 
@@ -359,12 +369,6 @@ ggplot(pots) +
   ) + theme_bw() 
 
 ggsave("plots/heatbars/potentials.png")
-
-bcomma <- function(x) {
-  return(strsplit(x,",")[[1]][[1]])
-}
-
-pots$label <- as.character(lapply(pots$AU, bcomma))
 
 ggplot() +
   geom_jitter(
@@ -405,19 +409,20 @@ ggplot(pots) +
 ggsave("plots/heatbars/potentials_numeric_year.png")
 
 
+###########################
+## Start doing some heatbars for the pots
+
 
 techs <- unique(pots$technology)
 
 
-ranges <- seq(0,100)
+ranges <- seq(0,100,by=0.1)
 df <- data.frame(v=ranges)
 
 potsranges <- countranges(
   df, 
   mutate(
-    filter(
-      pots
-    ),
+    pots,
     value=as.numeric(value)
   ),
   techs, "max")
@@ -429,13 +434,48 @@ rlabs <- potsranges %>%
   )
 
 
+
+
+image.file <- dir("icons", pattern=".png", full.names=TRUE)
+
+image.file <- image.file[!grepl("DAC",image.file)]
+
+image.file <- image.file[order(as.integer(sub("_.*","",sub("icons/","",image.file))))]
+npoints <- length(image.file)
+pics  <- vector(mode="list", length=npoints)
+for(i in 1:npoints) {
+  pics[[i]] <- EBImage::readImage(image.file[i])
+}
+names(pics) <- sub(".png","",sub("icons/","",image.file))
+
 names(pics) <- rlabs$resourcelab
 
 
-heatbar(potsranges,"pcnt") +
+
+
+heatbar(potsranges,"pcnt", step=0.1) +
   theme(axis.text.x = element_text(angle=60, hjust=1,vjust=1)) + 
   labs(x="",y="Potentials in Gt CO2/year") +
   theme(axis.text.x  = my_axis(pics))
 
 ggsave("plots/heatbars/all_potentials_labelled.png", width=16,height=10)
+
+
+
+for (t in techs) {
+  tranges <- potsranges[potsranges$resource==t,]
+  tpots <- pots[pots$technology==t,]
+  y1 <- min(tpots$PY,na.rm=T)
+  y2 <- max(tpots$PY,na.rm=T)
+  diff <- y2-y1
+  mid <- y1+diff/2
+  h1<- heatbar_years(tpots, tranges, "pcnt", graph = TRUE, y = mid, w = diff, var=t, measurement="max",step=0.1)
+  h1[[1]] +  geom_text_repel(data = h1[[2]], 
+                             aes(x = PYJ, y = max, label = label, angle = 90) 
+  ) + ggtitle(t) +
+    labs(y="Potentials in Gt CO2/year")
+  
+  ggsave(paste0("plots/heatbars/",t,"/potentials/range_year_studies.png"))
+}
+
 
