@@ -32,8 +32,11 @@ get_data <- function(ss,offset=2){
   b <- tail(gvars,1)
   
   gnames <- names(data)[8:(dim(ss)[2]-offset)]
-  except <- "Potentials in tCO2/yrÂ§Â§conversion factor to common unit"
-  gnames <- gnames[gnames!=except]
+  except <- c(
+    "Potentials in tCO2/yrÂ§Â§conversion factor to common unit",
+    "Costs in $US(2011)/tCO2Â§Â§conversion factor to common unit",
+    "Potentials in Mt CO2/yearÂ§Â§Estimate type")
+  gnames <- gnames[!(gnames %in% except)]
   
   a <- gnames[1]
   b <- tail(gnames,1)
@@ -68,7 +71,21 @@ countranges <- function(df, data, headers, measure) {
     newnames <- names(dataf)[!(names(dataf) %in% onames)]
     newnames <- newnames[nchar(newnames)>0]
     data_cleaned <- dataf %>%
-      gather_("measurement","value",newnames)    
+      gather_("measurement","value",newnames)   
+    data_cleaned$TI[is.na(data_cleaned$TI)] <- data_cleaned$CITATION[is.na(data_cleaned$TI)]
+  } else {
+    onames <- names(data)
+    dataf <- suppressWarnings(mutate(data,value=as.numeric(value))) %>%
+      group_by(variable) %>%
+      filter(!is.na(measurement)) %>%
+      spread(measurement, value )
+    dataf$max[is.na(dataf$max)] <- dataf$estimate[is.na(dataf$max)] + 0.5
+    dataf$min[is.na(dataf$min)] <- dataf$estimate[is.na(dataf$min)] - 0.5
+    newnames <- names(dataf)[!(names(dataf) %in% onames)]
+    newnames <- newnames[nchar(newnames)>0]
+    data_cleaned <- dataf %>%
+      gather_("measurement","value",newnames)   
+    data_cleaned$TI[is.na(data_cleaned$TI)] <- data_cleaned$CITATION[is.na(data_cleaned$TI)]
   }
   
 
@@ -76,7 +93,7 @@ countranges <- function(df, data, headers, measure) {
   countrange <- function(x, resource, measure) {
     if (measure=="range") {
       dataf <- filter(
-        suppressWarnings(mutate(data,value=as.numeric(value))),
+        data_cleaned,
         measurement %in% c("min","max"),
         variable==resource,
         !is.na(value)
@@ -85,7 +102,7 @@ countranges <- function(df, data, headers, measure) {
       ) %>%
       filter(
         min <=x,
-        max >=x
+        max >x
       )
     } else {
 
@@ -118,12 +135,25 @@ countranges <- function(df, data, headers, measure) {
     return(nrow(dataf))
     }
   
+  # Calculate the number of cores
+  no_cores <- detectCores() - 1
   
+  # Initiate cluster
+  cl <- makeCluster(no_cores)
+  
+  clusterEvalQ(cl, library(dplyr))
+  clusterEvalQ(cl, library(tidyr))
+  clusterExport(cl, "countrange", envir=environment())
+  clusterExport(cl, "costs", envir=environment())
+  clusterExport(cl, "data", envir=environment())
   
   # For each resource, count the number of values under each threshold
   for (r in headers) {
-    df[[r]] <- as.numeric(lapply(df$v,countrange, r, measure))
+    clusterExport(cl, "r", envir=environment())
+    df[[r]] <- as.numeric(parLapply(cl, df$v,countrange, r, measure))
+    #df[[r]] <- as.numeric(lapply(df$v,countrange, r, measure))
   }
+  stopCluster(cl)
   
   if (measure == "range") {
     data_r_sum <- filter(
@@ -252,11 +282,11 @@ heatbar <- function(df,f,step=1, fixed=T, text=F) {
 }
 
 
-heatbar_years <- function(data, df, f, grp=NA, fixed=TRUE, graph = FALSE, y =1980, w = 20) {
+heatbar_years <- function(data, df, f, var="cost", grp=NA, fixed=TRUE, graph = FALSE, y =1980, w = 20, measurement="range", step=1) {
   dataf <- filter(
     suppressWarnings(mutate(data,value=as.numeric(value))),
     measurement %in% c("min","max"),
-    variable==costs[1],
+    #variable==var,
     !is.na(value)
   ) %>% spread(
     measurement, value
@@ -274,6 +304,44 @@ heatbar_years <- function(data, df, f, grp=NA, fixed=TRUE, graph = FALSE, y =198
       country= substr(`Data categorisationsystem boundaries`,1,15),
       region = countrycode(`Data categorisationsystem boundaries`,"country.name","ar5")
     )
+  
+  if (measurement=="max") {
+    
+    onames <- names(data)
+    dataf <- suppressWarnings(mutate(data,value=as.numeric(value))) %>%
+      group_by(variable) %>%
+      filter(!is.na(measurement)) %>%
+      spread(measurement, value )
+    dataf$max[is.na(dataf$max)] <- dataf$estimate[is.na(dataf$max)]
+    newnames <- names(dataf)[!(names(dataf) %in% onames)]
+    newnames <- newnames[nchar(newnames)>0]
+    data_cleaned <- dataf %>%
+      gather_("measurement","value",newnames)   
+    data_cleaned$TI[is.na(data_cleaned$TI)] <- data_cleaned$CITATION[is.na(data_cleaned$TI)]
+    
+    
+    dataf <- filter(
+      data_cleaned,
+      measurement %in% c("max"),
+      #variable==var,
+      !is.na(value)
+    ) %>% spread(
+      measurement, value
+    ) %>%
+      group_by(PY) %>%
+      mutate(
+        gtot = n(),
+        pn = row_number()
+      ) %>%
+      ungroup() %>%
+      mutate(
+        PY = as.numeric(PY),
+        jitter= (1/gtot)*(pn-1),
+        PYJ = PY + (1/gtot)*(pn-1),
+        country= substr(`Data categorisationsystem boundaries`,1,15),
+        region = countrycode(`Data categorisationsystem boundaries`,"country.name","ar5")
+      )
+  }
   
   dataf$region[dataf$`Data categorisationsystem boundaries`=="Global"] <- "Global"
   dataf$region[grepl("Korea", dataf$`Data categorisationsystem boundaries`)] <- "ASIA"
@@ -300,7 +368,7 @@ heatbar_years <- function(data, df, f, grp=NA, fixed=TRUE, graph = FALSE, y =198
                  ymax="max"),
       size=1.5
     )
-  } else{
+  } else {
     ylines <- geom_linerange(
       data=dataf,
       aes_string(x="PYJ",
@@ -311,6 +379,15 @@ heatbar_years <- function(data, df, f, grp=NA, fixed=TRUE, graph = FALSE, y =198
     )
   } 
   
+  if (measurement=="max") {
+    ylines <- geom_point(
+      data=dataf,
+      aes_string(x="PYJ",
+                 y="max"),
+      size=1.5
+    )
+  }
+  
   
   cscale <- calc_cscale(df, f, flab, fixed)
   
@@ -318,7 +395,7 @@ heatbar_years <- function(data, df, f, grp=NA, fixed=TRUE, graph = FALSE, y =198
     theme_bw() +
     geom_bar(
       data=df,
-      aes_string(x=y,y=1,fill=f),
+      aes_string(x=y,y=step,fill=f),
       stat="identity",
       width=w,
       color=NA
@@ -332,9 +409,9 @@ heatbar_years <- function(data, df, f, grp=NA, fixed=TRUE, graph = FALSE, y =198
       width=w
     ) +
     cscale +
-    scale_x_continuous(
-      breaks = c(1990,2000,2010)
-    ) +
+    # scale_x_continuous(
+    #   breaks = c(1990,2000,2010)
+    # ) +
     guides(fill = guide_colourbar(reverse = TRUE)) +
     ylines + labs(
       x = "Year",y="Costs in $US(2011)/tCO2"
@@ -389,12 +466,16 @@ evcf <- function(x) {
   if (grepl("[[:alpha:]]",x)) {
     return(1)
   }
+  if (!grepl("[[:digit:]]",x)) {
+    return(1)
+  }
   if (is.na(x)) {
     return(1)
   }
   t <- paste0("1*",x)
   t <- gsub("**","*",t,fixed=T)
   t <- gsub(",",".",t, fixed=T)
+  t <- gsub("*/","/",t, fixed=T)
   f <- eval(parse(text = t))
   return(f)
 }
