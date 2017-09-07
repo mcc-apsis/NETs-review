@@ -13,6 +13,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(countrycode)
+library(ggrepel)
 
 
 source("heatbars/heatbar_functions.R")
@@ -22,8 +23,8 @@ dir.create(paste0("plots/heatbars/",u_sheetName))
 costsdir = paste0("plots/heatbars/",u_sheetName,"/costs")
 potsdir = paste0("plots/heatbars/",u_sheetName,"/potentials")
 
-dir.create(costsdir)
-dir.create(potsdir)
+# dir.create(costsdir)
+# dir.create(potsdir)
 
 # Authorise googlesheets to access your Google Sheets account
 gs_auth()
@@ -88,7 +89,7 @@ ggsave(paste0(potsdir,"/range_2050.png"),width=8,height=5)
 
 ###### Costs 
 
-ranges <- seq(1,400)
+ranges <- seq(1,450)
 df <- data.frame(v=ranges)
 costs <- c("cost")
 
@@ -105,7 +106,9 @@ res2050 <- countranges(df,
                        "range"
 )
 
-heatbar_years(data, res2050, "pcnt")
+heatbar(res2050, "pcnt")
+
+heatbar_years(data, res2050, "pcnt", graph = TRUE)
 
 ggsave(paste0(costsdir,"/range_years.png"),width=8,height=5)
 
@@ -113,8 +116,43 @@ heatbar_years(data, res2050, "pcnt", "`Data categorisationresource`")
 
 ggsave(paste0(costsdir,"/range_years_region.png"),width=8,height=5)
 
+# with labels
+heatbar_years(data, res2050, "pcnt", "`Data categorisationresource`") +
+  geom_text_repel(data = data_copy, aes(label = UT), check_overlap = TRUE)
+
+h1<- heatbar_years(data, res2050, "pcnt", graph = TRUE, y = 2010, w = 15)
+h1[[1]] +  geom_text_repel(data = mutate(h1[[2]],UT = paste(substr(UT, 1,10),PY)), 
+                           aes(x = PYJ, y = max, label = UT, angle = 90) 
+)
+ggsave(paste0(costsdir,"/range_years_labels2.png"),width=16,height=5)
+##### costs separated by resource
+# copy resource type to appropriate variable location
+
+data_copy <- data %>%
+  filter(variable=="cost") %>%
+  mutate(variable = `Data categorisationresource`,
+         value = as.numeric(value), 
+         UT = paste(substr(UT, 1,10),PY)
+         )
 
 
+# list of resources
+resources <- unique(
+  data_copy[data_copy$measurement=="max" & data_copy$variable!="cost",]$variable
+)
+resources <- resources[!is.na(resources)]
+
+res2050 <- countranges(
+  df, 
+  filter(data_copy),
+  resources,
+  "range"
+  )
+
+heatbar(res2050, "pcnt")
+
+
+ggsave(paste0(costsdir,"/costs_tech.png"),width=8,height=5)
 
 
 #ggsave("heatbar_example.png",width=8,height=5)
