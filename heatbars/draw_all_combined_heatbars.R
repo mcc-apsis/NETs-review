@@ -395,8 +395,23 @@ costrange <- costrange %>%
   )
 
 
+costrange <- costrange %>%
+  mutate(
+    ttip=paste0(
+      AU," (",PY,") ",
+      "<br>",
+      TI,
+      "<br>",
+      "Cost range: ",round(min,2),"-",round(max,2),
+      "$/tCO2","<br>",
+      "System boundaries: ", boundaries, "<br>",
+      "System conditions: ", `Data categorisationsystem conditions`
+    ) 
+  )
 
-heatbar(costranges,"pcnt", numeric=T) +
+
+
+gg <- heatbar(costranges,"pcnt", numeric=T) +
   geom_errorbar(
     data=costrange,
     aes(resourcelabn ,ymin=min, ymax=max),
@@ -417,7 +432,39 @@ heatbar(costranges,"pcnt", numeric=T) +
     panel.grid.minor.x = element_blank()
   ) 
 
+print(gg)
+
 ggsave("plots/heatbars/all_costs_years_ranges.png")
+
+
+
+gg <- heatbar(costranges,"pcnt", numeric=T) +
+  geom_errorbar(
+    data=costrange,
+    aes(resourcelabn ,ymin=min, ymax=max, text=ttip),
+    width=0.05,
+    alpha=0.3
+  ) +
+  scale_x_continuous(breaks=seq(1,8)) +
+  theme_bw()+
+  labs(x="",y="Costs in $US(2011)/tCO2") +
+  coord_cartesian(expand=F) +
+  theme(
+    axis.line.x=element_blank(),
+    axis.line.y= element_line(),
+    axis.ticks.x = element_blank(),
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  ) 
+
+print(gg)
+
+ggplotly(gg, tooltip="text")
+
+
+
+
 
 
 
@@ -612,7 +659,8 @@ print(gg)
 
 ggp <- ggplotly(gg, tooltip="text")
 
-htmlwidgets::saveWidget(as.widget(ggp), "plots/heatbars/costs/index.html")
+
+### Can't do it automatically !!! htmlwidgets::saveWidget(ggp, "plots\\heatbars\\costs\\index.html")
 
 ggsave("plots/heatbars/all_potentials_points.png", width=16,height=10)
 
