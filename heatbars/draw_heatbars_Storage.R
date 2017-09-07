@@ -12,11 +12,10 @@ library(googlesheets)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
-library(ggrepel)
 
 source("heatbars/heatbar_functions.R")
 
-#dir.create(paste0("plots/heatbars/",u_sheetName))
+dir.create(paste0("plots/heatbars/",u_sheetName))
 
 costsdir = paste0("plots/heatbars/",u_sheetName,"/costs")
 potsdir = paste0("plots/heatbars/",u_sheetName,"/potentials")
@@ -70,15 +69,6 @@ heatbar(res,"pcnt") +
   labs(x="Variable",y="Location")
 ggsave("plots/BECCS/Storage_Global.png",width=8,height=5)
 
-#Bars with resources with the lines with colors for type of estimate
-#might have to do it per bar 
-data_copy <- data %>% 
-  filter(`Data categorisationsystem boundaries` == "Global" | 
-           `Data categorisationsystem boundaries` == "Global, Review") %>% 
-  mutate(resource =`Data categorisationresource`)
-
-h1 <- heatbar_years(data_copy, res, "pcnt","`Data categorisationmethod`",graph = TRUE, type = "totalPotential" )
-h1[[1]] + facet_grid(.~resource)
 
 
 #ggsave("heatbar_example.png",width=8,height=5)
