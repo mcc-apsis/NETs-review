@@ -367,6 +367,30 @@ for (t in techs) {
   ggsave(paste0("plots/heatbars/",t,"/costs/range_year_studies.png"))
 }
 
+##########################
+## All costs with jittered ranges
+costs <- costs %>%
+  filter(measurement=="max", !is.na(value)) %>%
+  group_by(variable) %>%
+  mutate(
+    nstudies = n(),
+    resourcelab = paste0(variable,'\n[',nstudies,' studies]')
+  )
+
+costrange <- costs %>%
+  filter(measurement %in% c("max","min"), !is.na(value)) %>%
+  left_join(select(potsjitter,label, TI, resourcelab,`Data categorisationyear`)) %>%
+  spread(measurement, value)
+
+costrange$resourcelabn <- as.numeric(factor(costrange$resourcelab)) + rnorm(length(costrange$resourcelab))*0.1
+
+heatbar(costranges,"pcnt", numeric=T) +
+  geom_errorbar(
+    data=costrange,
+    aes(resourcelabn ,ymin=min, ymax=max),
+    width=0.1
+  )
+
 
 
 
@@ -474,10 +498,6 @@ names(pics) <- rlabs$resourcelab
 
 
 
-heatbar(potsranges,"pcnt", step=0.1) +
-  theme(axis.text.x = element_text(angle=60, hjust=1,vjust=1)) + 
-  labs(x="",y="Potentials in Gt CO2/year") +
-  theme(axis.text.x  = my_axis(pics))
 
 ggsave("plots/heatbars/all_potentials_labelled.png", width=16,height=10)
 
@@ -498,5 +518,84 @@ for (t in techs) {
   
   ggsave(paste0("plots/heatbars/",t,"/potentials/range_year_studies.png"))
 }
+
+potsjitter <- pots %>%
+  filter(measurement=="max", !is.na(value)) %>%
+  group_by(variable) %>%
+  mutate(
+    nstudies = n(),
+    resourcelab = paste0(variable,'\n[',nstudies,' studies]')
+  )
+
+potsrange <- pots %>%
+  filter(measurement %in% c("max","min"), !is.na(value)) %>%
+  left_join(select(potsjitter,label, TI, resourcelab,`Data categorisationyear`)) %>%
+  spread(measurement, value)
+
+heatbar(potsranges,"pcnt", step=0.1) +
+  theme(axis.text.x = element_text(angle=60, hjust=1,vjust=1)) + 
+  labs(x="",y="Potentials in Gt CO2/year") +
+  theme(axis.text.x  = my_axis(pics)) +
+  geom_jitter(
+    data=potsjitter,
+    aes(resourcelab,value)
+  )
+
+
+all_data$`Data categorisationsystem conditions`
+
+
+########################
+## 1 point per study
+
+bystudy <- all_data %>%
+  filter(variable %in% c("cost","totalPotential"),
+         !is.na(value), costsinclude==T, potsinclude==T) %>%
+  select(TI, technology, variable, measurement, value, boundaries, year, `Data categorisationsystem conditions`) %>%
+  spread(variable, value)
+
+ggplot(bystudy) +
+  geom_point(
+    aes(totalPotential, cost, colour=technology)
+  ) +theme_bw()
+
+
+#####################
+## By technology ranges
+
+bytech <- all_data %>%
+  filter(!is.na(value) , is.finite(value)) %>%
+  group_by(technology, variable) %>% 
+  summarise(
+    min = min(value, na.rm = T),
+    max = max(value, na.rm = T)
+  )
+
+costsums <- filter(bytech, variable=="cost") %>%
+  select(technology, costs_min=min,costs_max=max)
+
+potsums <- filter(bytech, variable=="totalPotential") %>%
+  select(technology, pots_min=min,pots_max=max)
+
+all_sums <- left_join(costsums, potsums)
+
+ggplot() + 
+  geom_rect(
+    aes(
+      xmin=pots_min,
+      xmax=pots_max,
+      ymin=costs_min,
+      ymax=costs_max
+      )
+  )
+
+
+
+
+
+
+
+
+
 
 

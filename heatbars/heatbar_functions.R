@@ -211,7 +211,7 @@ calc_cscale <- function(df, f, flab, fixed =T) {
   }
 }
 
-heatbar <- function(df,f,step=1, fixed=T, text=F) {
+heatbar <- function(df,f,step=1, fixed=T, text=F, numeric=F) {
   flab <- if (f=="pcnt") "% of Studies" else "Number of Studies" 
   #df <- df[df[[f]]>0,]
   df <- df %>%
@@ -221,6 +221,8 @@ heatbar <- function(df,f,step=1, fixed=T, text=F) {
            mostagreement = max(value)
            ) %>%
     filter(v <  max(df$v[df$value>0]))
+  
+  df$resourcelabn <- as.numeric(factor(df$resourcelab))
 
   dfagreement <- df %>%
     ungroup() %>%
@@ -241,18 +243,24 @@ heatbar <- function(df,f,step=1, fixed=T, text=F) {
     
   cscale <- calc_cscale(df, f, flab, fixed)
   
+  if (numeric) {
+    xvar <- "resourcelabn"
+  } else {
+    xvar <- "resourcelab"
+  }
+  
   p <- ggplot() +
     theme_bw() +
     geom_bar(
       data=df,
-      aes_string(x="resourcelab", y=step, fill=f),
+      aes_string(x=xvar, y=step, fill=f),
       stat="identity",
       width=0.6,
       color=NA
     ) +
     geom_bar(
       data=filter(df,v==min(df$v)),
-      aes(x=resourcelab,y=dfmax),
+      aes_string(x=xvar,y="dfmax"),
       stat = "identity",
       fill=NA,
       color="grey22",
