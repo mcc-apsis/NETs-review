@@ -369,7 +369,7 @@ for (t in techs) {
 
 ##########################
 ## All costs with jittered ranges
-costs <- costs %>%
+costsjitter <- costs %>%
   filter(measurement=="max", !is.na(value)) %>%
   group_by(variable) %>%
   mutate(
@@ -379,18 +379,45 @@ costs <- costs %>%
 
 costrange <- costs %>%
   filter(measurement %in% c("max","min"), !is.na(value)) %>%
-  left_join(select(potsjitter,label, TI, resourcelab,`Data categorisationyear`)) %>%
+  left_join(select(costsjitter,label, TI, resourcelab,`Data categorisationyear`,`Data categorisationsystem conditions`)) %>%
   spread(measurement, value)
 
-costrange$resourcelabn <- as.numeric(factor(costrange$resourcelab)) + rnorm(length(costrange$resourcelab))*0.1
+costrange$resourcelabn <- as.numeric(factor(costrange$resourcelab)) #+ runif(length(costrange$resourcelab),-0.4,0.4)
+
+costrange <- costrange %>%
+  group_by(technology) %>%
+  arrange(min) %>% 
+  mutate(
+    gtot = n(),
+    pn = row_number(),
+    jitter = (0.8/gtot)*(pn-1),
+    resourcelabn = resourcelabn- 0.4 + jitter
+  )
+
+
 
 heatbar(costranges,"pcnt", numeric=T) +
   geom_errorbar(
     data=costrange,
     aes(resourcelabn ,ymin=min, ymax=max),
-    width=0.1
-  )
+    width=0.05,
+    alpha=0.3
+  ) +
+  scale_x_continuous(breaks=seq(1,8)) +
+  theme_bw()+
+  theme(axis.text.x  = my_axis(pics)) +
+  labs(x="",y="Costs in $US(2011)/tCO2") +
+  coord_cartesian(expand=F) +
+  theme(
+    axis.line.x=element_blank(),
+    axis.line.y= element_line(),
+    axis.ticks.x = element_blank(),
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  ) 
 
+ggsave("plots/heatbars/all_costs_years_ranges.png")
 
 
 
@@ -409,6 +436,8 @@ techs <- unique(pots$technology)
 ranges <- seq(0,100,by=0.1)
 df <- data.frame(v=ranges)
 
+pots$measurement <- gsub(" (Gt CO2/yr)","",pots$measurement,fixed=T)
+
 potsranges <- countranges(
   df, 
   mutate(
@@ -418,7 +447,7 @@ potsranges <- countranges(
   techs, "max")
 
 
-pots$measurement <- gsub(" (Gt CO2/yr)","",pots$measurement,fixed=T)
+
 
 ggplot(pots) +
   geom_jitter(
@@ -519,13 +548,51 @@ for (t in techs) {
   ggsave(paste0("plots/heatbars/",t,"/potentials/range_year_studies.png"))
 }
 
+
+
 potsjitter <- pots %>%
   filter(measurement=="max", !is.na(value)) %>%
   group_by(variable) %>%
   mutate(
     nstudies = n(),
     resourcelab = paste0(variable,'\n[',nstudies,' studies]')
+  ) 
+
+potsjitter$resourcelabn <- as.numeric(factor(potsjitter$resourcelab))
+
+potsjitter <- potsjitter %>%
+  group_by(technology) %>%
+  arrange(value) %>% 
+  mutate(
+    gtot = n(),
+    pn = row_number(),
+    jitter = (0.8/gtot)*(pn-1)#,
+    resourcelabn = resourcelabn- 0.4 + jitter
   )
+
+
+
+heatbar(potsranges,"pcnt", step=0.1, numeric=T) +
+  geom_point(
+    data=potsjitter,
+    aes(resourcelabn ,y=value),
+    width=0.05,
+    alpha=0.3
+  ) +
+  scale_x_continuous(breaks=seq(1,8)) +
+  theme_bw()+
+  theme(axis.text.x  = my_axis(pics)) +
+  labs(x="",y="Costs in $US(2011)/tCO2") +
+  coord_cartesian(expand=F) +
+  theme(
+    axis.line.x=element_blank(),
+    axis.line.y= element_line(),
+    axis.ticks.x = element_blank(),
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  ) 
+
 
 potsrange <- pots %>%
   filter(measurement %in% c("max","min"), !is.na(value)) %>%
@@ -538,11 +605,14 @@ heatbar(potsranges,"pcnt", step=0.1) +
   theme(axis.text.x  = my_axis(pics)) +
   geom_jitter(
     data=potsjitter,
-    aes(resourcelab,value)
+    aes(resourcelab,value),
+    size=0.8,
+    alpha=0.5
   )
 
 
-all_data$`Data categorisationsystem conditions`
+
+
 
 
 ########################
@@ -558,62 +628,4 @@ ggplot(bystudy) +
   geom_point(
     aes(totalPotential, cost, colour=technology)
   ) +theme_bw()
-
-
-#####################
-## By technology ranges
-
-bytech <- all_data %>%
-  filter(
-    !is.na(value) , 
-    is.finite(value),
-    costsinclude==T, potsinclude==T
-    ) %>%
-  group_by(technology, variable) %>% 
-  summarise(
-    # min = min(value, na.rm = T),
-    # max = max(value, na.rm = T)
-    min = quantile(value, .25, na.rm = T),
-    max = quantile(value, .75, na.rm = T)
-  )
-
-costsums <- filter(bytech, variable=="cost") %>%
-  select(technology, costs_min=min,costs_max=max)
-
-potsums <- filter(bytech, variable=="totalPotential") %>%
-  select(technology, pots_min=min,pots_max=max)
-
-all_sums <- left_join(costsums, potsums)
-
-ggplot() + 
-  geom_rect(
-    data=all_sums,
-    mapping=aes(
-      xmin=pots_min,
-      xmax=pots_max,
-      ymin=costs_min,
-      ymax=costs_max,
-      color=technology
-      ),
-    alpha=0.0,
-    size=2
-   # color="black"
-  ) + theme_bw() +
-  labs(x="Potentials in Gt CO2/year",y="Costs in $/tCO2")
-
-ggsave("plots/synthetic/rects.svg",width=16,height=10)
-
-+
-  scale_y_log10() +
-  scale_x_log10()
-
-
-
-
-
-
-
-
-
-
 
