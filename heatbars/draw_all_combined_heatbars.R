@@ -566,23 +566,38 @@ potsjitter <- potsjitter %>%
   mutate(
     gtot = n(),
     pn = row_number(),
-    jitter = (0.8/gtot)*(pn-1)#,
-    resourcelabn = resourcelabn- 0.4 + jitter
+    jitter = (0.76/gtot)*(pn-1),
+    resourcelabn = resourcelabn- 0.38 + jitter
   )
 
 
+potsjitter <- potsjitter %>%
+  mutate(
+    ttip=paste0(
+      AU," (",PY,") ",
+      "<br>",
+      TI,
+      "<br>",
+      "Potential: ",round(value,1),
+      " Gt CO2/year","<br>",
+      "System boundaries: ", boundaries, "<br>",
+      "System conditions: ", `Data categorisationsystem conditions`
+      ) 
+  )
 
-heatbar(potsranges,"pcnt", step=0.1, numeric=T) +
+all_data$`Data categorisationsystem conditions`
+
+gg <- heatbar(potsranges,"pcnt", step=0.1, numeric=T) +
   geom_point(
     data=potsjitter,
-    aes(resourcelabn ,y=value),
-    width=0.05,
+    aes(resourcelabn ,y=value, text=ttip),
+    size=1,
     alpha=0.3
   ) +
-  scale_x_continuous(breaks=seq(1,8)) +
+  scale_x_continuous(breaks=seq(1,7)) +
   theme_bw()+
-  theme(axis.text.x  = my_axis(pics)) +
-  labs(x="",y="Costs in $US(2011)/tCO2") +
+  #theme(axis.text.x  = my_axis(pics)) +
+  labs(x="",y="Potential GtCO2/year Sequestered") +
   coord_cartesian(expand=F) +
   theme(
     axis.line.x=element_blank(),
@@ -593,22 +608,21 @@ heatbar(potsranges,"pcnt", step=0.1, numeric=T) +
     panel.grid.minor.x = element_blank()
   ) 
 
+print(gg)
+
+ggp <- ggplotly(gg, tooltip="text")
+
+htmlwidgets::saveWidget(as.widget(ggp), "plots/heatbars/costs/index.html")
+
+ggsave("plots/heatbars/all_potentials_points.png", width=16,height=10)
+
+
+######
 
 potsrange <- pots %>%
   filter(measurement %in% c("max","min"), !is.na(value)) %>%
   left_join(select(potsjitter,label, TI, resourcelab,`Data categorisationyear`)) %>%
   spread(measurement, value)
-
-heatbar(potsranges,"pcnt", step=0.1) +
-  theme(axis.text.x = element_text(angle=60, hjust=1,vjust=1)) + 
-  labs(x="",y="Potentials in Gt CO2/year") +
-  theme(axis.text.x  = my_axis(pics)) +
-  geom_jitter(
-    data=potsjitter,
-    aes(resourcelab,value),
-    size=0.8,
-    alpha=0.5
-  )
 
 
 
