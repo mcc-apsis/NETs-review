@@ -395,6 +395,29 @@ costrange <- costrange %>%
   )
 
 
+
+costrange$TIs <- lapply(costrange$TI, splitwords, n=8)
+
+costrange$conditions <- lapply(costrange$`Data categorisationsystem conditions`, splitwords, n=8)
+
+costrange$AUs <- lapply(costrange$AU, fixauthors)
+
+costrange <- costrange %>%
+  mutate(
+    ttip=paste0(
+      AUs," (",PY,") ",
+      "<br>",
+      TIs,
+      "<br><br>",
+      "Cost range: ",round(min,2),"-",round(max,2),
+      " Gt CO2/year","<br>",
+      "<b>System boundaries:</b> ", boundaries, "<br>",
+      "<b>System conditions:</b> ", conditions
+    ) 
+  )
+
+
+
 costrange <- costrange %>%
   mutate(
     ttip=paste0(
@@ -402,7 +425,7 @@ costrange <- costrange %>%
       "<br>",
       TI,
       "<br>",
-      "Cost range: ",round(min,2),"-",round(max,2),
+
       "$/tCO2","<br>",
       "System boundaries: ", boundaries, "<br>",
       "System conditions: ", `Data categorisationsystem conditions`
@@ -439,13 +462,13 @@ ggsave("plots/heatbars/all_costs_years_ranges.png")
 
 
 gg <- heatbar(costranges,"pcnt", numeric=T) +
-  geom_errorbar(
+  geom_linerange(
     data=costrange,
     aes(resourcelabn ,ymin=min, ymax=max, text=ttip),
-    width=0.05,
-    alpha=0.3
+    width=1,
+    alpha=1
   ) +
-  scale_x_continuous(breaks=seq(1,8)) +
+  #scale_x_continuous(breaks=seq(1,8)) +
   theme_bw()+
   labs(x="",y="Costs in $US(2011)/tCO2") +
   coord_cartesian(expand=F) +
@@ -456,12 +479,21 @@ gg <- heatbar(costranges,"pcnt", numeric=T) +
     panel.border = element_blank(),
     panel.grid.major.x = element_blank(),
     panel.grid.minor.x = element_blank()
-  ) 
+  ) +
+  scale_x_continuous(breaks=seq(1,8),labels=names(rlabs$resourcelab))
 
 print(gg)
 
-ggplotly(gg, tooltip="text")
+m <- list(
+  l = 100,
+  r = 50,
+  b = 200,
+  t = 100,
+  pad = 10
+)
 
+ggplotly(gg, tooltip="text") %>%
+  layout(margin = m)
 
 
 
@@ -618,32 +650,18 @@ potsjitter <- potsjitter %>%
   )
 
 
-potsjitter <- potsjitter %>%
-  mutate(
-    ttip=paste0(
-      AU," (",PY,") ",
-      "<br>",
-      TI,
-      "<br>",
-      "Potential: ",round(value,1),
-      " Gt CO2/year","<br>",
-      "System boundaries: ", boundaries, "<br>",
-      "System conditions: ", `Data categorisationsystem conditions`
-      ) 
-  )
 
-all_data$`Data categorisationsystem conditions`
 
 gg <- heatbar(potsranges,"pcnt", step=0.1, numeric=T) +
   geom_point(
     data=potsjitter,
-    aes(resourcelabn ,y=value, text=ttip),
+    aes(resourcelabn ,y=value),
     size=1,
     alpha=0.3
   ) +
   scale_x_continuous(breaks=seq(1,7)) +
   theme_bw()+
-  #theme(axis.text.x  = my_axis(pics)) +
+  theme(axis.text.x  = my_axis(pics)) +
   labs(x="",y="Potential GtCO2/year Sequestered") +
   coord_cartesian(expand=F) +
   theme(
@@ -657,21 +675,68 @@ gg <- heatbar(potsranges,"pcnt", step=0.1, numeric=T) +
 
 print(gg)
 
-ggp <- ggplotly(gg, tooltip="text")
-
-
 ### Can't do it automatically !!! htmlwidgets::saveWidget(ggp, "plots\\heatbars\\costs\\index.html")
 
 ggsave("plots/heatbars/all_potentials_points.png", width=16,height=10)
 
 
+
+potsjitter$TIs <- lapply(potsjitter$TI, splitwords, n=8)
+
+potsjitter$conditions <- lapply(potsjitter$`Data categorisationsystem conditions`, splitwords, n=8)
+
+potsjitter$AUs <- lapply(potsjitter$AU, fixauthors)
+
+potsjitter <- potsjitter %>%
+  mutate(
+    ttip=paste0(
+      AUs," (",PY,") ",
+      "<br>",
+      TIs,
+      "<br><br>",
+      "<b>Potential:</b> ",round(value,1),
+      " Gt CO2/year","<br>",
+      "<b>System boundaries:</b> ", boundaries, "<br>",
+      "<b>System conditions:</b> ", conditions
+    ) 
+  )
+
+
+gg <- heatbar(potsranges,"pcnt", step=0.1, numeric=T) +
+  geom_point(
+    data=potsjitter,
+    aes(resourcelabn ,y=value, text=ttip),
+    size=1,
+    alpha=0.3
+  ) +
+  theme_bw()+
+  labs(x="",y="Potential GtCO2/year Sequestered") +
+  coord_cartesian(expand=F) +
+  theme(
+    axis.line.x=element_blank(),
+    axis.line.y= element_line(),
+    axis.ticks.x = element_blank(),
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  ) +
+  scale_x_continuous(breaks=seq(1,7),labels=names(pics))
+
+print(gg)
+
+m <- list(
+  l = 100,
+  r = 50,
+  b = 200,
+  t = 100,
+  pad = 10
+)
+
+ggplotly(gg, tooltip="text") %>%
+  layout(margin = m)
+
+
 ######
-
-potsrange <- pots %>%
-  filter(measurement %in% c("max","min"), !is.na(value)) %>%
-  left_join(select(potsjitter,label, TI, resourcelab,`Data categorisationyear`)) %>%
-  spread(measurement, value)
-
 
 
 

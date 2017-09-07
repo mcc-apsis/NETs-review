@@ -489,3 +489,32 @@ evcf <- function(x) {
 }
 
 
+splitwords <- function(x,n) {
+  s <- ""
+  words <- strsplit(x," ")
+  i<-0
+  for (w in words[[1]]) {
+    i <- i+1
+    if (i %% n == 0) {
+      space <- "<br>"
+    } else {
+      space <- " "
+    }
+    s <- paste0(s,w,space)
+  }
+  
+  return(paste0(s))
+}
+
+fixauthors <- function(x) {
+  aus <- strsplit(x,";")[[1]]
+  if (length(aus)>2) {
+    x <- paste0(aus[1], ". et al.") 
+  } else {
+    aus <- strsplit(x,",")[[1]]
+    if (length(aus)>2) {
+      x <- paste0(aus[1], ". et al.") 
+    }
+  }
+  return(x)
+}
