@@ -1,4 +1,196 @@
 #== Density plot function ============
+plot_density2_stacked <- function(
+  data,
+  ax_min,
+  ax_max,
+  ax_tickpos,
+  ax_lab = "",
+  plt = c(0.15, 0.95, 0.15, 0.95),
+  new = TRUE,
+  switch_axes = FALSE
+) {
+  # Initialise
+  par(plt=plt, new=new)
+  if (!switch_axes) {
+    plot(0,0,
+         type="n",
+         axes=FALSE,
+         xlim=c(ax_min,ax_max), ylim=c(0,1),
+         xlab="", ylab="",
+         xaxs="i",yaxs="i")
+    box()
+  } else {
+    plot(0,0,
+         type="n",
+         axes=FALSE,
+         xlim=c(0,1), ylim=c(ax_min,ax_max),
+         xlab="", ylab="",
+         xaxs="i",yaxs="i")
+    box()
+  }
+  
+  
+  if (!switch_axes) {
+    
+    nnet <- length(names(data))
+
+    plt_ymin  <- plt[3]    
+    plt_ymax  <- plt[4]
+    plt_delta <- (plt_ymax-plt_ymin)/nnet
+    
+    for (k_net in names(data)) {
+      
+      kpos <- which(names(data) == k_net)
+      
+      cur_plt_ymin <- plt_ymax - kpos    *plt_delta
+      cur_plt_ymax <- plt_ymax - (kpos-1)*plt_delta
+# 
+#       if (new == FALSE && kpos == 1) {
+#         par(plt=c(plt[1], plt[2], cur_plt_ymin, cur_plt_ymax), new=FALSE)   
+#       } else {
+#         par(plt=c(plt[1], plt[2], cur_plt_ymin, cur_plt_ymax), new=TRUE)   
+#       }
+#       
+      par(plt=c(plt[1], plt[2], cur_plt_ymin, cur_plt_ymax), new=TRUE)
+      plot(0,0,
+           type="n",
+           axes=FALSE,
+           xlim=c(ax_min,ax_max), ylim=c(0,1),
+           xlab=ifelse(kpos == length(names(data)), ax_lab, ""), ylab="",
+           xaxs="i",yaxs="i")
+      
+      # Grid
+      for (kx in ax_tickpos) lines(c(kx, kx), c(0, 1), col="#eeeeee")
+      
+      # Density area
+      polygon(
+        c(data[[k_net]]$pot$x, rev(data[[k_net]]$pot$x)),
+        c(rep(0, length(data[[k_net]]$pot$y)), data[[k_net]]$pot$y),
+        col=paste(net_cols[net_names$shortname[which(net_names$longname == k_net)]]),
+        border=NA
+      )
+
+      #box()
+      lines(c(ax_min,ax_max), c(0,0), 
+            col=paste(net_cols[net_names$shortname[which(net_names$longname == k_net)]]))
+    }
+    # Axes
+    axis(1, at=ax_tickpos)
+    
+  } else {
+    nnet <- length(names(data))
+    
+    plt_xmin  <- plt[1]    
+    plt_xmax  <- plt[2]
+    plt_delta <- (plt_xmax-plt_xmin)/nnet
+    
+    for (k_net in names(data)) {
+      
+      kpos <- which(names(data) == k_net)
+      
+      cur_plt_xmin <- plt_xmax - kpos    *plt_delta
+      cur_plt_xmax <- plt_xmax - (kpos-1)*plt_delta
+      # 
+      #       if (new == FALSE && kpos == 1) {
+      #         par(plt=c(plt[1], plt[2], cur_plt_ymin, cur_plt_ymax), new=FALSE)   
+      #       } else {
+      #         par(plt=c(plt[1], plt[2], cur_plt_ymin, cur_plt_ymax), new=TRUE)   
+      #       }
+      #       
+      par(plt=c(cur_plt_xmin, cur_plt_xmax, plt[3], plt[4]), new=TRUE)
+
+      plot(0,0,
+           type="n",
+           axes=FALSE,
+           xlim=c(0,1), ylim=c(ax_min,ax_max),
+           xlab="", ylab=ifelse(kpos == length(names(data)), ax_lab, ""),
+           xaxs="i",yaxs="i")
+      
+      # Grid
+      for (ky in ax_tickpos) lines(c(0, 1), c(ky, ky), col="#eeeeee")
+      
+      # Density area
+      polygon(
+        c(rep(0, length(data[[k_net]]$cost$x)), data[[k_net]]$cost$x),
+        c(data[[k_net]]$cost$y, rev(data[[k_net]]$cost$y)),
+        col=paste(net_cols[net_names$shortname[which(net_names$longname == k_net)]]),
+        border=NA
+      )
+      
+      #box()
+      lines(c(0,0), c(ax_min,ax_max),
+            col=paste(net_cols[net_names$shortname[which(net_names$longname == k_net)]]))
+    }
+    
+    # Axes
+    axis(2, at=ax_tickpos)
+    
+    box()
+  }
+  
+  
+}
+#== Density plot function ============
+plot_density2 <- function(
+  data,
+  ax_min,
+  ax_max,
+  ax_tickpos,
+  ax_lab = "",
+  plt = c(0.15, 0.95, 0.15, 0.95),
+  new = TRUE,
+  switch_axes = FALSE
+) {
+  # Initialise
+  par(plt=plt, new=new)
+  
+  if (!switch_axes) {
+    plot(0,0,
+         type="n",
+         axes=FALSE,
+         xlim=c(ax_min,ax_max), ylim=c(0,1),
+         xlab=ax_lab, ylab="",
+         xaxs="i",yaxs="i")
+    
+    # Grid
+    for (kx in ax_tickpos) lines(c(kx, kx), c(0, 1), col="#eeeeee")
+    
+    # Density line 
+    for (k_net in names(data)) {
+      lines(data[[k_net]]$pot$x, data[[k_net]]$pot$y, col=paste(net_cols[net_names$shortname[which(net_names$longname == k_net)]]),lwd=0.5)
+    }
+
+    # Axes
+    axis(1, at=ax_tickpos)
+    
+    box()
+    
+  } else {
+    plot(0,0,
+         type="n",
+         axes=FALSE,
+         xlim=c(0,1), ylim=c(ax_min,ax_max),
+         xlab="", ylab=ax_lab,
+         xaxs="i",yaxs="i")
+    
+    # Grid
+    for (ky in ax_tickpos) lines(c(0, 1), c(ky, ky), col="#eeeeee")
+    
+    # Density line
+    for (k_net in names(data)) {
+      lines(data[[k_net]]$cost$x, data[[k_net]]$cost$y, col=paste(net_cols[net_names$shortname[which(net_names$longname == k_net)]]),lwd=0.5)
+    }
+    
+    # Axes
+    axis(2, at=ax_tickpos)
+    
+    box()
+  }
+  
+  
+}
+
+#== Density plot function ============
 plot_density <- function(
   data,
   threshold,
@@ -210,7 +402,7 @@ generate_potentials <- function(data, technology, steps) {
   
   # range
   pot_range <- countranges(df, 
-                           filter(data, `Data categorisationyear` == 2050 & `Data categorisationsystem boundaries` == "Global"),
+                           data,
                            resources,
                            "range"
   )
@@ -221,7 +413,7 @@ generate_potentials <- function(data, technology, steps) {
 #== Generate cost data =====
 generate_costs <- function(data, technology, steps) {
   # Adjust the maximum here to change the scale
-  df <- data.frame(v=cost_steps)
+  df <- data.frame(v=steps)
 
   # Get cost label  
   costs <- unique(
@@ -232,7 +424,7 @@ generate_costs <- function(data, technology, steps) {
   
   # Generate ranges
   cost_range <- countranges(df, 
-                            filter(data),
+                            data,
                             costs,
                             "range"
   )
@@ -284,6 +476,7 @@ plot_synthesis_part2 <- function(
   xmax <- max(pot_steps)
   ymin <- 0
   ymax <- max(cost_steps)
+  if (DEBUG) cat("[plot_heatmap]     > xmin: ",xmin,", xmax: ",xmax,", ymin: ",ymin,", ymax:",ymax,"\n")
   
   # Define axis tick positions
   if (DEBUG) cat("[plot_heatmap]   - Defining axes tick positions\n")
@@ -294,7 +487,7 @@ plot_synthesis_part2 <- function(
   if (DEBUG) cat("[plot_heatmap]   - Defining colours\n")
   white2red  <- colorRampPalette(c("white", "red"))
   white2blue <- colorRampPalette(c("white", "blue"))
-  pot_cols   <- paste0(white2red(length(pot_steps)), alpha)
+  pot_cols   <- paste0(white2red(length(pot_steps)),   alpha)
   cost_cols  <- paste0(white2blue(length(cost_steps)), alpha)
   
   # Define plot positions
@@ -312,7 +505,7 @@ plot_synthesis_part2 <- function(
   if (DEBUG) cat("[plot_heatmap] Processing data...\n")
   # Potential
   if (DEBUG) cat("[plot_heatmap]   - Computing rectangles coordinates for potentials\n")
-  pot_rects <- data.frame(xmin  = pot_steps-1, 
+  pot_rects <- data.frame(xmin  = lag(pot_steps, default=pot_steps[2]-pot_steps[1]), 
                           xmax  = pot_steps, 
                           ymin  = rep(ymin, length(pot_steps)), 
                           ymax  = rep(ymax, length(pot_steps)), 
@@ -324,7 +517,7 @@ plot_synthesis_part2 <- function(
   if (DEBUG) cat("[plot_heatmap]   - Computing rectangles coordinates for costs\n")
   cost_rects <- data.frame(xmin  = rep(xmin, length(cost_steps)),
                            xmax  = rep(xmax, length(cost_steps)),
-                           ymin  = cost_steps-1,
+                           ymin  = lag(cost_steps, default=cost_steps[2]-cost_steps[1]),
                            ymax  = cost_steps,
                            colid = pmin(length(cost_steps), pmax(1, round(data_cost$pcnt*(max(cost_steps)*cost_scalecol)/100, digit=0))))
   cost_rects$colidnorm <- round(cost_rects$colid/max(cost_rects$colid)*length(cost_steps), digits=0)
@@ -360,11 +553,9 @@ plot_synthesis_part2 <- function(
   for (ky in axes_ytick_pos) lines(c(xmin, xmax), c(ky, ky),     col="#eeeeee")
   
   # Bottom-up studies
-  print(nrow(pot_rects))
   for (kr in 1:nrow(pot_rects)) {
     rect(pot_rects$xmin[kr], pot_rects$ymin[kr], pot_rects$xmax[kr], pot_rects$ymax[kr], col=pot_rects$fill[kr],  border=NA)
   }
-  print(nrow(cost_rects))
   for (kr in 1:nrow(cost_rects)) {
     rect(cost_rects$xmin[kr],cost_rects$ymin[kr],cost_rects$xmax[kr],cost_rects$ymax[kr],col=cost_rects$fill[kr], border=NA)
   }
@@ -388,7 +579,7 @@ plot_synthesis_part2 <- function(
   }
   
   # Former review(s)
-  if (!is.null(data_rev)) {
+  if (!is.null(data_rev) && do_rev) {
     for (kr in nrow(data_rev)) {
       rect(
         data_rev$totalPotential.min[kr], data_rev$cost.min[kr],
@@ -398,22 +589,27 @@ plot_synthesis_part2 <- function(
     }
   }
   
-  # IAM data
-  if (!is.null(data_iam) && do_iam) {
-    iam_data <- data_iam %>% 
-      select(model,scenario,tempcat,period,variable,value) %>% 
-      spread(variable, value) %>% 
-      rename(price=`Price|Carbon`) %>% 
-      rename(potential=`Emissions|CO2|Carbon Capture and Storage|Biomass`) %>% 
-      mutate(potential=potential/1000)
-    
-    points(iam_data$potential[which(iam_data$period == 2050 & iam_data$potential != 0)], 
-           iam_data$price[which(iam_data$period == 2050 & iam_data$potential != 0)], 
-           pch=21, col="#777777ff", bg="#ffffff00")
-    points(iam_data$potential[which(iam_data$period == 2100 & iam_data$potential != 0)], 
-           iam_data$price[which(iam_data$period == 2100 & iam_data$potential != 0)], 
-           pch=19, col="#777777ff", cex=0.5)
-  }
+  # # IAM data
+  # if (!is.null(data_iam) && do_iam) {
+  #   iam_data <- data_iam %>% 
+  #     select(model,scenario,tempcat,period,variable,value) %>% 
+  #     spread(variable, value) %>% 
+  #     rename(price=`Price|Carbon`) %>% 
+  #     rename(potential=`Emissions|CO2|Carbon Capture and Storage|Biomass`) %>% 
+  #     mutate(potential=potential/1000)
+  #   
+  #   points(iam_data$potential[which(iam_data$period == 2050 & iam_data$potential != 0)], 
+  #          iam_data$price[which(iam_data$period == 2050 & iam_data$potential != 0)], 
+  #          pch=21, col="#777777ff", bg="#ffffff00")
+  #   points(iam_data$potential[which(iam_data$period == 2100 & iam_data$potential != 0)], 
+  #          iam_data$price[which(iam_data$period == 2100 & iam_data$potential != 0)], 
+  #          pch=19, col="#777777ff", cex=0.5)
+  # }
+  
+  # Add title
+  par(xpd=FALSE)
+  text(xmax/2, ymax+(ymax-ymin)*1.05, title, cex=2)
+  par(xpd=FALSE)
   
   box()
   
@@ -436,7 +632,7 @@ plot_synthesis_part2 <- function(
   )
   
   
-  if (!is.null(data_iam)) {
+  if (!is.null(data_iam) && do_iam) {
     #-- Top plot (boxplots of potentials) -------------------------
     if (DEBUG) cat("[plot_heatmap]   - Top plot (boxplots of potentials)\n")
     plot_boxplot(
