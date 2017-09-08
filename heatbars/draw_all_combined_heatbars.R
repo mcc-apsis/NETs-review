@@ -369,7 +369,7 @@ for (t in techs) {
 
 ##########################
 ## All costs with jittered ranges
-costs <- costs %>%
+costsjitter <- costs %>%
   filter(measurement=="max", !is.na(value)) %>%
   group_by(variable) %>%
   mutate(
@@ -379,17 +379,123 @@ costs <- costs %>%
 
 costrange <- costs %>%
   filter(measurement %in% c("max","min"), !is.na(value)) %>%
-  left_join(select(potsjitter,label, TI, resourcelab,`Data categorisationyear`)) %>%
+  left_join(select(costsjitter,label, TI, resourcelab,`Data categorisationyear`,`Data categorisationsystem conditions`)) %>%
   spread(measurement, value)
 
-costrange$resourcelabn <- as.numeric(factor(costrange$resourcelab)) + rnorm(length(costrange$resourcelab))*0.1
+costrange$resourcelabn <- as.numeric(factor(costrange$resourcelab)) #+ runif(length(costrange$resourcelab),-0.4,0.4)
 
-heatbar(costranges,"pcnt", numeric=T) +
+costrange <- costrange %>%
+  group_by(technology) %>%
+  arrange(min) %>% 
+  mutate(
+    gtot = n(),
+    pn = row_number(),
+    jitter = (0.8/gtot)*(pn-1),
+    resourcelabn = resourcelabn- 0.4 + jitter
+  )
+
+
+
+costrange$TIs <- lapply(costrange$TI, splitwords, n=8)
+
+costrange$conditions <- lapply(costrange$`Data categorisationsystem conditions`, splitwords, n=8)
+
+costrange$AUs <- lapply(costrange$AU, fixauthors)
+
+costrange <- costrange %>%
+  mutate(
+    ttip=paste0(
+      AUs," (",PY,") ",
+      "<br>",
+      TIs,
+      "<br><br>",
+      "Cost range: ",round(min,2),"-",round(max,2),
+      " Gt CO2/year","<br>",
+      "<b>System boundaries:</b> ", boundaries, "<br>",
+      "<b>System conditions:</b> ", conditions
+    ) 
+  )
+
+
+
+costrange <- costrange %>%
+  mutate(
+    ttip=paste0(
+      AU," (",PY,") ",
+      "<br>",
+      TI,
+      "<br>",
+
+      "$/tCO2","<br>",
+      "System boundaries: ", boundaries, "<br>",
+      "System conditions: ", `Data categorisationsystem conditions`
+    ) 
+  )
+
+
+
+gg <- heatbar(costranges,"pcnt", numeric=T) +
   geom_errorbar(
     data=costrange,
     aes(resourcelabn ,ymin=min, ymax=max),
-    width=0.1
-  )
+    width=0.05,
+    alpha=0.3
+  ) +
+  scale_x_continuous(breaks=seq(1,8)) +
+  theme_bw()+
+  theme(axis.text.x  = my_axis(pics)) +
+  labs(x="",y="Costs in $US(2011)/tCO2") +
+  coord_cartesian(expand=F) +
+  theme(
+    axis.line.x=element_blank(),
+    axis.line.y= element_line(),
+    axis.ticks.x = element_blank(),
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  ) 
+
+print(gg)
+
+ggsave("plots/heatbars/all_costs_years_ranges.png")
+
+
+
+gg <- heatbar(costranges,"pcnt", numeric=T) +
+  geom_linerange(
+    data=costrange,
+    aes(resourcelabn ,ymin=min, ymax=max, text=ttip),
+    width=1,
+    alpha=1
+  ) +
+  #scale_x_continuous(breaks=seq(1,8)) +
+  theme_bw()+
+  labs(x="",y="Costs in $US(2011)/tCO2") +
+  coord_cartesian(expand=F) +
+  theme(
+    axis.line.x=element_blank(),
+    axis.line.y= element_line(),
+    axis.ticks.x = element_blank(),
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  ) +
+  scale_x_continuous(breaks=seq(1,8),labels=names(rlabs$resourcelab))
+
+print(gg)
+
+m <- list(
+  l = 100,
+  r = 50,
+  b = 200,
+  t = 100,
+  pad = 10
+)
+
+ggplotly(gg, tooltip="text") %>%
+  layout(margin = m)
+
+
 
 
 
@@ -409,6 +515,8 @@ techs <- unique(pots$technology)
 ranges <- seq(0,100,by=0.1)
 df <- data.frame(v=ranges)
 
+pots$measurement <- gsub(" (Gt CO2/yr)","",pots$measurement,fixed=T)
+
 potsranges <- countranges(
   df, 
   mutate(
@@ -418,7 +526,7 @@ potsranges <- countranges(
   techs, "max")
 
 
-pots$measurement <- gsub(" (Gt CO2/yr)","",pots$measurement,fixed=T)
+
 
 ggplot(pots) +
   geom_jitter(
@@ -519,30 +627,119 @@ for (t in techs) {
   ggsave(paste0("plots/heatbars/",t,"/potentials/range_year_studies.png"))
 }
 
+
+
 potsjitter <- pots %>%
   filter(measurement=="max", !is.na(value)) %>%
   group_by(variable) %>%
   mutate(
     nstudies = n(),
     resourcelab = paste0(variable,'\n[',nstudies,' studies]')
+  ) 
+
+potsjitter$resourcelabn <- as.numeric(factor(potsjitter$resourcelab))
+
+potsjitter <- potsjitter %>%
+  group_by(technology) %>%
+  arrange(value) %>% 
+  mutate(
+    gtot = n(),
+    pn = row_number(),
+    jitter = (0.76/gtot)*(pn-1),
+    resourcelabn = resourcelabn- 0.38 + jitter
   )
 
-potsrange <- pots %>%
-  filter(measurement %in% c("max","min"), !is.na(value)) %>%
-  left_join(select(potsjitter,label, TI, resourcelab,`Data categorisationyear`)) %>%
-  spread(measurement, value)
 
-heatbar(potsranges,"pcnt", step=0.1) +
-  theme(axis.text.x = element_text(angle=60, hjust=1,vjust=1)) + 
-  labs(x="",y="Potentials in Gt CO2/year") +
-  theme(axis.text.x  = my_axis(pics)) +
-  geom_jitter(
+
+
+gg <- heatbar(potsranges,"pcnt", step=0.1, numeric=T) +
+  geom_point(
     data=potsjitter,
-    aes(resourcelab,value)
+    aes(resourcelabn ,y=value),
+    size=1,
+    alpha=0.3
+  ) +
+  scale_x_continuous(breaks=seq(1,7)) +
+  theme_bw()+
+  theme(axis.text.x  = my_axis(pics)) +
+  labs(x="",y="Potential GtCO2/year Sequestered") +
+  coord_cartesian(expand=F) +
+  theme(
+    axis.line.x=element_blank(),
+    axis.line.y= element_line(),
+    axis.ticks.x = element_blank(),
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  ) 
+
+print(gg)
+
+### Can't do it automatically !!! htmlwidgets::saveWidget(ggp, "plots\\heatbars\\costs\\index.html")
+
+ggsave("plots/heatbars/all_potentials_points.png", width=16,height=10)
+
+
+
+potsjitter$TIs <- lapply(potsjitter$TI, splitwords, n=8)
+
+potsjitter$conditions <- lapply(potsjitter$`Data categorisationsystem conditions`, splitwords, n=8)
+
+potsjitter$AUs <- lapply(potsjitter$AU, fixauthors)
+
+potsjitter <- potsjitter %>%
+  mutate(
+    ttip=paste0(
+      AUs," (",PY,") ",
+      "<br>",
+      TIs,
+      "<br><br>",
+      "<b>Potential:</b> ",round(value,1),
+      " Gt CO2/year","<br>",
+      "<b>System boundaries:</b> ", boundaries, "<br>",
+      "<b>System conditions:</b> ", conditions
+    ) 
   )
 
 
-all_data$`Data categorisationsystem conditions`
+gg <- heatbar(potsranges,"pcnt", step=0.1, numeric=T) +
+  geom_point(
+    data=potsjitter,
+    aes(resourcelabn ,y=value, text=ttip),
+    size=1,
+    alpha=0.3
+  ) +
+  theme_bw()+
+  labs(x="",y="Potential GtCO2/year Sequestered") +
+  coord_cartesian(expand=F) +
+  theme(
+    axis.line.x=element_blank(),
+    axis.line.y= element_line(),
+    axis.ticks.x = element_blank(),
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank()
+  ) +
+  scale_x_continuous(breaks=seq(1,7),labels=names(pics))
+
+print(gg)
+
+m <- list(
+  l = 100,
+  r = 50,
+  b = 200,
+  t = 100,
+  pad = 10
+)
+
+ggplotly(gg, tooltip="text") %>%
+  layout(margin = m)
+
+
+######
+
+
+
 
 
 ########################
@@ -558,62 +755,4 @@ ggplot(bystudy) +
   geom_point(
     aes(totalPotential, cost, colour=technology)
   ) +theme_bw()
-
-
-#####################
-## By technology ranges
-
-bytech <- all_data %>%
-  filter(
-    !is.na(value) , 
-    is.finite(value),
-    costsinclude==T, potsinclude==T
-    ) %>%
-  group_by(technology, variable) %>% 
-  summarise(
-    # min = min(value, na.rm = T),
-    # max = max(value, na.rm = T)
-    min = quantile(value, .25, na.rm = T),
-    max = quantile(value, .75, na.rm = T)
-  )
-
-costsums <- filter(bytech, variable=="cost") %>%
-  select(technology, costs_min=min,costs_max=max)
-
-potsums <- filter(bytech, variable=="totalPotential") %>%
-  select(technology, pots_min=min,pots_max=max)
-
-all_sums <- left_join(costsums, potsums)
-
-ggplot() + 
-  geom_rect(
-    data=all_sums,
-    mapping=aes(
-      xmin=pots_min,
-      xmax=pots_max,
-      ymin=costs_min,
-      ymax=costs_max,
-      color=technology
-      ),
-    alpha=0.0,
-    size=2
-   # color="black"
-  ) + theme_bw() +
-  labs(x="Potentials in Gt CO2/year",y="Costs in $/tCO2")
-
-ggsave("plots/synthetic/rects.svg",width=16,height=10)
-
-+
-  scale_y_log10() +
-  scale_x_log10()
-
-
-
-
-
-
-
-
-
-
 
