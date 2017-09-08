@@ -82,10 +82,10 @@ steps <- list(
 data_ej <- list(
   data.frame(
     net      = "AR",
-    pot_min  = 1,
-    pot_max  = 10,
-    cost_min = 1,
-    cost_max = 6
+    pot_min  = 3,
+    pot_max  = 6,
+    cost_min = 10,
+    cost_max = 125
   ),
   data.frame(
     net      = "BECCS",
@@ -96,8 +96,8 @@ data_ej <- list(
   ),
   data.frame(
     net      = "BC",
-    pot_min  = 3,
-    pot_max  = 4,
+    pot_min  = 2.5,
+    pot_max  = 4.5,
     cost_min = 70,
     cost_max = 100
   ),
@@ -117,23 +117,23 @@ data_ej <- list(
   ),
   data.frame(
     net      = "OA",
-    pot_min  = 2,
-    pot_max  = 10,
-    cost_min = 80,
-    cost_max = 250
+    pot_min  = 10,
+    pot_max  = 25,
+    cost_min = 90,
+    cost_max = 110
   ),
   data.frame(
     net      = "OF",
     pot_min  = 2,
-    pot_max  = 10,
-    cost_min = 80,
-    cost_max = 250
+    pot_max  = 30,
+    cost_min = 10,
+    cost_max = 80
   ),
   data.frame(
     net      = "SCS",
     pot_min  = 2,
-    pot_max  = 8,
-    cost_min = 30,
+    pot_max  = 4,
+    cost_min = 20,
     cost_max = 100
   )
 ) %>% 
@@ -209,7 +209,7 @@ for (k_net in unique(all_data$technology)) {
 for (k_net in unique(all_data$technology)) {
   
   net_sn <- paste(net_names$shortname[which(net_names$longname == k_net)])
-  
+  print(net_sn)
   if (net_sn != "DAC") {
    
     do_rev <- TRUE
@@ -240,14 +240,14 @@ for (k_net in unique(all_data$technology)) {
       2050,  # IAM Period for boxplots
       #--- Plot options ---
       do_bu  = TRUE,
-      do_iam = ifelse(k_net == "BECCS", TRUE, FALSE),
+      do_iam = FALSE, #ifelse(k_net == "BECCS", TRUE, FALSE),
       do_rev = do_rev,
       alpha  = "33",
       #--- Other options ---
       xlab  = "Potential [Gt(CO2)]",
       ylab  = "Costs [$US/t(CO2)]",
       title = "[NET name]",
-      file  = NULL, #file.path(plotdir, paste0("heatmap_", net_sn, ".svg")),
+      file  = file.path(plotdir, paste0("heatmap_", net_sn, ".svg")),
       DEBUG = DEBUG
     )
   }
