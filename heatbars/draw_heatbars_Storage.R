@@ -12,10 +12,13 @@ library(googlesheets)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(parallel)
+library(countrycode)
+
 
 source("heatbars/heatbar_functions.R")
 
-dir.create(paste0("plots/heatbars/",u_sheetName))
+#dir.create(paste0("plots/heatbars/",u_sheetName))
 
 costsdir = paste0("plots/heatbars/",u_sheetName,"/costs")
 potsdir = paste0("plots/heatbars/",u_sheetName,"/potentials")
@@ -34,12 +37,12 @@ ss  <- gs_read(gs, ws = u_sheetName, verbose=DEBUG)
 
 data <- get_data(ss,3)
 
-
+#data <- filter(data, `Data categorisationresource` == "DOG")
 ################################################
 ## Generate a new df of ranges
 
 # Adjust the maximum here to change the scale
-ranges <- seq(1,1050)
+ranges <- seq(1,5050)
 df <- data.frame(v=ranges)
 
 data_copy <- data %>%
@@ -53,11 +56,12 @@ data_copy <- data %>%
 # resources <- resources[!is.na(resources)
 
 resources <- list("Aquifers", "Coal beds", "DNG", "DOF", "DOG", "Total")
+costs <- c("cost")
 
 # extracting theoretical potentials to put in caption, 
 # Count the studies with a maximum under each range for each resource
 # Add any additional "Dimension" filters too
-res <- countranges(
+store <- countranges(
   df, 
   filter(
     data_copy, `Data categorisationsystem boundaries` == "Global" | 
@@ -65,11 +69,45 @@ res <- countranges(
     ),
   resources, "max"
   )
-heatbar(res,"pcnt") + 
+heatbar(store,"pcnt") + 
   labs(x="Variable",y="Location")
-ggsave("plots/BECCS/Storage_Global.png",width=8,height=5)
+#ggsave("plots/BECCS/Storage_Global.png",width=8,height=5)
 
+store <- countranges(
+  df, 
+  filter(
+    data_copy, `Data categorisationsystem boundaries` == "Global" | 
+      `Data categorisationsystem boundaries` == "Global, Review"
+  ),
+  resources, "range"
+)
+heatbar(store,"pcnt") + 
+  labs(x="Variable",y="Location")
 
+#Bars with resources with the lines with colors for type of estimate
+#might have to do it per bar 
+data_copy <- data %>% 
+  filter(`Data categorisationsystem boundaries` == "Global" | 
+           `Data categorisationsystem boundaries` == "Global, Review" 
+           ) %>% 
+  filter(variable == "totalPotential") %>% 
+  mutate(resource =`Data categorisationresource`,
+         value = ifelse(value > 5000, 5000,value), 
+         PY = as.numeric(PY), 
+         value = as.numeric(value))
+
+h1 <- heatbar_years(data_copy, 
+                    store,
+                    "pcnt",
+                    "`Data categorisationmethod`",
+                    graph = TRUE,
+                    var = "totalPotential", 
+                    y = 2000,
+                    w = 20
+                    )
+
+h1[[1]] + facet_grid(.~resource)+
+  geom_jitter(data = data_copy, aes(x = PY, y = value))
 
 #ggsave("heatbar_example.png",width=8,height=5)
 
