@@ -58,6 +58,15 @@ steps <- list(
     cost_n   = 1000
   ),
   data.frame(
+    net      = "EW&OA",
+    pot_min  = 1,
+    pot_max  = 100,
+    pot_n    = 1000,
+    cost_min = 1,
+    cost_max = 1000,
+    cost_n   = 1000
+  ),
+  data.frame(
     net      = "OF",
     pot_min  = 1,
     pot_max  = 50,
@@ -123,6 +132,13 @@ data_ej <- list(
     cost_max = 110
   ),
   data.frame(
+    net      = "EW&OA",
+    pot_min  = 2,
+    pot_max  = 25,
+    cost_min = 80,
+    cost_max = 250
+  ),
+  data.frame(
     net      = "OF",
     pot_min  = 2,
     pot_max  = 30,
@@ -140,8 +156,8 @@ data_ej <- list(
   do.call("rbind", .)
 
 net_names <- data.frame(
-  longname  = sort(unique(all_data$technology)),
-  shortname = c("AR", "BECCS", "BC", "DAC", "EW", "OA", "OF", "SCS")
+  longname  = c(sort(unique(all_data$technology)), "Enhanced weathering (terrestrial and ocean) and Ocean alkalinisation"),
+  shortname = c("AR", "BECCS", "BC", "DAC", "EW", "OA", "OF", "SCS", "EW&OA")
 )
 
 
@@ -152,6 +168,7 @@ library(tidyr)
 library(ggplot2)
 library(countrycode)
 library(plotrix)
+library(parallel)
 
 source("heatbars/heatbar_functions.R")
 source("part2-synthesis/heatmap_functions.R")
@@ -168,9 +185,13 @@ load("../../bitbucket/beccs/data/dataplotAll.RData") # IAM
 
 
 #==== PROCESS DATA ==========
+all_data$technology[which(all_data$technology == "Enhanced weathering (terrestrial and ocean)")] <- "Enhanced weathering (terrestrial and ocean) and Ocean alkalinisation"
+all_data$technology[which(all_data$technology == "Ocean alkalinisation")]                        <- "Enhanced weathering (terrestrial and ocean) and Ocean alkalinisation"
+
+#==== PROCESS DATA ==========
 data_steps <- list()
 data_bu    <- list()
-for (k_net in unique(all_data$technology)) {
+for (k_net in unique(all_data$technology)[5:7]) {
   
   cat(paste0("Processing ", k_net, "...\n"))
   
@@ -199,6 +220,23 @@ for (k_net in unique(all_data$technology)) {
                                   !is.na(value) , 
                                   is.finite(value),
                                   costsinclude==T, potsinclude==T
+                                ), net_sn, data_steps[[k_net]]$cost)
+    )
+  } else {
+    data_steps[[k_net]] <- data.frame(
+      "pot" = rep(NA, 1001),
+      "cost" = seq(steps$cost_min[which(steps$net == net_sn)], 
+                   steps$cost_max[which(steps$net == net_sn)],
+                   (steps$cost_max[which(steps$net == net_sn)]-steps$cost_min[which(steps$net == net_sn)])/steps$cost_n[which(steps$net == net_sn)])
+    )
+    
+    data_bu[[k_net]] <- list(
+      "pot"  = NULL,
+      "cost" = generate_costs(all_data %>% filter(technology == k_net) %>%
+                                filter(
+                                  !is.na(value) , 
+                                  is.finite(value),
+                                  costsinclude==T#, potsinclude==T
                                 ), net_sn, data_steps[[k_net]]$cost)
     )
   }
@@ -247,7 +285,46 @@ for (k_net in unique(all_data$technology)) {
       xlab  = "Potential [Gt(CO2)]",
       ylab  = "Costs [$US/t(CO2)]",
       title = "[NET name]",
-      file  = file.path(plotdir, paste0("heatmap_", net_sn, ".svg")),
+      file  = file.path(plotdir, paste0("heatmap_", net_sn, ".png")),
+      DEBUG = DEBUG
+    )
+  } else {
+    do_rev <- TRUE
+    data_rev <- all_data %>% 
+      filter(technology == k_net) %>% 
+      filter(variable %in% c("totalPotential", "cost")) %>% 
+      unite(var.mes, variable, measurement, sep=".") %>% 
+      select(-category) %>% 
+      filter(`Data categorisationresource` == "Review")
+    
+    if (nrow(data_rev) > 0) {
+      data_rev <- data_rev %>% spread(var.mes, value)
+    } else {
+      data_rev <- NULL
+      do_rev <- FALSE
+    }
+    
+    plot_synthesis_part2_DAC(
+      data_bu[[k_net]]$pot,  # Bottom-up data potential
+      data_bu[[k_net]]$cost, # Bottom-up data costs
+      v_data_tempTargets_world_plot %>% 
+        filter(variable %in% c("Price|Carbon", "Emissions|CO2|Carbon Capture and Storage|Biomass")), # IAM data
+      data_rev, # Previous review data 
+      data_ej %>% 
+        filter(net == net_sn),  # Expert judgment data
+      #--- Data options ---
+      0.50,  # Threshold for density plots (same for both)
+      2050,  # IAM Period for boxplots
+      #--- Plot options ---
+      do_bu  = TRUE,
+      do_iam = FALSE, #ifelse(k_net == "BECCS", TRUE, FALSE),
+      do_rev = do_rev,
+      alpha  = "33",
+      #--- Other options ---
+      xlab  = "Potential [Gt(CO2)]",
+      ylab  = "Costs [$US/t(CO2)]",
+      title = "[NET name]",
+      file  = file.path(plotdir, paste0("heatmap_", net_sn, ".png")),
       DEBUG = DEBUG
     )
   }
