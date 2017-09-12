@@ -556,3 +556,7 @@ grid_arrange_shared_legend <- function(..., ncol = length(list(...)), nrow = 1, 
   invisible(combined)
   
 }
+
+nth_el <- function(lst, n){
+  sapply(lst, `[[`, n)
+}

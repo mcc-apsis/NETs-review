@@ -229,10 +229,10 @@ beccs <- filter(pots, technology=="BECCS") %>%
   mutate(variable=`Data categorisationresource`) %>%
   filter(variable!="?",variable!="Misc")
 
-beccs$variable[beccs$variable=="Bioenergy Crops"] <- "1. Bioenergy Crops"
-beccs$variable[beccs$variable=="Forestry"] <- "2. Forestry"
-beccs$variable[beccs$variable=="Residues"] <- "3. Residues"
-beccs$variable[beccs$variable=="Waste"] <- "4. Waste"
+beccs$variable[beccs$variable=="Bioenergy Crops"] <- " Bioenergy Crops "
+beccs$variable[beccs$variable=="Forestry"] <- " Forestry "
+beccs$variable[beccs$variable=="Residues"] <- " Residues "
+beccs$variable[beccs$variable=="Waste"] <- " Waste "
 
 
 resources <- unique(beccs$variable)
@@ -352,6 +352,8 @@ p <- heatbar(storageranges,"pcnt",step=100) +
 
 print(p)
 
+tech_graphs[["Storage"]][[2]] <- p
+
 tech_graphs[["BECCS"]][[5]] <- p
 
 
@@ -367,7 +369,8 @@ for (t in tech_graphs[!is.null(tech_graphs)]) {
       if (t[[3]]=="Enhanced weathering") {
         grid_arrange_shared_legend(t[[1]],t[[4]]+ylab(""),t[[2]],t[[5]]+ylab(""), ncol=4)
       } else if (t[[3]]=="BECCS"){
-        legend <- ggplotGrob(t[[1]])$grobs[[which(sapply(g, function(x) x$name) == "guide-box")]]
+        g <- ggplotGrob(t[[1]])$grobs
+        legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
         lay <- rbind(c(1,2,4),c(3,3,4))
         lwidth <- sum(legend$width)
         grid.arrange(
@@ -398,6 +401,18 @@ for (t in tech_graphs[!is.null(tech_graphs)]) {
 }
 
 
+
+for (cp in seq(1,2)) {
+  gs <- nth_el(tech_graphs,cp)
+  gs <- gs[!unlist(lapply(gs, is.null))]
+  if (cp==1) {
+    var = "costs"
+  } else {
+    var = "potentials"
+  }
+  png(paste0("plots/heatbars/",var,"/panel.png"),width=1000,height=625)
+  do.call("grid_arrange_shared_legend", c(gs, ncol=2,nrow=4))
+}
 
 ##########################
 ## Other graphs
