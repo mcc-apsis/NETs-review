@@ -9,6 +9,9 @@ library(ggplot2)
 library(countrycode)
 library(ggrepel)
 library(parallel)
+library(grid)
+library(gridExtra)
+library(plotly)
 
 source("heatbars/heatbar_functions.R")
 
@@ -26,206 +29,28 @@ for(i in 1:npoints) {
 names(pics) <- sub(".png","",sub("icons/","",image.file))
 
 
+load("data/all_data.RData")
 
-# Authorise googlesheets to access your Google Sheets account
-gs_auth()
-
-
-#==== READ IN SPREADSHEET ==========
-gs  <- gs_title("NETs Review")
-
-
-#######################################
-## Go through all sheets, and merge all the data
-
-sheets <- gs$ws$ws_title
-
-sheets <- sheets[!(sheets %in% c("Bioenergy","Storage","Template"))]
-
-all_data <- data.frame()
-
-for (u_sheetName in sheets) {
-  print(u_sheetName)
-  Sys.sleep(6)
-  ss  <- gs_read(gs, ws = u_sheetName, verbose=FALSE)
-  data <- get_data(ss)
-  data$technology <- u_sheetName
-  data$PY <- as.numeric(data$PY)
-  all_data <- bind_rows(all_data, data)
-}
-
-#######################################
-## Fix one or two problems in the old data
-
-all_data <- all_data %>%
-  mutate(
-    year = `Data categorisationyear`,
-    nyear = as.numeric(year),
-    value = as.numeric(value),
-    pcf = `Potentials in tCO2/yrconversion factor to common unit`,
-    ccf = `Costs in $US(2011)/tCO2conversion factor to common unit`,
-    boundaries = tolower(`Data categorisationsystem boundaries`)
-  ) 
-
-ews <- c(
-  "Enhanced weathering (terrestrial and ocean)",
-  "Ocean alkalinisation",
-  "Ocean fertilization"
-)
-
-all_data$pcf <- as.numeric(lapply(all_data$pcf, evcf))
-all_data$ccf <- as.numeric(lapply(all_data$ccf, evcf))
-
-all_data$value[
-  all_data$technology %in% ews & 
-    all_data$variable=="totalPotential"
-  ] <- all_data$value[all_data$technology %in% ews & 
-                        all_data$variable=="totalPotential"
-                      ] * all_data$pcf[
-                        all_data$technology %in% ews & 
-                          all_data$variable=="totalPotential"
-                        ]
-
-all_data$value[
-  all_data$technology %in% ews & 
-    all_data$variable=="cost"
-  ] <- all_data$value[all_data$technology %in% ews & 
-                        all_data$variable=="cost"
-                      ] * all_data$ccf[
-                        all_data$technology %in% ews & 
-                          all_data$variable=="cost"
-                        ]
-
-
-#########################################
-## We should define some criteria for each tech - it's always different
-
-# Do this for costs and potentials
-all_data$costsinclude=F
-all_data$potsinclude=F
-
-all_data$boundaries[is.na(all_data$boundaries)] <- ""
-
-#DAC - remove mil-101, as MG-2 has a bigger range
-#pots
-all_data$costsinclude[
-  all_data$technology=="DAC" &
-    (is.na(all_data$`Data categorisationsystem conditions`) |
-       all_data$`Data categorisationsystem conditions`=="MG-2")
-  ] <- T
-
-#BECCS - include everything that is not cumulative
-all_data$costsinclude[
-  all_data$technology=="BECCS" &
-    !(all_data$boundaries %in% c("cumulative","exclude"))
-  ] <- T
-
-all_data$potsinclude[
-  all_data$technology=="BECCS" &
-    !(all_data$boundaries %in% c("cumulative","exclude"))
-  ] <- T
-
-
-#EW include everything global
-all_data$costsinclude[
-  all_data$technology=="Enhanced weathering (terrestrial and ocean)"
-  ] <- T
-
-all_data$potsinclude[
-  all_data$technology=="Enhanced weathering (terrestrial and ocean)"
-  ] <- T
-
-# Ocean fertilisation - include everything global
-all_data$costsinclude[
-  all_data$technology=="Ocean fertilization" 
-  ] <- T
-
-all_data$potsinclude[
-  all_data$technology=="Ocean fertilization" &
-    grepl("global",all_data$boundaries)
-  ] <- T
-
-# Ocean alk - include everything global
-all_data$costsinclude[
-  all_data$technology=="Ocean alkalinisation" 
-  ] <- T
-
-all_data$potsinclude[
-  all_data$technology=="Ocean alkalinisation" &
-    grepl("global",all_data$boundaries)
-  ] <- T
-
-# Biochar - include everything global
-all_data$costsinclude[
-  all_data$technology=="Biochar" 
-  ] <- T
-
-all_data$potsinclude[
-  all_data$technology=="Biochar" &
-    all_data$boundaries=="global"
-  ] <- T
-
-# Soil Carbon Sequestration
-all_data$potsinclude[
-  all_data$technology=="Soil Carbon Sequestration" &
-    all_data$boundaries=="global"
-  ] <- T
-
-all_data$costsinclude[
-  all_data$technology=="Soil Carbon Sequestration"
-  ] <- T
-
-# AR - include everything global, in 2050 and flux measurement
-all_data$potsinclude[
-  all_data$technology=="Afforestation and Reforestation" &
-    grepl("global",all_data$boundaries) &
-    all_data$nyear==2050 &
-    all_data$`Potentials in Mt CO2/yearEstimate type`=="Flux"
-  ] <- T
-
-all_data$costsinclude[
-  all_data$technology=="Afforestation and Reforestation"
-  ] <- T
-
-all_data$AU[is.na(all_data$AU)] <- all_data$UT[is.na(all_data$AU)]
-
-bcomma <- function(x) {
-  return(strsplit(x,",")[[1]][[1]])
-}
-
-all_data$label <- paste0(as.character(lapply(all_data$AU, bcomma)),", ",all_data$PY)
-
-
-# t -> gt or mt -> gt
-all_data$value[
-  all_data$technology=="Biochar" &all_data$variable=="totalPotential"
-  ] <- all_data$value[all_data$technology=="Biochar" & all_data$variable=="totalPotential"]/1000000000
-
-all_data$value[
-  all_data$technology=="Afforestation and Reforestation" & all_data$variable=="totalPotential"
-  ] <- all_data$value[
-    all_data$technology=="Afforestation and Reforestation" & all_data$variable=="totalPotential"
-    ]/1000
-
-all_data$value[
-  all_data$technology %in% ews & all_data$variable=="totalPotential"
-  ] <- all_data$value[
-    all_data$technology %in% ews & all_data$variable=="totalPotential"
-    ]/1000000000
-
-
-
-save(all_data,file="data/all_data.RData")
-
+all_data$technology[all_data$technology=="Enhanced weathering (terrestrial and ocean)"] <- "Enhanced weathering"
 
 #### Add in max + min 0.5 around estimate
 all_data$TI[is.na(all_data$TI)] <- all_data$CITATION[is.na(all_data$TI)]
 
-onames <- names(all_data)
-dataf <- suppressWarnings(mutate(all_data,value=as.numeric(value))) %>%
-  group_by(TI, variable) %>%
-  filter(!is.na(measurement),!is.na(TI)) %>%
-  spread(measurement, value )
+
+dataf <- all_data %>%
+  group_by(TI, variable, `Data categorisationresource`, boundaries, year, measurement) %>%
+  arrange(value) %>%
+  mutate(ind = row_number()) %>%
+  filter(ind==1) %>%
+  ungroup()
+
+onames <- names(dataf)
+
+dataf <- dataf %>%
+  filter(!is.na(measurement) & !is.na(value) & measurement!="",!is.na(TI)) %>%
+ #mutate(group_i=row_number()) %>%
+  spread(measurement, value ) %>%
+  select(-ind)
 
 dataf$max[is.na(dataf$max)] <- dataf$estimate[is.na(dataf$max)] + 0.5
 dataf$min[is.na(dataf$min)] <- dataf$estimate[is.na(dataf$min)] - 0.5
@@ -243,12 +68,8 @@ all_data <- all_data[,names(all_data[names(all_data)!=""])]
 
 
 costs <- as.data.frame(all_data) %>%
-  filter(variable=="cost" & costsinclude==T) %>%
+  filter(variable=="cost" & costsinclude==T & !is.na(value)) %>%
   mutate(variable=technology)
-
-
-
-
 
 ## Get a dataframe with values to 1000 and the number of studies in that range
 ## for each tech
@@ -276,6 +97,527 @@ rlabs <- costranges %>%
   )
 
 names(pics) <- rlabs$resourcelab
+
+###############################
+## Do the same for potentials
+
+
+
+###################################
+## Plot potentials for all estimates and all technologies
+
+pots <- all_data %>%
+  ungroup() %>%
+  filter(variable=="totalPotential" & potsinclude==T) %>%
+  mutate(
+    variable=technology
+  ) 
+
+techs <- unique(pots$technology)
+
+ranges <- seq(0,100,by=0.1)
+df <- data.frame(v=ranges)
+
+pots$measurement <- gsub(" (Gt CO2/yr)","",pots$measurement,fixed=T)
+
+potsranges <- countranges(
+  df, 
+  mutate(
+    pots,
+    value=as.numeric(value)
+  ),
+  techs, "max")
+
+#####################################
+## Potspics
+
+potspics <- pics[!grepl("DAC",names(pics))]
+
+
+##################################################################
+########################################
+## By technology graphs
+top_n <- 4
+
+
+tech_graphs <- list()
+techs <- unique(costs$technology)
+
+for (t in techs) {
+  tranges <- costranges[costranges$resource==t,]
+  tcosts <- costs[costs$technology==t,]
+  y1 <- min(tcosts$PY,na.rm=T)
+  y2 <- max(tcosts$PY,na.rm=T)
+  diff <- y2-y1+2
+  mid <- y1+diff/2-1
+  h1<- heatbar_years(tcosts, tranges, "pcnt", graph = TRUE, y = mid, w = diff,var=t)
+  int_breaks <- function(x, n = 5) pretty(x, n)[pretty(x, n) %% 1 == 0] 
+  labels <- h1[[2]] %>%
+    group_by(variable) %>%
+    arrange(max) %>%
+    mutate(lowest=row_number()) %>%
+    arrange(-max) %>%
+    mutate(highest=row_number()) %>%
+    filter(highest < top_n | lowest < top_n)
+  p <- h1[[1]] +  geom_text_repel(data = labels, 
+                                  aes(x = PYJ, y = max, label = label, angle = 90) ,
+                                  size=3
+  ) + ggtitle(paste0(t," - Costs")) +
+    scale_x_continuous(breaks= int_breaks)
+  print(p)
+  if (t %in% c("Ocean alkalinisation","Enhanced weathering")) {
+    p <- p + ylim(0,550)
+  }
+  if (t=="Ocean alkalinisation") {
+    tech_graphs[["Enhanced weathering"]][[4]] <- p
+    tech_graphs[["Enhanced weathering"]][[6]] <- t
+  } 
+  tech_graphs[[t]][[1]] <- p
+  tech_graphs[[t]][[3]] <- t
+  
+  ggsave(paste0("plots/heatbars/",t,"/costs/range_year_studies.png"))
+}
+
+
+
+
+
+techs <- unique(pots$technology)
+
+for (t in techs) {
+  tranges <- potsranges[potsranges$resource==t,]
+  tpots <- pots[pots$technology==t,]
+  
+  y1 <- min(tpots$PY,na.rm=T)
+  y2 <- max(tpots$PY,na.rm=T)
+  diff <- y2-y1+2
+  mid <- y1+diff/2-1
+  int_breaks <- function(x, n = 5) pretty(x, n)[pretty(x, n) %% 1 == 0] 
+  h1<- heatbar_years(tpots, tranges, "pcnt", graph = TRUE, y = mid, w = diff, var=t, measurement="max",step=0.1)
+  labels <- h1[[2]] %>%
+    group_by(variable) %>%
+    arrange(max) %>%
+    mutate(lowest=row_number()) %>%
+    arrange(-max) %>%
+    mutate(highest=row_number()) %>%
+    filter(highest < top_n | lowest < top_n)
+  p <- h1[[1]] +  geom_text_repel(data = labels, 
+                                  aes(x = PYJ, y = max, label = label, angle = 90) ,
+                                  size=3
+  ) + ggtitle(paste0(t," - Potentials")) +
+    labs(y="Potentials in Gt CO2/year") +
+    scale_x_continuous(breaks= int_breaks)
+  
+  print(p)
+  
+  if (t %in% c("Ocean alkalinisation","Enhanced weathering")) {
+    p <- p + ylim(0,100)
+  }
+  
+  if (t=="Ocean alkalinisation") {
+    tech_graphs[["Enhanced weathering"]][[5]] <- p
+  }
+  tech_graphs[[t]][[2]] <- p
+  tech_graphs[[t]][[3]] <- t
+  
+  ggsave(paste0("plots/heatbars/",t,"/potentials/range_year_studies.png"))
+}
+
+## special one for BECCS pots
+
+beccs <- filter(pots, technology=="BECCS") %>%
+  mutate(variable=`Data categorisationresource`) %>%
+  filter(variable!="?",variable!="Misc")
+
+beccs$variable[beccs$variable=="Bioenergy Crops"] <- "1. Bioenergy Crops"
+beccs$variable[beccs$variable=="Forestry"] <- "2. Forestry"
+beccs$variable[beccs$variable=="Residues"] <- "3. Residues"
+beccs$variable[beccs$variable=="Waste"] <- "4. Waste"
+
+
+resources <- unique(beccs$variable)
+
+beccsranges <- countranges(
+  df,
+  beccs,
+  resources, "max")
+
+
+
+beccsjitter <- beccs %>%
+  filter(measurement=="max", !is.na(value)) %>%
+  group_by(variable) %>%
+  mutate(
+    nstudies = n(),
+    resourcelab = paste0(variable,'\n[',nstudies,' studies]')
+  ) 
+
+beccsjitter$resourcelabn <- as.numeric(factor(beccsjitter$resourcelab))
+
+beccsjitter <- beccsjitter %>%
+  group_by(variable) %>%
+  arrange(value) %>% 
+  mutate(
+    gtot = n(),
+    pn = row_number(),
+    jitter = (0.76/gtot)*(pn-1),
+    resourcelabn = resourcelabn- 0.38 + jitter
+  )
+
+labels <- beccsjitter %>%
+  group_by(variable) %>%
+  arrange(value) %>%
+  mutate(lowest=row_number()) %>%
+  arrange(-value) %>%
+  mutate(highest=row_number()) %>%
+  filter(highest < 4 | lowest < 4)
+
+p <- heatbar(beccsranges,"pcnt",step=0.1) +
+  geom_point(
+    data=filter(beccsjitter,technology!="Storage"),
+    aes(resourcelabn ,y=value),
+    size=1,
+    alpha=0.3
+  ) +
+  labs(x="Resource",y="Sequestration Potential in GtCO2/year") +
+  geom_text_repel(data = labels, 
+                  aes(x = resourcelabn, y = value, 
+                      label = label, angle = 90) ,
+                  size=3
+  ) + ggtitle("Bioenergy Potential for BECCS") 
+
+print(p)
+
+tech_graphs[["BECCS"]][[4]] <- p
+
+## special one for Storage pots
+
+storage <- filter(pots, technology=="Storage") %>%
+  mutate(variable=`Data categorisationresource`) %>%
+  filter(variable!="?",variable!="Misc")
+
+resources <- unique(storage$variable)
+
+ranges <- seq(0,10000,by=100)
+bigdf <- data.frame(v=ranges)
+resources
+
+
+storageranges <- countranges(
+  bigdf,
+  storage,
+  resources, "max")
+
+storagejitter <- storage %>%
+  filter(measurement=="max", !is.na(value)) %>%
+  group_by(variable) %>%
+  mutate(
+    nstudies = n(),
+    resourcelab = paste0(variable,'\n[',nstudies,' studies]')
+  ) 
+
+storagejitter$resourcelabn <- as.numeric(factor(storagejitter$resourcelab))
+
+storagejitter <- storagejitter %>%
+  group_by(variable) %>%
+  arrange(value) %>% 
+  mutate(
+    gtot = n(),
+    pn = row_number(),
+    jitter = (0.76/gtot)*(pn-1),
+    resourcelabn = resourcelabn- 0.38 + jitter
+  )
+
+labels <- storagejitter %>%
+  group_by(variable) %>%
+  arrange(value) %>%
+  mutate(lowest=row_number()) %>%
+  arrange(-value) %>%
+  mutate(highest=row_number()) %>%
+  filter(highest < 4 | lowest < 4)
+
+p <- heatbar(storageranges,"pcnt",step=100) +
+  geom_point(
+    data=storagejitter,
+    aes(resourcelabn ,y=value),
+    size=1,
+    alpha=0.3
+  ) +
+  labs(x="Resource",y="Total Storage Potential in GtCO2") +
+  geom_text_repel(data = labels, 
+                  aes(x = resourcelabn, y = value, 
+                      label = label, angle = 90) ,
+                  size=3
+  ) + ggtitle("Storage Potential") 
+
+print(p)
+
+tech_graphs[["BECCS"]][[5]] <- p
+
+
+#################### 
+## Tech panels
+
+for (t in tech_graphs[!is.null(tech_graphs)]) {
+  
+  if (!is.null(t)) {
+    print(t[[3]])
+    png(paste0("plots/heatbars/",t[[3]],"/panel.png"),width=1000,height=625)
+    if (!is.null(t[[2]]) & !is.null(t[[1]])) {
+      if (t[[3]]=="Enhanced weathering") {
+        grid_arrange_shared_legend(t[[1]],t[[4]]+ylab(""),t[[2]],t[[5]]+ylab(""), ncol=4)
+      } else if (t[[3]]=="BECCS"){
+        legend <- ggplotGrob(t[[1]])$grobs[[which(sapply(g, function(x) x$name) == "guide-box")]]
+        lay <- rbind(c(1,2,4),c(3,3,4))
+        lwidth <- sum(legend$width)
+        grid.arrange(
+          t[[1]]+ theme(legend.position="none"),
+          t[[4]]+ theme(legend.position="none"),
+          t[[5]]+ theme(legend.position="none"),
+          legend,
+          layout_matrix=lay,
+          widths= unit.c(unit(0.45, "npc"),unit(0.45, "npc"), unit(0.1, "npc")))
+      } else {
+        grid_arrange_shared_legend(t[[1]],t[[2]],ncol=2)
+      }
+    } else if (!is.null(t[[1]])) {
+      #grid.arrange(t[[1]],ncol=1)
+      print(t[[1]])
+    } else if (!is.null(t[[2]])) {
+      print(t[[2]])
+    }
+    dev.off()
+    if (!is.null(t[[3]])) {
+      if (t[[3]]=="Enhanced weathering") {
+        png(paste0("plots/heatbars/",t[[3]],"/panel_alt.png"),width=800,height=500)
+        grid_arrange_shared_legend(t[[1]],t[[2]],t[[4]],t[[5]],ncol=2,nrow=2)
+        dev.off()
+      }
+    } 
+  }
+}
+
+
+
+##########################
+## Other graphs
+
+#########################
+## Interactive!
+
+## Data prep
+
+##########################
+## All costs with jittered ranges
+costsjitter <- costs %>%
+  filter(measurement=="max", !is.na(value)) %>%
+  group_by(variable) %>%
+  mutate(
+    nstudies = n(),
+    resourcelab = paste0(variable,'\n[',nstudies,' studies]')
+  )
+
+costrange <- costs %>%
+  filter(measurement %in% c("max","min"), !is.na(value)) %>%
+  left_join(select(costsjitter,label, TI, resourcelab,`Data categorisationyear`,`Data categorisationsystem conditions`)) %>%
+  spread(measurement, value)
+
+costrange$resourcelabn <- as.numeric(factor(costrange$resourcelab)) #+ runif(length(costrange$resourcelab),-0.4,0.4)
+
+costrange <- costrange %>%
+  group_by(technology) %>%
+  arrange(min) %>% 
+  mutate(
+    gtot = n(),
+    pn = row_number(),
+    jitter = (0.8/gtot)*(pn-1),
+    resourcelabn = resourcelabn- 0.4 + jitter
+  )
+
+
+
+costrange$TIs <- lapply(costrange$TI, splitwords, n=8)
+
+costrange$conditions <- lapply(costrange$`Data categorisationsystem conditions`, splitwords, n=8)
+
+costrange$AUs <- lapply(costrange$AU, fixauthors)
+
+costrange <- costrange %>%
+  mutate(
+    ttip=paste0(
+      AUs," (",PY,") ",
+      "<br>",
+      TIs,
+      "<br><br>",
+      "Cost range: ",round(min,2),"-",round(max,2),
+      " $/tCO2","<br>",
+      "<b>System boundaries:</b> ", boundaries, "<br>",
+      "<b>System conditions:</b> ", conditions
+    ) 
+  )
+
+
+
+potsjitter <- pots %>%
+  filter(measurement=="max", !is.na(value)) %>%
+  group_by(variable) %>%
+  mutate(
+    nstudies = n(),
+    resourcelab = paste0(variable,'\n[',nstudies,' studies]')
+  ) 
+
+potsjitter$resourcelabn <- as.numeric(factor(potsjitter$resourcelab))
+
+potsjitter <- potsjitter %>%
+  group_by(technology) %>%
+  arrange(value) %>% 
+  mutate(
+    gtot = n(),
+    pn = row_number(),
+    jitter = (0.76/gtot)*(pn-1),
+    resourcelabn = resourcelabn- 0.38 + jitter
+  )
+
+
+
+potsjitter$TIs <- lapply(potsjitter$TI, splitwords, n=8)
+
+potsjitter$conditions <- lapply(potsjitter$`Data categorisationsystem conditions`, splitwords, n=8)
+
+potsjitter$AUs <- lapply(potsjitter$AU, fixauthors)
+
+potsjitter <- potsjitter %>%
+  mutate(
+    ttip=paste0(
+      AUs," (",PY,") ",
+      "<br>",
+      TIs,
+      "<br><br>",
+      "<b>Potential:</b> ",round(value,1),
+      " Gt CO2/year","<br>",
+      "<b>System boundaries:</b> ", boundaries, "<br>",
+      "<b>System conditions:</b> ", conditions
+    ) 
+  )
+
+jittertheme <- theme(
+  axis.line.x=element_blank(),
+  axis.line.y= element_line(),
+  axis.ticks.x = element_blank(),
+  panel.border = element_blank(),
+  panel.grid.major.x = element_blank(),
+  panel.grid.minor.x = element_blank()
+)
+
+m <- list(
+  l = 100,
+  r = 50,
+  b = 200,
+  t = 100,
+  pad = 10
+)
+
+## Costs
+
+gg <- heatbar(costranges,"pcnt", numeric=T) +
+  geom_linerange(
+    data=costrange,
+    aes(resourcelabn ,ymin=min, ymax=max, text=ttip),
+    width=1,
+    alpha=1
+  ) +
+  theme_bw()+
+  labs(x="",y="Costs in $US(2011)/tCO2") +
+  coord_cartesian(expand=F) +
+  jittertheme +
+  scale_x_continuous(breaks=seq(1,8),labels=rlabs$resourcelab)
+
+print(gg)
+
+
+ggplotly(gg, tooltip="text") %>%
+  layout(margin = m)
+
+## Potentials
+
+gg <- heatbar(filter(potsranges,resource!="Storage"),"pcnt", step=0.1, numeric=T) +
+  geom_point(
+    data=filter(potsjitter,technology!="Storage"),
+    aes(resourcelabn ,y=value, text=ttip),
+    size=1,
+    alpha=0.3
+  ) +
+  theme_bw()+
+  labs(x="",y="Potential GtCO2/year Sequestered") +
+  coord_cartesian(expand=F) +
+  jittertheme +
+  scale_x_continuous(breaks=seq(1,7),labels=names(potspics))
+
+print(gg)
+
+m <- list(
+  l = 100,
+  r = 50,
+  b = 200,
+  t = 100,
+  pad = 10
+)
+
+ggplotly(gg, tooltip="text") %>%
+  layout(margin = m)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+gg <- heatbar(costranges,"pcnt", numeric=T) +
+  geom_errorbar(
+    data=costrange,
+    aes(resourcelabn ,ymin=min, ymax=max),
+    width=0.05,
+    alpha=0.3
+  ) +
+  scale_x_continuous(breaks=seq(1,8)) +
+  theme_bw()+
+  theme(axis.text.x  = my_axis(pics)) +
+  labs(x="",y="Costs in $US(2011)/tCO2") +
+  coord_cartesian(expand=F) +
+  jittertheme
+  
+  print(gg)
+
+ggsave("plots/heatbars/all_costs_years_ranges.png")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Plot a heatbar with that text label, and pretty pictures of the technologies
 
@@ -353,177 +695,21 @@ ggsave("plots/heatbars/all_costs_years_faceted.png")
 
 
 
-for (t in techs) {
-  tranges <- costranges[costranges$resource==t,]
-  tcosts <- costs[costs$technology==t,]
-  y1 <- min(tcosts$PY,na.rm=T)
-  y2 <- max(tcosts$PY,na.rm=T)
-  diff <- y2-y1
-  mid <- y1+diff/2
-  h1<- heatbar_years(tcosts, tranges, "pcnt", graph = TRUE, y = mid, w = diff,var=t)
-  h1[[1]] +  geom_text_repel(data = h1[[2]], 
-                             aes(x = PYJ, y = max, label = label, angle = 90) 
-  ) + ggtitle(t)
-  ggsave(paste0("plots/heatbars/",t,"/costs/range_year_studies.png"))
-}
-
-##########################
-## All costs with jittered ranges
-costsjitter <- costs %>%
-  filter(measurement=="max", !is.na(value)) %>%
-  group_by(variable) %>%
-  mutate(
-    nstudies = n(),
-    resourcelab = paste0(variable,'\n[',nstudies,' studies]')
-  )
-
-costrange <- costs %>%
-  filter(measurement %in% c("max","min"), !is.na(value)) %>%
-  left_join(select(costsjitter,label, TI, resourcelab,`Data categorisationyear`,`Data categorisationsystem conditions`)) %>%
-  spread(measurement, value)
-
-costrange$resourcelabn <- as.numeric(factor(costrange$resourcelab)) #+ runif(length(costrange$resourcelab),-0.4,0.4)
-
-costrange <- costrange %>%
-  group_by(technology) %>%
-  arrange(min) %>% 
-  mutate(
-    gtot = n(),
-    pn = row_number(),
-    jitter = (0.8/gtot)*(pn-1),
-    resourcelabn = resourcelabn- 0.4 + jitter
-  )
-
-
-
-costrange$TIs <- lapply(costrange$TI, splitwords, n=8)
-
-costrange$conditions <- lapply(costrange$`Data categorisationsystem conditions`, splitwords, n=8)
-
-costrange$AUs <- lapply(costrange$AU, fixauthors)
-
-costrange <- costrange %>%
-  mutate(
-    ttip=paste0(
-      AUs," (",PY,") ",
-      "<br>",
-      TIs,
-      "<br><br>",
-      "Cost range: ",round(min,2),"-",round(max,2),
-      " Gt CO2/year","<br>",
-      "<b>System boundaries:</b> ", boundaries, "<br>",
-      "<b>System conditions:</b> ", conditions
-    ) 
-  )
-
-
-
-costrange <- costrange %>%
-  mutate(
-    ttip=paste0(
-      AU," (",PY,") ",
-      "<br>",
-      TI,
-      "<br>",
-
-      "$/tCO2","<br>",
-      "System boundaries: ", boundaries, "<br>",
-      "System conditions: ", `Data categorisationsystem conditions`
-    ) 
-  )
-
-
-
-gg <- heatbar(costranges,"pcnt", numeric=T) +
-  geom_errorbar(
-    data=costrange,
-    aes(resourcelabn ,ymin=min, ymax=max),
-    width=0.05,
-    alpha=0.3
-  ) +
-  scale_x_continuous(breaks=seq(1,8)) +
-  theme_bw()+
-  theme(axis.text.x  = my_axis(pics)) +
-  labs(x="",y="Costs in $US(2011)/tCO2") +
-  coord_cartesian(expand=F) +
-  theme(
-    axis.line.x=element_blank(),
-    axis.line.y= element_line(),
-    axis.ticks.x = element_blank(),
-    panel.border = element_blank(),
-    panel.grid.major.x = element_blank(),
-    panel.grid.minor.x = element_blank()
-  ) 
-
-print(gg)
-
-ggsave("plots/heatbars/all_costs_years_ranges.png")
-
-
-
-gg <- heatbar(costranges,"pcnt", numeric=T) +
-  geom_linerange(
-    data=costrange,
-    aes(resourcelabn ,ymin=min, ymax=max, text=ttip),
-    width=1,
-    alpha=1
-  ) +
-  #scale_x_continuous(breaks=seq(1,8)) +
-  theme_bw()+
-  labs(x="",y="Costs in $US(2011)/tCO2") +
-  coord_cartesian(expand=F) +
-  theme(
-    axis.line.x=element_blank(),
-    axis.line.y= element_line(),
-    axis.ticks.x = element_blank(),
-    panel.border = element_blank(),
-    panel.grid.major.x = element_blank(),
-    panel.grid.minor.x = element_blank()
-  ) +
-  scale_x_continuous(breaks=seq(1,8),labels=names(rlabs$resourcelab))
-
-print(gg)
-
-m <- list(
-  l = 100,
-  r = 50,
-  b = 200,
-  t = 100,
-  pad = 10
-)
-
-ggplotly(gg, tooltip="text") %>%
-  layout(margin = m)
 
 
 
 
 
 
-###################################
-## Plot potentials for all estimates and all technologies
 
-pots <- all_data %>%
-  ungroup() %>%
-  filter(variable=="totalPotential" & potsinclude==T) %>%
-  mutate(
-    variable=technology
-    ) 
 
-techs <- unique(pots$technology)
 
-ranges <- seq(0,100,by=0.1)
-df <- data.frame(v=ranges)
 
-pots$measurement <- gsub(" (Gt CO2/yr)","",pots$measurement,fixed=T)
 
-potsranges <- countranges(
-  df, 
-  mutate(
-    pots,
-    value=as.numeric(value)
-  ),
-  techs, "max")
+
+
+
+
 
 
 
@@ -580,74 +766,11 @@ ggsave("plots/heatbars/potentials_numeric_year.png")
 
 
 
-rlabs <- potsranges %>%
-  group_by(resource) %>%
-  summarise(
-    resourcelab=paste0(gsub(" (terrestrial and ocean)","",first(resource),fixed=T),'\n[',max(maxvalue),' studies]')
-  )
-
-
-
-
-image.file <- dir("icons", pattern=".png", full.names=TRUE)
-
-image.file <- image.file[!grepl("DAC",image.file)]
-
-image.file <- image.file[order(as.integer(sub("_.*","",sub("icons/","",image.file))))]
-npoints <- length(image.file)
-pics  <- vector(mode="list", length=npoints)
-for(i in 1:npoints) {
-  pics[[i]] <- EBImage::readImage(image.file[i])
-}
-names(pics) <- sub(".png","",sub("icons/","",image.file))
-
-names(pics) <- rlabs$resourcelab
-
-
-
 
 
 ggsave("plots/heatbars/all_potentials_labelled.png", width=16,height=10)
 
 
-
-for (t in techs) {
-  tranges <- potsranges[potsranges$resource==t,]
-  tpots <- pots[pots$technology==t,]
-  y1 <- min(tpots$PY,na.rm=T)
-  y2 <- max(tpots$PY,na.rm=T)
-  diff <- y2-y1
-  mid <- y1+diff/2
-  h1<- heatbar_years(tpots, tranges, "pcnt", graph = TRUE, y = mid, w = diff, var=t, measurement="max",step=0.1)
-  h1[[1]] +  geom_text_repel(data = h1[[2]], 
-                             aes(x = PYJ, y = max, label = label, angle = 90) 
-  ) + ggtitle(t) +
-    labs(y="Potentials in Gt CO2/year")
-  
-  ggsave(paste0("plots/heatbars/",t,"/potentials/range_year_studies.png"))
-}
-
-
-
-potsjitter <- pots %>%
-  filter(measurement=="max", !is.na(value)) %>%
-  group_by(variable) %>%
-  mutate(
-    nstudies = n(),
-    resourcelab = paste0(variable,'\n[',nstudies,' studies]')
-  ) 
-
-potsjitter$resourcelabn <- as.numeric(factor(potsjitter$resourcelab))
-
-potsjitter <- potsjitter %>%
-  group_by(technology) %>%
-  arrange(value) %>% 
-  mutate(
-    gtot = n(),
-    pn = row_number(),
-    jitter = (0.76/gtot)*(pn-1),
-    resourcelabn = resourcelabn- 0.38 + jitter
-  )
 
 
 
@@ -681,62 +804,10 @@ ggsave("plots/heatbars/all_potentials_points.png", width=16,height=10)
 
 
 
-potsjitter$TIs <- lapply(potsjitter$TI, splitwords, n=8)
-
-potsjitter$conditions <- lapply(potsjitter$`Data categorisationsystem conditions`, splitwords, n=8)
-
-potsjitter$AUs <- lapply(potsjitter$AU, fixauthors)
-
-potsjitter <- potsjitter %>%
-  mutate(
-    ttip=paste0(
-      AUs," (",PY,") ",
-      "<br>",
-      TIs,
-      "<br><br>",
-      "<b>Potential:</b> ",round(value,1),
-      " Gt CO2/year","<br>",
-      "<b>System boundaries:</b> ", boundaries, "<br>",
-      "<b>System conditions:</b> ", conditions
-    ) 
-  )
-
-
-gg <- heatbar(potsranges,"pcnt", step=0.1, numeric=T) +
-  geom_point(
-    data=potsjitter,
-    aes(resourcelabn ,y=value, text=ttip),
-    size=1,
-    alpha=0.3
-  ) +
-  theme_bw()+
-  labs(x="",y="Potential GtCO2/year Sequestered") +
-  coord_cartesian(expand=F) +
-  theme(
-    axis.line.x=element_blank(),
-    axis.line.y= element_line(),
-    axis.ticks.x = element_blank(),
-    panel.border = element_blank(),
-    panel.grid.major.x = element_blank(),
-    panel.grid.minor.x = element_blank()
-  ) +
-  scale_x_continuous(breaks=seq(1,7),labels=names(pics))
-
-print(gg)
-
-m <- list(
-  l = 100,
-  r = 50,
-  b = 200,
-  t = 100,
-  pad = 10
-)
-
-ggplotly(gg, tooltip="text") %>%
-  layout(margin = m)
 
 
 ######
+
 
 
 
