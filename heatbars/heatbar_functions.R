@@ -123,11 +123,11 @@ countranges <- function(df, data, headers, measure) {
       if (measure=="range") {
     
       } else {
-        dataf <- dataf %>% 
-          group_by(TI) %>% 
-          filter(
-            value == max(value)
-          ) %>% ungroup()  
+        # dataf <- dataf %>% 
+        #   group_by(TI) %>% 
+        #   filter(
+        #     value == max(value)
+        #   ) %>% ungroup()  
       }
 
     } 

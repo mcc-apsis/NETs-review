@@ -128,10 +128,29 @@ potsranges <- countranges(
   ),
   techs, "max")
 
+plabs <- potsranges %>%
+  filter(resource!="Storage") %>%
+  group_by(resource) %>%
+  summarise(
+    resourcelab=paste0(gsub(" (terrestrial and ocean)","",first(resource),fixed=T),'\n[',max(maxvalue),' studies]')
+  )
+
 #####################################
 ## Potspics
 
-potspics <- pics[!grepl("DAC",names(pics))]
+image.file <- dir("icons", pattern=".png", full.names=TRUE)
+
+image.file <- image.file[!grepl("DAC",image.file)]
+
+image.file <- image.file[order(as.integer(sub("_.*","",sub("icons/","",image.file))))]
+npoints <- length(image.file)
+potspics  <- vector(mode="list", length=npoints)
+for(i in 1:npoints) {
+  potspics[[i]] <- EBImage::readImage(image.file[i])
+}
+names(potspics) <- sub(".png","",sub("icons/","",image.file))
+
+names(potspics) <- plabs$resourcelab
 
 
 ##################################################################
@@ -270,7 +289,7 @@ labels <- beccsjitter %>%
   mutate(lowest=row_number()) %>%
   arrange(-value) %>%
   mutate(highest=row_number()) %>%
-  filter(highest < 4 | lowest < 4)
+  filter(highest < 2 | lowest < 2)
 
 p <- heatbar(beccsranges,"pcnt",step=0.1) +
   geom_point(
@@ -410,8 +429,9 @@ for (cp in seq(1,2)) {
   } else {
     var = "potentials"
   }
-  png(paste0("plots/heatbars/",var,"/panel.png"),width=1000,height=625)
+  png(paste0("plots/heatbars/",var,"/panel.png"),width=1200,height=1600)
   do.call("grid_arrange_shared_legend", c(gs, ncol=2,nrow=4))
+  dev.off()
 }
 
 ##########################
@@ -583,22 +603,6 @@ ggplotly(gg, tooltip="text") %>%
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 gg <- heatbar(costranges,"pcnt", numeric=T) +
   geom_errorbar(
     data=costrange,
@@ -615,10 +619,28 @@ gg <- heatbar(costranges,"pcnt", numeric=T) +
   
   print(gg)
 
-ggsave("plots/heatbars/all_costs_years_ranges.png")
+ggsave("plots/heatbars/costs/all_costs_ranges.png")
 
 
 
+gg <- heatbar(filter(potsranges,resource!="Storage"),"pcnt", step=0.1, numeric=T) +
+  geom_point(
+    data=filter(potsjitter,technology!="Storage"),
+    aes(resourcelabn ,y=value),
+    size=1,
+    alpha=0.3
+  ) +
+  scale_x_continuous(breaks=seq(1,7)) +
+  theme_bw()+
+  theme(axis.text.x  = my_axis(potspics)) +
+  labs(x="",y="Potential GtCO2/year Sequestered") +
+  coord_cartesian(expand=F) +
+  jittertheme
+
+print(gg)
+
+
+ggsave("plots/heatbars/potentials/all_potentials_points.png", width=16,height=10)
 
 
 
@@ -790,32 +812,6 @@ ggsave("plots/heatbars/all_potentials_labelled.png", width=16,height=10)
 
 
 
-gg <- heatbar(potsranges,"pcnt", step=0.1, numeric=T) +
-  geom_point(
-    data=potsjitter,
-    aes(resourcelabn ,y=value),
-    size=1,
-    alpha=0.3
-  ) +
-  scale_x_continuous(breaks=seq(1,7)) +
-  theme_bw()+
-  theme(axis.text.x  = my_axis(pics)) +
-  labs(x="",y="Potential GtCO2/year Sequestered") +
-  coord_cartesian(expand=F) +
-  theme(
-    axis.line.x=element_blank(),
-    axis.line.y= element_line(),
-    axis.ticks.x = element_blank(),
-    panel.border = element_blank(),
-    panel.grid.major.x = element_blank(),
-    panel.grid.minor.x = element_blank()
-  ) 
-
-print(gg)
-
-### Can't do it automatically !!! htmlwidgets::saveWidget(ggp, "plots\\heatbars\\costs\\index.html")
-
-ggsave("plots/heatbars/all_potentials_points.png", width=16,height=10)
 
 
 
