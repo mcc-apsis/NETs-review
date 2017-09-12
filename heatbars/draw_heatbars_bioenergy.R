@@ -13,6 +13,10 @@ library(googlesheets)
 # library(tidyr)
 library(tidyverse)
 library(ggplot2)
+library(ggrepel)
+library(parallel)
+library(countrycode)
+
 
 source("heatbars/heatbar_functions.R")
 
@@ -30,6 +34,8 @@ gs_auth()
 #==== READ IN SPREADSHEET ==========
 gs  <- gs_title("NETs Review")
 ss  <- gs_read(gs, ws = u_sheetName, verbose=DEBUG)
+
+ss <- [2:dim(ss),1:dim(ss)]
 
 data <- get_data(ss,2)
 names(data) <- make.names(names(data))

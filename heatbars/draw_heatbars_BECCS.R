@@ -18,7 +18,7 @@ library(ggrepel)
 
 source("heatbars/heatbar_functions.R")
 
-dir.create(paste0("plots/heatbars/",u_sheetName))
+#dir.create(paste0("plots/heatbars/",u_sheetName))
 
 costsdir = paste0("plots/heatbars/",u_sheetName,"/costs")
 potsdir = paste0("plots/heatbars/",u_sheetName,"/potentials")
@@ -68,7 +68,7 @@ res2050 <- countranges(df,
                        filter(data, `Data categorisationyear` == 2050 & `Data categorisationsystem boundaries` == "Global"),
                        resources,
                        "max"
-                       )
+)
 heatbar(res2050,"pcnt") + 
   labs(x="Variable",y="Estimate") +
   ylim(c(0,20))
@@ -125,6 +125,14 @@ h1[[1]] +  geom_text_repel(data = mutate(h1[[2]],UT = paste(substr(UT, 1,10),PY)
                            aes(x = PYJ, y = max, label = UT, angle = 90) 
 )
 ggsave(paste0(costsdir,"/range_years_labels2.png"),width=16,height=5)
+
+
+h2<- heatbar_years(data, res2050, "pcnt","`Data categorisationresource`", graph = TRUE, y = 2010, w = 15)
+h2[[1]] +  geom_text_repel(data = mutate(h2[[2]],UT = paste(substr(UT, 1,10),PY)), 
+                           aes(x = PYJ, y = max, label = UT, angle = 90) 
+)
+ggsave(paste0(costsdir,"/range_years_labels3.png"),width=16,height=5)
+
 ##### costs separated by resource
 # copy resource type to appropriate variable location
 
@@ -133,7 +141,7 @@ data_copy <- data %>%
   mutate(variable = `Data categorisationresource`,
          value = as.numeric(value), 
          UT = paste(substr(UT, 1,10),PY)
-         )
+  )
 
 
 # list of resources
@@ -147,7 +155,7 @@ res2050 <- countranges(
   filter(data_copy),
   resources,
   "range"
-  )
+)
 
 heatbar(res2050, "pcnt")
 
