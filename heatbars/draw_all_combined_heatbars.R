@@ -71,6 +71,8 @@ costs <- as.data.frame(all_data) %>%
   filter(variable=="cost" & costsinclude==T & !is.na(value)) %>%
   mutate(variable=technology)
 
+costs <- costs[!duplicated(costs[,c("TI","measurement","value")]),]
+
 ## Get a dataframe with values to 1000 and the number of studies in that range
 ## for each tech
 
@@ -182,7 +184,8 @@ for (t in techs) {
                                   aes(x = PYJ, y = max, label = label, angle = 90) ,
                                   size=3
   ) + ggtitle(paste0(t," - Costs")) +
-    scale_x_continuous(breaks= int_breaks)
+    scale_x_continuous(breaks= int_breaks) +
+    ylab("Cost [US$(2011)/tCO2]")
   print(p)
   if (t %in% c("Ocean alkalinisation","Enhanced weathering")) {
     p <- p + ylim(0,550)
@@ -224,7 +227,7 @@ for (t in techs) {
                                   aes(x = PYJ, y = max, label = label, angle = 90) ,
                                   size=3
   ) + ggtitle(paste0(t," - Potentials")) +
-    labs(y="Potentials in Gt CO2/year") +
+    labs(y="Sequestration Potential [Gt CO2/year]") +
     scale_x_continuous(breaks= int_breaks)
   
   print(p)
@@ -256,6 +259,9 @@ beccs$variable[beccs$variable=="Waste"] <- " Waste "
 
 
 resources <- unique(beccs$variable)
+
+ranges <- seq(0,2000,by=2)
+df <- data.frame(v=ranges)
 
 beccsranges <- countranges(
   df,
@@ -292,7 +298,7 @@ labels <- beccsjitter %>%
   mutate(highest=row_number()) %>%
   filter(highest < 2 | lowest < 2)
 
-p <- heatbar(beccsranges,"pcnt",step=0.1) +
+p <- heatbar(beccsranges,"pcnt",step=2) +
   geom_point(
     data=filter(beccsjitter,technology!="Storage"),
     aes(resourcelabn ,y=value),
@@ -363,7 +369,7 @@ p <- heatbar(storageranges,"pcnt",step=100) +
     size=1,
     alpha=0.3
   ) +
-  labs(x="Resource",y="Total Storage Potential in GtCO2") +
+  labs(x="Sink",y="Total Storage Potential [Gt CO2]") +
   geom_text_repel(data = labels, 
                   aes(x = resourcelabn, y = value, 
                       label = label, angle = 90) ,
@@ -421,6 +427,7 @@ for (t in tech_graphs[!is.null(tech_graphs)]) {
 }
 
 
+vars = c("costs","potentials")
 
 for (cp in seq(1,2)) {
   gs <- nth_el(tech_graphs,cp)
