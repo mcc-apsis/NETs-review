@@ -310,7 +310,7 @@ p <- heatbar(beccsranges,"pcnt",step=2) +
                   aes(x = resourcelabn, y = value, 
                       label = label, angle = 90) ,
                   size=3
-  ) + ggtitle("Bioenergy Potential for BECCS") 
+  ) + ggtitle("Bioenergy Potential") 
 
 print(p)
 
@@ -432,12 +432,7 @@ vars = c("costs","potentials")
 for (cp in seq(1,2)) {
   gs <- nth_el(tech_graphs,cp)
   gs <- gs[!unlist(lapply(gs, is.null))]
-  if (cp==1) {
-    var = "costs"
-  } else {
-    var = "potentials"
-  }
-  png(paste0("plots/heatbars/",var,"/panel.png"),width=1200,height=1600)
+  png(paste0("plots/heatbars/",vars[cp],"/panel.png"),width=1200,height=1600)
   do.call("grid_arrange_shared_legend", c(gs, ncol=2,nrow=4))
   dev.off()
 }
