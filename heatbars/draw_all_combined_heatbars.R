@@ -246,7 +246,8 @@ for (t in techs) {
 
 beccs <- filter(pots, technology=="BECCS") %>%
   mutate(variable=`Data categorisationresource`) %>%
-  filter(variable!="?",variable!="Misc")
+  filter(variable!="?",variable!="Misc") %>%
+  mutate(value = (value+ 1.432129) / 0.04982206)
 
 beccs$variable[beccs$variable=="Bioenergy Crops"] <- " Bioenergy Crops "
 beccs$variable[beccs$variable=="Forestry"] <- " Forestry "
@@ -298,7 +299,7 @@ p <- heatbar(beccsranges,"pcnt",step=0.1) +
     size=1,
     alpha=0.3
   ) +
-  labs(x="Resource",y="Sequestration Potential in GtCO2/year") +
+  labs(x="Resource",y="Bioenergy Potential [EJ/year]") +
   geom_text_repel(data = labels, 
                   aes(x = resourcelabn, y = value, 
                       label = label, angle = 90) ,
