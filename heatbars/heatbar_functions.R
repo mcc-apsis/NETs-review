@@ -123,11 +123,11 @@ countranges <- function(df, data, headers, measure) {
       if (measure=="range") {
     
       } else {
-        dataf <- dataf %>% 
-          group_by(TI) %>% 
-          filter(
-            value == max(value)
-          ) %>% ungroup()  
+        # dataf <- dataf %>% 
+        #   group_by(TI) %>% 
+        #   filter(
+        #     value == max(value)
+        #   ) %>% ungroup()  
       }
 
     } 
@@ -221,6 +221,8 @@ heatbar <- function(df,f,step=1, fixed=T, text=F, numeric=F) {
            mostagreement = max(value)
            ) %>%
     filter(v <  max(df$v[df$value>0]))
+  
+  
   
   df$resourcelabn <- as.numeric(factor(df$resourcelab))
 
@@ -374,7 +376,7 @@ heatbar_years <- function(data, df, f, var="cost", grp=NA, fixed=TRUE, graph = F
       aes_string(x="PYJ",
                  ymin="min",
                  ymax="max"),
-      size=1.5
+      size=0.6
     )
   } else {
     ylines <- geom_linerange(
@@ -383,7 +385,7 @@ heatbar_years <- function(data, df, f, var="cost", grp=NA, fixed=TRUE, graph = F
                  ymin="min",
                  ymax="max",
                  colour=grp),
-      size=1.5
+      size=0.6
     )
   } 
   
@@ -517,4 +519,44 @@ fixauthors <- function(x) {
     }
   }
   return(x)
+}
+
+
+
+
+
+
+
+
+grid_arrange_shared_legend <- function(..., ncol = length(list(...)), nrow = 1, position = c("bottom", "right")) {
+  
+  plots <- list(...)
+  position <- match.arg(position)
+  g <- ggplotGrob(plots[[1]] + theme(legend.position = position))$grobs
+  legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
+  lheight <- sum(legend$height)
+  lwidth <- sum(legend$width)
+  gl <- lapply(plots, function(x) x + theme(legend.position="none"))
+  gl <- c(gl, ncol = ncol, nrow = nrow)
+  
+  combined <- switch(position,
+                     "bottom" = arrangeGrob(do.call(arrangeGrob, gl),
+                                            legend,
+                                            ncol = 1,
+                                            heights = unit.c(unit(1, "npc") - lheight, lheight)),
+                     "right" = arrangeGrob(do.call(arrangeGrob, gl),
+                                           legend,
+                                           ncol = 2,
+                                           widths = unit.c(unit(1, "npc") - lwidth, lwidth)))
+  
+  grid.newpage()
+  grid.draw(combined)
+  
+  # return gtable invisibly
+  invisible(combined)
+  
+}
+
+nth_el <- function(lst, n){
+  sapply(lst, `[[`, n)
 }
