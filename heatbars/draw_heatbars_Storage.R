@@ -69,6 +69,9 @@ store <- countranges(
     ),
   resources, "max"
   )
+
+#save(store, file = "heatbars/storage5000.RData")
+
 heatbar(store,"pcnt") + 
   labs(x="Variable",y="Location")
 #ggsave("plots/BECCS/Storage_Global.png",width=8,height=5)
@@ -108,6 +111,7 @@ h1 <- heatbar_years(data_copy,
 
 h1[[1]] + facet_grid(.~resource)+
   geom_jitter(data = data_copy, aes(x = PY, y = value))
+ggsave("plots/BECCS/Storage_jitter.png",width=8,height=5)
 
 #ggsave("heatbar_example.png",width=8,height=5)
 
