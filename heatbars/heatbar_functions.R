@@ -292,7 +292,12 @@ heatbar <- function(df,f,step=1, fixed=T, text=F, numeric=F) {
 }
 
 
-heatbar_years <- function(data, df, f, var="cost", grp=NA, fixed=TRUE, graph = FALSE, y =1980, w = 20, measurement="range", step=1) {
+heatbar_years <- function(
+  data, df, f, var="cost", grp=NA, 
+  fixed=TRUE, graph = FALSE, y =1980, 
+  w = 20, measurement="range", step=1,
+  dsize=1
+  ) {
   dataf <- filter(
     suppressWarnings(mutate(data,value=as.numeric(value))),
     measurement %in% c("min","max"),
@@ -394,7 +399,7 @@ heatbar_years <- function(data, df, f, var="cost", grp=NA, fixed=TRUE, graph = F
       data=dataf,
       aes_string(x="PYJ",
                  y="max"),
-      size=1.5
+      size=dsize
     )
   }
   

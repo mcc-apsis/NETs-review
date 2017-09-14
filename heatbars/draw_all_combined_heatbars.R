@@ -155,95 +155,10 @@ names(potspics) <- sub(".png","",sub("icons/","",image.file))
 names(potspics) <- plabs$resourcelab
 
 
-##################################################################
-########################################
-## By technology graphs
-top_n <- 4
 
+######################################
+## Ranges for BECCS and Storage
 
-tech_graphs <- list()
-techs <- unique(costs$technology)
-
-for (t in techs) {
-  tranges <- costranges[costranges$resource==t,]
-  tcosts <- costs[costs$technology==t,]
-  y1 <- min(tcosts$PY,na.rm=T)
-  y2 <- max(tcosts$PY,na.rm=T)
-  diff <- y2-y1+2
-  mid <- y1+diff/2-1
-  h1<- heatbar_years(tcosts, tranges, "pcnt", graph = TRUE, y = mid, w = diff,var=t)
-  int_breaks <- function(x, n = 5) pretty(x, n)[pretty(x, n) %% 1 == 0] 
-  labels <- h1[[2]] %>%
-    group_by(variable) %>%
-    arrange(max) %>%
-    mutate(lowest=row_number()) %>%
-    arrange(-max) %>%
-    mutate(highest=row_number()) %>%
-    filter(highest < top_n | lowest < top_n)
-  p <- h1[[1]] +  geom_text_repel(data = labels, 
-                                  aes(x = PYJ, y = max, label = label, angle = 90) ,
-                                  size=3
-  ) + ggtitle(paste0(t," - Costs")) +
-    scale_x_continuous(breaks= int_breaks) +
-    ylab("Cost [US$(2011)/tCO2]")
-  print(p)
-  if (t %in% c("Ocean alkalinisation","Enhanced weathering")) {
-    p <- p + ylim(0,550)
-  }
-  if (t=="Ocean alkalinisation") {
-    tech_graphs[["Enhanced weathering"]][[4]] <- p
-    tech_graphs[["Enhanced weathering"]][[6]] <- t
-  } 
-  tech_graphs[[t]][[1]] <- p
-  tech_graphs[[t]][[3]] <- t
-  
-  ggsave(paste0("plots/heatbars/",t,"/costs/range_year_studies.png"))
-}
-
-
-
-
-
-techs <- unique(pots$technology)
-
-for (t in techs) {
-  tranges <- potsranges[potsranges$resource==t,]
-  tpots <- pots[pots$technology==t,]
-  
-  y1 <- min(tpots$PY,na.rm=T)
-  y2 <- max(tpots$PY,na.rm=T)
-  diff <- y2-y1+2
-  mid <- y1+diff/2-1
-  int_breaks <- function(x, n = 5) pretty(x, n)[pretty(x, n) %% 1 == 0] 
-  h1<- heatbar_years(tpots, tranges, "pcnt", graph = TRUE, y = mid, w = diff, var=t, measurement="max",step=0.1)
-  labels <- h1[[2]] %>%
-    group_by(variable) %>%
-    arrange(max) %>%
-    mutate(lowest=row_number()) %>%
-    arrange(-max) %>%
-    mutate(highest=row_number()) %>%
-    filter(highest < top_n | lowest < top_n)
-  p <- h1[[1]] +  geom_text_repel(data = labels, 
-                                  aes(x = PYJ, y = max, label = label, angle = 90) ,
-                                  size=3
-  ) + ggtitle(paste0(t," - Potentials")) +
-    labs(y="Sequestration Potential [Gt CO2/year]") +
-    scale_x_continuous(breaks= int_breaks)
-  
-  print(p)
-  
-  if (t %in% c("Ocean alkalinisation","Enhanced weathering")) {
-    p <- p + ylim(0,100)
-  }
-  
-  if (t=="Ocean alkalinisation") {
-    tech_graphs[["Enhanced weathering"]][[5]] <- p
-  }
-  tech_graphs[[t]][[2]] <- p
-  tech_graphs[[t]][[3]] <- t
-  
-  ggsave(paste0("plots/heatbars/",t,"/potentials/range_year_studies.png"))
-}
 
 ## special one for BECCS pots
 
@@ -252,7 +167,9 @@ beccs <- filter(pots, technology=="BECCS") %>%
   filter(variable!="?",variable!="Misc") %>%
   mutate(value = (value+ 1.432129) / 0.04982206)
 
-beccs$variable[beccs$variable=="Bioenergy Crops"] <- " Bioenergy Crops "
+
+
+beccs$variable[beccs$variable=="Bioenergy Crops"] <- " Bioenergy \nCrops "
 beccs$variable[beccs$variable=="Forestry"] <- " Forestry "
 beccs$variable[beccs$variable=="Residues"] <- " Residues "
 beccs$variable[beccs$variable=="Waste"] <- " Waste "
@@ -267,7 +184,6 @@ beccsranges <- countranges(
   df,
   beccs,
   resources, "max")
-
 
 
 beccsjitter <- beccs %>%
@@ -290,7 +206,7 @@ beccsjitter <- beccsjitter %>%
     resourcelabn = resourcelabn- 0.38 + jitter
   )
 
-labels <- beccsjitter %>%
+beccslabels <- beccsjitter %>%
   group_by(variable) %>%
   arrange(value) %>%
   mutate(lowest=row_number()) %>%
@@ -298,25 +214,8 @@ labels <- beccsjitter %>%
   mutate(highest=row_number()) %>%
   filter(highest < 2 | lowest < 2)
 
-p <- heatbar(beccsranges,"pcnt",step=2) +
-  geom_point(
-    data=filter(beccsjitter,technology!="Storage"),
-    aes(resourcelabn ,y=value),
-    size=1,
-    alpha=0.3
-  ) +
-  labs(x="Resource",y="Bioenergy Potential [EJ/year]") +
-  geom_text_repel(data = labels, 
-                  aes(x = resourcelabn, y = value, 
-                      label = label, angle = 90) ,
-                  size=3
-  ) + ggtitle("Bioenergy Potential") 
 
-print(p)
-
-tech_graphs[["BECCS"]][[4]] <- p
-
-## special one for Storage pots
+### Storage 
 
 storage <- filter(pots, technology=="Storage") %>%
   mutate(variable=`Data categorisationresource`) %>%
@@ -354,7 +253,7 @@ storagejitter <- storagejitter %>%
     resourcelabn = resourcelabn- 0.38 + jitter
   )
 
-labels <- storagejitter %>%
+storagelabels <- storagejitter %>%
   group_by(variable) %>%
   arrange(value) %>%
   mutate(lowest=row_number()) %>%
@@ -362,19 +261,148 @@ labels <- storagejitter %>%
   mutate(highest=row_number()) %>%
   filter(highest < 4 | lowest < 4)
 
+
+
+########################################
+## Plot sizing parameters
+
+
+fsize <- 15
+
+lsize <- 4.5
+
+dsize <- 2
+
+
+##################################################################
+########################################
+## By technology graphs
+top_n <- 4
+
+
+tech_graphs <- list()
+techs <- unique(costs$technology)
+
+for (t in techs) {
+  tranges <- costranges[costranges$resource==t,]
+  tcosts <- costs[costs$technology==t,]
+  y1 <- min(tcosts$PY,na.rm=T)
+  y2 <- max(tcosts$PY,na.rm=T)
+  diff <- y2-y1+2
+  mid <- y1+diff/2-1
+  h1<- heatbar_years(tcosts, tranges, "pcnt", graph = TRUE, y = mid, w = diff,var=t)
+  int_breaks <- function(x, n = 5) pretty(x, n)[pretty(x, n) %% 1 == 0] 
+  labels <- h1[[2]] %>%
+    group_by(variable) %>%
+    arrange(max) %>%
+    mutate(lowest=row_number()) %>%
+    arrange(-max) %>%
+    mutate(highest=row_number()) %>%
+    filter(highest < top_n | lowest < top_n)
+  p <- h1[[1]] +  geom_text_repel(data = labels, 
+                                  aes(x = PYJ, y = max, label = label, angle = 90) ,
+                                  size=lsize
+  ) + ggtitle(paste0(t," - Costs")) +
+    scale_x_continuous(breaks= int_breaks) +
+    ylab("Cost [US$(2011)/tCO2]") +
+    theme(text = element_text(size=fsize))
+  print(p)
+  if (t %in% c("Ocean alkalinisation","Enhanced weathering")) {
+    p <- p + ylim(0,550)
+  }
+  if (t=="Ocean alkalinisation") {
+    tech_graphs[["Enhanced weathering"]][[4]] <- p
+    tech_graphs[["Enhanced weathering"]][[6]] <- t
+  } 
+  tech_graphs[[t]][[1]] <- p
+  tech_graphs[[t]][[3]] <- t
+  
+  ggsave(paste0("plots/heatbars/",t,"/costs/range_year_studies.png"))
+}
+
+
+
+
+
+techs <- unique(pots$technology)
+
+for (t in techs) {
+  tranges <- potsranges[potsranges$resource==t,]
+  tpots <- pots[pots$technology==t,]
+  
+  y1 <- min(tpots$PY,na.rm=T)
+  y2 <- max(tpots$PY,na.rm=T)
+  diff <- y2-y1+2
+  mid <- y1+diff/2-1
+  int_breaks <- function(x, n = 5) pretty(x, n)[pretty(x, n) %% 1 == 0] 
+  h1<- heatbar_years(tpots, tranges, "pcnt", graph = TRUE, y = mid, w = diff, var=t, measurement="max",step=0.1,dsize=dsize)
+  labels <- h1[[2]] %>%
+    group_by(variable) %>%
+    arrange(max) %>%
+    mutate(lowest=row_number()) %>%
+    arrange(-max) %>%
+    mutate(highest=row_number()) %>%
+    filter(highest < top_n | lowest < top_n)
+  p <- h1[[1]] +  geom_text_repel(data = labels, 
+                                  aes(x = PYJ, y = max, label = label, angle = 90) ,
+                                  size=lsize
+  ) + ggtitle(paste0(t," - Potentials")) +
+    labs(y="Sequestration Potential [Gt CO2/year]") +
+    scale_x_continuous(breaks= int_breaks) +
+    theme(text = element_text(size=fsize))
+  
+  print(p)
+  
+  if (t %in% c("Ocean alkalinisation","Enhanced weathering")) {
+    p <- p + ylim(0,100)
+  }
+  
+  if (t=="Ocean alkalinisation") {
+    tech_graphs[["Enhanced weathering"]][[5]] <- p
+  }
+  tech_graphs[[t]][[2]] <- p
+  tech_graphs[[t]][[3]] <- t
+  
+  ggsave(paste0("plots/heatbars/",t,"/potentials/range_year_studies.png"))
+}
+
+## BECCS graph
+
+p <- heatbar(beccsranges,"pcnt",step=2) +
+  geom_point(
+    data=filter(beccsjitter,technology!="Storage"),
+    aes(resourcelabn ,y=value),
+    size=dsize,
+    alpha=0.3
+  ) +
+  labs(x="Resource",y="Bioenergy Potential [EJ/year]") +
+  geom_text_repel(data = beccslabels, 
+                  aes(x = resourcelabn, y = value, 
+                      label = label, angle = 90) ,
+                  size=lsize
+  ) + ggtitle("Bioenergy Potential") +
+  theme(text = element_text(size=fsize))
+
+print(p)
+
+tech_graphs[["BECCS"]][[4]] <- p
+
+## special one for Storage pots
+
 p <- heatbar(storageranges,"pcnt",step=100) +
   geom_point(
     data=storagejitter,
     aes(resourcelabn ,y=value),
-    size=1,
+    size=dsize,
     alpha=0.3
   ) +
   labs(x="Sink",y="Total Storage Potential [Gt CO2]") +
-  geom_text_repel(data = labels, 
+  geom_text_repel(data = storagelabels, 
                   aes(x = resourcelabn, y = value, 
                       label = label, angle = 90) ,
-                  size=3
-  ) + ggtitle("Storage Potential") 
+                  size=lsize
+  ) + ggtitle("Storage Potential") +
+  theme(text = element_text(size=fsize))
 
 print(p)
 
@@ -390,14 +418,14 @@ for (t in tech_graphs[!is.null(tech_graphs)]) {
   
   if (!is.null(t)) {
     print(t[[3]])
-    png(paste0("plots/heatbars/",t[[3]],"/panel.png"),width=1000,height=625)
+    png(paste0("plots/heatbars/",t[[3]],"/panel.png"),width=800,height=500)
     if (!is.null(t[[2]]) & !is.null(t[[1]])) {
       if (t[[3]]=="Enhanced weathering") {
         grid_arrange_shared_legend(t[[1]],t[[4]]+ylab(""),t[[2]],t[[5]]+ylab(""), ncol=4)
       } else if (t[[3]]=="BECCS"){
-        g <- ggplotGrob(t[[1]])$grobs
+        g <- ggplotGrob(t[[1]] + theme(legend.position="bottom"))$grobs
         legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
-        lay <- rbind(c(1,2,4),c(3,3,4))
+        lay <- rbind(c(1,2),c(3,3),c(4,4))
         lwidth <- sum(legend$width)
         grid.arrange(
           t[[1]]+ theme(legend.position="none"),
@@ -405,7 +433,8 @@ for (t in tech_graphs[!is.null(tech_graphs)]) {
           t[[5]]+ theme(legend.position="none"),
           legend,
           layout_matrix=lay,
-          widths= unit.c(unit(0.45, "npc"),unit(0.45, "npc"), unit(0.1, "npc")))
+          heights= unit.c(unit(0.45, "npc"),unit(0.45, "npc"), unit(0.1, "npc"))
+          )
       } else {
         grid_arrange_shared_legend(t[[1]],t[[2]],ncol=2)
       }
