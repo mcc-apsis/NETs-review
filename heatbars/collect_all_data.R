@@ -182,11 +182,12 @@ all_data$potsinclude[
 
 #EW include everything global
 all_data$costsinclude[
-  all_data$technology=="Enhanced weathering (terrestrial and ocean)"
+  all_data$technology=="Enhanced weathering (terrestrial and ocean)" 
   ] <- T
 
 all_data$potsinclude[
-  all_data$technology=="Enhanced weathering (terrestrial and ocean)"
+  all_data$technology=="Enhanced weathering (terrestrial and ocean)" &
+    grepl("global",all_data$boundaries)
   ] <- T
 
 # Ocean fertilisation - include everything global
@@ -222,7 +223,7 @@ all_data$potsinclude[
 # Soil Carbon Sequestration
 all_data$potsinclude[
   all_data$technology=="Soil Carbon Sequestration" &
-    all_data$boundaries=="global"
+    grepl("global",all_data$boundaries)
   ] <- T
 
 all_data$costsinclude[
