@@ -193,6 +193,7 @@ plot_density2 <- function(
 #== Density plot function ============
 plot_density <- function(
   data,
+  range,
   threshold,
   ax_min,
   ax_max,
@@ -200,6 +201,7 @@ plot_density <- function(
   ax_lab = "",
   plt = c(0.15, 0.95, 0.15, 0.95),
   new = TRUE,
+  cex_axis=1,
   switch_axes = FALSE
 ) {
   # Initialise
@@ -209,34 +211,44 @@ plot_density <- function(
     plot(0,0,
          type="n",
          axes=FALSE,
-         xlim=c(ax_min,ax_max), ylim=c(0,1.05),
+         xlim=c(ax_min,ax_max), ylim=c(0,range$ymax),
          xlab=ax_lab, ylab="",
-         xaxs="i",yaxs="i")
+         xaxs="i",yaxs="i",
+         cex.axis=cex_axis, cex=cex_axis)
     
     # Grid
-    for (kx in ax_tickpos) lines(c(kx, kx), c(0, 1.05), col="#eeeeee")
+    for (kx in ax_tickpos) lines(c(kx, kx), c(0, range$ymax), col="#eeeeee")
+    
+    # 50% of studies
+    rect(range$x[1], 0,
+         range$x[2], range$ymax,
+         col="#cccccc66", border=NA)
+    lines(c(ax_min,ax_max), c(range$y,range$y), col="#777777", lty=2)
     
     # Density line and threshold
-    rect(data$x[min(which(data$y> threshold))], 0,
-         data$x[max(which(data$y> threshold))], 1.05,
-         col="#cccccc66", border=NA)
-    lines(c(ax_min,ax_max), c(threshold,threshold), col="#777777", lty=2)
+    # rect(data$x[min(which(data$y> threshold))], 0,
+    #      data$x[max(which(data$y> threshold))], 1.05,
+    #      col="#cccccc66", border=NA)
+    #lines(c(ax_min,ax_max), c(threshold,threshold), col="#777777", lty=2)
+    
     lines(data$x, data$y, col="red",lwd=3)
     
-    rect(data$x[min(which(data$y> threshold))]-ax_max*0.025, 0.03, 
-         data$x[min(which(data$y> threshold))]+ax_max*0.025, 0.16,
-         col="#ffffff99", border="#99999999")
-    text(data$x[min(which(data$y> threshold))], 0.1, paste(round(data$x[min(which(data$y> threshold))], digits=0)), cex=0.8, col="#777777")
+    # rect(data$x[min(which(data$y> threshold))]-ax_max*0.025, 0.03, 
+    #      data$x[min(which(data$y> threshold))]+ax_max*0.025, 0.16,
+    #      col="#ffffff99", border="#99999999")
+    # text(data$x[min(which(data$y> threshold))], 0.1, paste(round(data$x[min(which(data$y> threshold))], digits=0)), cex=0.8, col="#777777")
+    # 
+    # rect(data$x[max(which(data$y> threshold))]-ax_max*0.025, 0.03, 
+    #      data$x[max(which(data$y> threshold))]+ax_max*0.025, 0.16,
+    #      col="#ffffff99", border="#99999999")
+    # text(data$x[max(which(data$y> threshold))], 0.1, paste(round(data$x[max(which(data$y> threshold))], digits=0)), cex=0.8, col="#777777")
     
-    rect(data$x[max(which(data$y> threshold))]-ax_max*0.025, 0.03, 
-         data$x[max(which(data$y> threshold))]+ax_max*0.025, 0.16,
-         col="#ffffff99", border="#99999999")
-    text(data$x[max(which(data$y> threshold))], 0.1, paste(round(data$x[max(which(data$y> threshold))], digits=0)), cex=0.8, col="#777777")
+    #text(ax_max - ax_max*0.025, threshold+0.05, paste0(threshold*100, "%"), adj = c(1,0), cex=0.8, col="#777777")
     
-    text(ax_max - ax_max*0.025, threshold+0.05, paste0(threshold*100, "%"), adj = c(1,0), cex=0.8, col="#777777")
+    #text(ax_max - ax_max*0.025, range$y+0.05, paste0(threshold*100, "%"), adj = c(1,0), cex=0.8, col="#777777")
     
     # Axes
-    axis(1, at=ax_tickpos)
+    axis(1, at=ax_tickpos, cex.axis=cex_axis, cex=cex_axis)
     
     box()
     
@@ -244,34 +256,44 @@ plot_density <- function(
     plot(0,0,
          type="n",
          axes=FALSE,
-         xlim=c(0,1.05), ylim=c(ax_min,ax_max),
+         xlim=c(0,range$ymax), ylim=c(ax_min,ax_max),
          xlab="", ylab=ax_lab,
-         xaxs="i",yaxs="i")
+         xaxs="i",yaxs="i",
+         cex.axis=cex_axis)
     
     # Grid
-    for (ky in ax_tickpos) lines(c(0, 1.05), c(ky, ky), col="#eeeeee")
+    for (ky in ax_tickpos) lines(c(0, range$ymax), c(ky, ky), col="#eeeeee")
     
-    # Density line and threshold
-    rect(0, data$x[min(which(data$y> threshold))], 
-         1.05, data$x[max(which(data$y> threshold))], 
+    # 50% of studies
+    rect(0,    range$x[1],
+         range$ymax, range$x[2],
          col="#cccccc66", border=NA)
-    lines(c(threshold,threshold), c(ax_min,ax_max), col="#777777", lty=2)
+    lines(c(range$y,range$y), c(ax_min,ax_max), col="#777777", lty=2)
+    
+    # # Density line and threshold
+    # rect(0, data$x[min(which(data$y> threshold))], 
+    #      1.05, data$x[max(which(data$y> threshold))], 
+    #      col="#cccccc66", border=NA)
+    # lines(c(threshold,threshold), c(ax_min,ax_max), col="#777777", lty=2)
+    
     lines(data$y, data$x, col="blue",lwd=3)
     
-    rect(0.05, data$x[min(which(data$y> threshold))]-ax_max*0.025, 
-         0.25, data$x[min(which(data$y> threshold))]+ax_max*0.025, 
-         col="#ffffff99", border="#99999999")
-    text(0.15, data$x[min(which(data$y> threshold))], paste(round(data$x[min(which(data$y> threshold))], digits=0)), cex=0.8, col="#777777")
+    # rect(0.05, data$x[min(which(data$y> threshold))]-ax_max*0.025, 
+    #      0.25, data$x[min(which(data$y> threshold))]+ax_max*0.025, 
+    #      col="#ffffff99", border="#99999999")
+    # text(0.15, data$x[min(which(data$y> threshold))], paste(round(data$x[min(which(data$y> threshold))], digits=0)), cex=0.8, col="#777777")
+    # 
+    # rect(0.05, data$x[max(which(data$y> threshold))]-ax_max*0.025, 
+    #      0.25, data$x[max(which(data$y> threshold))]-ax_max*0.025, 
+    #      col="#ffffff99", border="#99999999")
+    # text(0.15, data$x[max(which(data$y> threshold))], paste(round(data$x[max(which(data$y> threshold))], digits=0)), cex=0.8, col="#777777")
     
-    rect(0.05, data$x[max(which(data$y> threshold))]-ax_max*0.025, 
-         0.25, data$x[max(which(data$y> threshold))]-ax_max*0.025, 
-         col="#ffffff99", border="#99999999")
-    text(0.15, data$x[max(which(data$y> threshold))], paste(round(data$x[max(which(data$y> threshold))], digits=0)), cex=0.8, col="#777777")
+    #text(threshold+0.05, ax_max - ax_max*0.025, paste0(threshold*100, "%"), adj = c(0,1), cex=0.8, col="#777777")
     
-    text(threshold+0.05, ax_max - ax_max*0.025, paste0(threshold*100, "%"), adj = c(0,1), cex=0.8, col="#777777")
+    #text(range$y+0.05, ax_max - ax_max*0.025, paste0(threshold*100, "%"), adj = c(0,1), cex=0.8, col="#777777")
     
     # Axes
-    axis(2, at=ax_tickpos)
+    axis(2, at=ax_tickpos, cex=cex_axis, cex.axis=cex_axis)
     
     box()
   }
@@ -383,9 +405,9 @@ plot_boxplot <- function(
 
 
 #== Generate potential data =====
-generate_potentials <- function(data, technology, steps) {
+generate_potentials <- function(data, technology, isteps) {
   # Adjust the maximum here to change the scale
-  df <- data.frame(v=steps)
+  df <- data.frame(v=isteps)
   
   # Get a list of resources, or define it yourself
   resources <- unique(
@@ -525,11 +547,32 @@ plot_synthesis_part2 <- function(
   
   if (DEBUG) cat("[plot_heatmap]   - Computing density for potentials\n")
   pot_d   <- density(unlist(sapply(1:nrow(data_pot), function(x) rep(data_pot$v[x], data_pot$value[x]))))
-  pot_d$y <- pot_d$y/max(pot_d$y)
+
+  pot_dx     <- (pot_d$x - lag(pot_d$x))[2]
+  pot_d_ymax <- max(pot_d$y)
+  pot_d_yseq <- seq(0.5*pot_d_ymax, pot_d_ymax, (pot_d_ymax - 0.5*pot_d_ymax)/1000)
+  
+  pot_d_res    <- sapply(pot_d_yseq, function(x) sum(pot_d$y[which(pot_d$y >= x)]*pot_dx))
+  pot_d_threshold <- max(pot_d_yseq[which(abs(pot_d_res - threshold) == min(abs(pot_d_res - threshold)))])
+  pot_d_xrange <- pot_d$x[range(which(pot_d$y >= pot_d_threshold))]
+  
+  #pot_d_threshold <- pot_d_threshold/max(pot_d$y)
+  #pot_d$y <- pot_d$y/max(pot_d$y)
+  
   
   if (DEBUG) cat("[plot_heatmap]   - Computing density for costs\n")
   cost_d   <- density(unlist(sapply(1:nrow(data_cost), function(x) rep(data_cost$v[x], data_cost$value[x]))))
-  cost_d$y <- cost_d$y/max(cost_d$y)
+  
+  cost_dx     <- (cost_d$x - lag(cost_d$x))[2]
+  cost_d_ymax <- max(cost_d$y)
+  cost_d_yseq <- seq(0.5*cost_d_ymax, cost_d_ymax, (cost_d_ymax - 0.5*cost_d_ymax)/1000)
+  
+  cost_d_res    <- sapply(cost_d_yseq, function(x) sum(cost_d$y[which(cost_d$y >= x)]*cost_dx))
+  cost_d_threshold <- max(cost_d_yseq[which(abs(cost_d_res - threshold) == min(abs(cost_d_res - threshold)))])
+  cost_d_xrange <- cost_d$x[range(which(cost_d$y >= cost_d_threshold))]
+  
+  #cost_d_threshold <- cost_d_threshold/max(cost_d$y)
+  #cost_d$y <- cost_d$y/max(cost_d$y)
   
   
   #-- Plotting data -----------------------------------------------
@@ -561,10 +604,15 @@ plot_synthesis_part2 <- function(
   }
   
   # Density data + threshold
+  # rect(
+  #   pot_d$x[min(which(pot_d$y> threshold))], cost_d$x[min(which(cost_d$y> threshold))],
+  #   pot_d$x[max(which(pot_d$y> threshold))], cost_d$x[max(which(cost_d$y> threshold))],
+  #   lwd=3, lty=3 
+  # )
   rect(
-    pot_d$x[min(which(pot_d$y> threshold))], cost_d$x[min(which(cost_d$y> threshold))],
-    pot_d$x[max(which(pot_d$y> threshold))], cost_d$x[max(which(cost_d$y> threshold))],
-    lwd=3, lty=3 
+    pot_d_xrange[1], cost_d_xrange[1],
+    pot_d_xrange[2], cost_d_xrange[2],
+    lwd=1, lty=1 
   )
   
   # Expert judgment
@@ -616,18 +664,24 @@ plot_synthesis_part2 <- function(
   #-- Bottom plot (density plot of potentials) -------------------------
   if (DEBUG) cat("[plot_heatmap]   - Bottom plot (density plot of potentials)\n")
   plot_density(
-    pot_d, threshold, 0, xmax, axes_xtick_pos,
-    ax_lab = "Potential [Gt(CO2)]",
+    pot_d, 
+    list(x=pot_d_xrange, y=pot_d_threshold, ymax=max(pot_d$y)),
+    threshold, 0, xmax, axes_xtick_pos,
+    ax_lab = "", #  "Potential [Gt(CO2)]",
     plt = plt_pos$dpot,
+    cex_axis=p_cex_axis,
     switch_axes = FALSE
   )
   
   #-- Left-side plot (density plot of costs) -------------------------
   if (DEBUG) cat("[plot_heatmap]   - Left-side plot (density plot of costs)\n")
   plot_density(
-    cost_d, threshold, 0, ymax, axes_ytick_pos,
-    ax_lab = "Costs [US$/t(CO2)]",
+    cost_d, 
+    list(x=cost_d_xrange, y=cost_d_threshold, ymax=max(cost_d$y)),
+    threshold, 0, ymax, axes_ytick_pos,
+    ax_lab = "", # "Costs [US$/t(CO2)]",
     plt = plt_pos$dcost,
+    cex_axis=p_cex_axis,
     switch_axes = TRUE
   )
   
@@ -758,7 +812,17 @@ plot_synthesis_part2_DAC <- function(
   
   if (DEBUG) cat("[plot_heatmap]   - Computing density for costs\n")
   cost_d   <- density(unlist(sapply(1:nrow(data_cost), function(x) rep(data_cost$v[x], data_cost$value[x]))))
-  cost_d$y <- cost_d$y/max(cost_d$y)
+  
+  cost_dx     <- (cost_d$x - lag(cost_d$x))[2]
+  cost_d_ymax <- max(cost_d$y)
+  cost_d_yseq <- seq(0.5*cost_d_ymax, cost_d_ymax, (cost_d_ymax - 0.5*cost_d_ymax)/1000)
+  
+  cost_d_res    <- sapply(cost_d_yseq, function(x) sum(cost_d$y[which(cost_d$y >= x)]*cost_dx))
+  cost_d_threshold <- max(cost_d_yseq[which(abs(cost_d_res - threshold) == min(abs(cost_d_res - threshold)))])
+  cost_d_xrange <- cost_d$x[range(which(cost_d$y >= cost_d_threshold))]
+  
+  # cost_d_threshold <- cost_d_threshold/max(cost_d$y)
+  # cost_d$y <- cost_d$y/max(cost_d$y)
   
   
   #-- Plotting data -----------------------------------------------
@@ -849,12 +913,13 @@ plot_synthesis_part2_DAC <- function(
        type="n",
        axes=FALSE,
        xlim=c(0, xmax), ylim=c(0,1.05),
-       xlab="Potential [Gt(CO2)]", ylab="",
-       xaxs="i",yaxs="i")
+       xlab= "", ylab="", #"Potential [Gt(CO2)]", 
+       xaxs="i",yaxs="i",
+       cex.axis=p_cex_axis)
   # Grid
   for (kx in axes_xtick_pos) lines(c(kx, kx), c(0, 1.05), col="#eeeeee")
   # Axes
-  axis(1, at=axes_xtick_pos)
+  axis(1, at=axes_xtick_pos, cex.axis=p_cex_axis)
   
   text(50, 0.5, "NA", col = "grey", cex = 3)
   
@@ -863,9 +928,12 @@ plot_synthesis_part2_DAC <- function(
   #-- Left-side plot (density plot of costs) -------------------------
   if (DEBUG) cat("[plot_heatmap]   - Left-side plot (density plot of costs)\n")
   plot_density(
-    cost_d, threshold, 0, ymax, axes_ytick_pos,
-    ax_lab = "Costs [US$/t(CO2)]",
+    cost_d, 
+    list(x=cost_d_xrange, y=cost_d_threshold, ymax=max(cost_d$y)),
+    threshold, 0, ymax, axes_ytick_pos,
+    ax_lab = "", #  "Costs [US$/t(CO2)]",
     plt = plt_pos$dcost,
+    cex_axis=p_cex_axis,
     switch_axes = TRUE
   )
   
