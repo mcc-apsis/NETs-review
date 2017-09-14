@@ -44,6 +44,17 @@ all_sums <- left_join(costs, pots)
 all_sums$pots_min[is.na(all_sums$pots_min)] <- 0
 all_sums$pots_max[is.na(all_sums$pots_max)] <- 100
 
+
+expert_judgements <- data.frame(
+  technology = unique(all_sums$technology),
+  pots_min = c(0,0.5,NA,4,2,NA,NA,3),
+  pots_max = c(3.6, 5, NA, 40, 4, NA, NA, 6),
+  costs_min = c(5,100, NA, 50, 50, NA, NA, 0),
+  costs_max = c(50, 200, NA, 250, 200, NA, NA, 100)
+)
+
+
+
 ggplot() + 
   geom_rect(
     data=all_sums,
@@ -57,6 +68,18 @@ ggplot() +
     alpha=0.0,
     size=2
     # color="black"
+  ) +
+  geom_rect(
+    data=all_sums,
+    mapping=aes(
+      xmin=pots_min,
+      xmax=pots_max,
+      ymin=costs_min,
+      ymax=costs_max,
+      color=technology
+    ),
+    alpha=0.0,
+    size=0
   ) + theme_bw() +
   labs(x="Potentials in Gt CO2/year",y="Costs in $/tCO2")
 
