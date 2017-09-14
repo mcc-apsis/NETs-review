@@ -89,3 +89,46 @@ ggsave("plots/BECCS/bioenergypotential.png",width=8,height=5)
 
 #ggsave("heatbar_example.png",width=8,height=5)
 
+
+#####
+#Drivers exploration 
+#####
+library(xlsx)
+bio <- read.xlsx("../Bioenergy/Bioenergy_R2.xlsx",1) 
+bio_tidy <- bio %>%  select(UT, PY, Ident, CITATION, year, system.boundaries, resource, system.conditions,
+                   totalPotential.min, totalPotential.max,
+                   Land.min, Land.max,             
+                   Yield.min, Yield.max,                       
+                   Quality.min, Quality.max,
+                   Sustainability.min,
+                   Sustainability.max, comments) %>% 
+  gather(key = "variable", value = "estimate",
+         totalPotential.min, totalPotential.max,
+         Land.min, Land.max,             
+         Yield.min, Yield.max,                       
+         Quality.min, Quality.max,
+         Sustainability.min,
+         Sustainability.max) %>% 
+  separate(variable, into = c("variable", "type"), sep = "\\.") %>% 
+  group_by(CITATION,Ident, variable,year) %>% #variable or type trial
+  mutate(ind = row_number()) %>% 
+  ungroup() %>% 
+  spread(key = "variable", value = "estimate") %>% 
+  mutate(totalPotential = as.numeric(totalPotential),
+         Land = as.numeric(Land),
+         Yield = as.numeric(Yield))
+
+
+# ggplot(data = filter(bio_tidy, Land <= 5000 & totalPotential <1500), aes(x = Land, y = totalPotential))+
+#   geom_point(aes(color = year))+ggrepel::geom_label_repel(aes(label = Ident))
+ ggsave("plots/BECCS/bioenergy land and yelds.png")
+
+ggplot(data = filter(bio_tidy, Land <= 5000 & totalPotential <1500 & year == "2050" & resource == "Bioenergy Crops"), aes(x = Land, y = totalPotential))+
+  geom_point(aes(color = Yield))+ggrepel::geom_label_repel(aes(label = Ident))
+ggsave("plots/BECCS/biocrops land and yields 2050.png", width=8,height=5)
+
+ggplot(data = filter(bio_tidy, Land <= 5000 & totalPotential <1500), aes(x = Land, y = totalPotential))+
+  geom_point(aes(color = Yield))+ggrepel::geom_label_repel(aes(label = Ident))
+
+ggplot(data = filter(bio_tidy, Land <= 5000 & totalPotential <1500), aes(x = PY, y = totalPotential))+
+  geom_jitter(aes(color = Yield))+ggrepel::geom_label_repel(aes(label = Quality))+
