@@ -1,4 +1,9 @@
 rm(list=ls())
+library(dplyr)
+load("data/all_data.RData") #BOTTOM UP 
+
+costs <- 0
+
 #==== USER SECTION ==========
 DEBUG       <- FALSE
 
@@ -15,7 +20,7 @@ steps <- list(
   data.frame(
     net      = "BECCS",
     pot_min  = 1,
-    pot_max  = 40,
+    pot_max  = 10,
     pot_n    = 1000,
     cost_min = 1,
     cost_max = 400,
@@ -91,30 +96,30 @@ steps <- list(
 data_ej <- list(
   data.frame(
     net      = "AR",
-    pot_min  = 3,
-    pot_max  = 6,
-    cost_min = 10,
-    cost_max = 125
+    pot_min  = 0,
+    pot_max  = 3.6,
+    cost_min = 5,
+    cost_max = 50
   ),
   data.frame(
     net      = "BECCS",
-    pot_min  = 2,
-    pot_max  = 10,
-    cost_min = 80,
-    cost_max = 250
+    pot_min  = 0.5,
+    pot_max  = 5,
+    cost_min = 100,
+    cost_max = 200
   ),
   data.frame(
     net      = "BC",
-    pot_min  = 2.5,
-    pot_max  = 4.5,
-    cost_min = 70,
-    cost_max = 100
+    pot_min  = 0.5,
+    pot_max  = 5.0,
+    cost_min = 100,
+    cost_max = 200
   ),
   data.frame(
     net      = "DAC",
-    pot_min  = 2,
-    pot_max  = 10,
-    cost_min = 80,
+    pot_min  = 4,
+    pot_max  = 40,
+    cost_min = 50,
     cost_max = 250
   ),
   data.frame(
@@ -134,9 +139,9 @@ data_ej <- list(
   data.frame(
     net      = "EW&OA",
     pot_min  = 2,
-    pot_max  = 25,
-    cost_min = 80,
-    cost_max = 250
+    pot_max  = 4,
+    cost_min = 50,
+    cost_max = 200
   ),
   data.frame(
     net      = "OF",
@@ -147,9 +152,9 @@ data_ej <- list(
   ),
   data.frame(
     net      = "SCS",
-    pot_min  = 2,
-    pot_max  = 4,
-    cost_min = 20,
+    pot_min  = 3,
+    pot_max  = 6,
+    cost_min = 0,
     cost_max = 100
   )
 ) %>% 
@@ -157,7 +162,7 @@ data_ej <- list(
 
 net_names <- data.frame(
   longname  = c(sort(unique(all_data$technology)), "Enhanced weathering (terrestrial and ocean) and Ocean alkalinisation"),
-  shortname = c("AR", "BECCS", "BC", "DAC", "EW", "OA", "OF", "SCS", "EW&OA")
+  shortname = c("AR", "BECCS", "BC", "Bioenergy", "DAC", "EW", "OA", "OF", "SCS", "Storage", "EW&OA")
 )
 
 
@@ -174,24 +179,33 @@ source("heatbars/heatbar_functions.R")
 source("part2-synthesis/heatmap_functions.R")
 source("../../bitbucket/beccs/functions/useful_functions.R")
 
-plotdir <- paste0("plots/synthesis-part2/",u_sheetName)
+plotdir <- paste0("plots/synthesis-part2/") #,u_sheetName)
 
 dir.create(plotdir, recursive = TRUE)
 
 
 #==== READ IN DATA ==========
-load("data/all_data.RData") #BOTTOM UP 
+#load("data/all_data.RData") #BOTTOM UP 
 load("../../bitbucket/beccs/data/dataplotAll.RData") # IAM
 
 
 #==== PROCESS DATA ==========
+all_data <- all_data %>%
+  filter(!technology %in% c("Storage", "Bioenergy")) %>% 
+  group_by(TI, variable, `Data categorisationresource`, boundaries, year, measurement) %>%
+  arrange(value) %>%
+  mutate(ind = row_number()) %>%
+  filter(ind==1) %>%
+  ungroup()
+
+# TODO: EW and OA are additive!! => Add up potentials (and costs?)
 all_data$technology[which(all_data$technology == "Enhanced weathering (terrestrial and ocean)")] <- "Enhanced weathering (terrestrial and ocean) and Ocean alkalinisation"
 all_data$technology[which(all_data$technology == "Ocean alkalinisation")]                        <- "Enhanced weathering (terrestrial and ocean) and Ocean alkalinisation"
 
 #==== PROCESS DATA ==========
 data_steps <- list()
 data_bu    <- list()
-for (k_net in unique(all_data$technology)[5:7]) {
+for (k_net in unique(all_data$technology)) {
   
   cat(paste0("Processing ", k_net, "...\n"))
   
@@ -213,14 +227,13 @@ for (k_net in unique(all_data$technology)[5:7]) {
                                      filter(
                                        !is.na(value) , 
                                        is.finite(value),
-                                       costsinclude==T, potsinclude==T
+                                       potsinclude==T
                                      ), net_sn, data_steps[[k_net]]$pot),
       "cost" = generate_costs(all_data %>% filter(technology == k_net) %>%
                                 filter(
                                   !is.na(value) , 
                                   is.finite(value),
-                                  costsinclude==T, potsinclude==T
-                                ), net_sn, data_steps[[k_net]]$cost)
+                                  costsinclude==T), net_sn, data_steps[[k_net]]$cost)
     )
   } else {
     data_steps[[k_net]] <- data.frame(
@@ -255,8 +268,8 @@ for (k_net in unique(all_data$technology)) {
       filter(technology == k_net) %>% 
       filter(variable %in% c("totalPotential", "cost")) %>% 
       unite(var.mes, variable, measurement, sep=".") %>% 
-      select(-category) %>% 
-      filter(`Data categorisationresource` == "Review")
+      select(-category)%>% 
+      filter(grepl("Review", `Data categorisationresource`))
     
     if (nrow(data_rev) > 0) {
       data_rev <- data_rev %>% spread(var.mes, value)
@@ -295,7 +308,7 @@ for (k_net in unique(all_data$technology)) {
       filter(variable %in% c("totalPotential", "cost")) %>% 
       unite(var.mes, variable, measurement, sep=".") %>% 
       select(-category) %>% 
-      filter(`Data categorisationresource` == "Review")
+      filter(grepl("Review", `Data categorisationresource`))
     
     if (nrow(data_rev) > 0) {
       data_rev <- data_rev %>% spread(var.mes, value)
