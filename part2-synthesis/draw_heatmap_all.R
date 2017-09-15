@@ -20,7 +20,7 @@ steps <- list(
   data.frame(
     net      = "BECCS",
     pot_min  = 1,
-    pot_max  = 40,
+    pot_max  = 10,
     pot_n    = 1000,
     cost_min = 1,
     cost_max = 400,
@@ -198,6 +198,7 @@ all_data <- all_data %>%
   filter(ind==1) %>%
   ungroup()
 
+# TODO: EW and OA are additive!! => Add up potentials (and costs?)
 all_data$technology[which(all_data$technology == "Enhanced weathering (terrestrial and ocean)")] <- "Enhanced weathering (terrestrial and ocean) and Ocean alkalinisation"
 all_data$technology[which(all_data$technology == "Ocean alkalinisation")]                        <- "Enhanced weathering (terrestrial and ocean) and Ocean alkalinisation"
 

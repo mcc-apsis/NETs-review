@@ -211,17 +211,17 @@ plot_density <- function(
     plot(0,0,
          type="n",
          axes=FALSE,
-         xlim=c(ax_min,ax_max), ylim=c(0,range$ymax),
+         xlim=c(ax_min,ax_max), ylim=c(0,range$ymax*1.05),
          xlab=ax_lab, ylab="",
          xaxs="i",yaxs="i",
          cex.axis=cex_axis, cex=cex_axis)
     
     # Grid
-    for (kx in ax_tickpos) lines(c(kx, kx), c(0, range$ymax), col="#eeeeee")
+    for (kx in ax_tickpos) lines(c(kx, kx), c(0, range$ymax*1.05), col="#eeeeee")
     
     # 50% of studies
     rect(range$x[1], 0,
-         range$x[2], range$ymax,
+         range$x[2], range$ymax*1.05,
          col="#cccccc66", border=NA)
     lines(c(ax_min,ax_max), c(range$y,range$y), col="#777777", lty=2)
     
@@ -256,17 +256,17 @@ plot_density <- function(
     plot(0,0,
          type="n",
          axes=FALSE,
-         xlim=c(0,range$ymax), ylim=c(ax_min,ax_max),
+         xlim=c(0,range$ymax*1.05), ylim=c(ax_min,ax_max),
          xlab="", ylab=ax_lab,
          xaxs="i",yaxs="i",
          cex.axis=cex_axis)
     
     # Grid
-    for (ky in ax_tickpos) lines(c(0, range$ymax), c(ky, ky), col="#eeeeee")
+    for (ky in ax_tickpos) lines(c(0, range$ymax*1.05), c(ky, ky), col="#eeeeee")
     
     # 50% of studies
-    rect(0,    range$x[1],
-         range$ymax, range$x[2],
+    rect(0,               range$x[1],
+         range$ymax*1.05, range$x[2],
          col="#cccccc66", border=NA)
     lines(c(range$y,range$y), c(ax_min,ax_max), col="#777777", lty=2)
     
@@ -426,7 +426,7 @@ generate_potentials <- function(data, technology, isteps) {
   pot_range <- countranges(df, 
                            data,
                            resources,
-                           "range"
+                           "max"
   )
   
   return(pot_range)
