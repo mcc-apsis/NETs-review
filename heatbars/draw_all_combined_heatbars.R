@@ -421,7 +421,14 @@ for (t in tech_graphs[!is.null(tech_graphs)]) {
     png(paste0("plots/heatbars/",t[[3]],"/panel.png"),width=800,height=500)
     if (!is.null(t[[2]]) & !is.null(t[[1]])) {
       if (t[[3]]=="Enhanced weathering") {
-        grid_arrange_shared_legend(t[[1]],t[[4]]+ylab(""),t[[2]],t[[5]]+ylab(""), ncol=4)
+        int_breaks <- function(x, n = 3) pretty(x, n)[pretty(x, n) %% 1 == 0] 
+        grid_arrange_shared_legend(
+          t[[1]] + scale_x_continuous(breaks= int_breaks),
+          t[[4]] + scale_x_continuous(breaks= int_breaks) +ylab(""),
+          t[[2]] + scale_x_continuous(breaks= int_breaks),
+          t[[5]] + scale_x_continuous(breaks= int_breaks) +ylab(""), 
+          ncol=4
+          )
       } else if (t[[3]]=="BECCS"){
         g <- ggplotGrob(t[[1]] + theme(legend.position="bottom"))$grobs
         legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
