@@ -423,10 +423,10 @@ for (t in tech_graphs[!is.null(tech_graphs)]) {
       if (t[[3]]=="Enhanced weathering") {
         int_breaks <- function(x, n = 3) pretty(x, n)[pretty(x, n) %% 1 == 0] 
         grid_arrange_shared_legend(
-          t[[1]] + scale_x_continuous(breaks= int_breaks),
-          t[[4]] + scale_x_continuous(breaks= int_breaks) +ylab(""),
-          t[[2]] + scale_x_continuous(breaks= int_breaks),
-          t[[5]] + scale_x_continuous(breaks= int_breaks) +ylab(""), 
+          t[[1]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Enhanced\nweathering"),
+          t[[4]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Ocean\nalkalinisation") +ylab(""),
+          t[[2]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Enhanced\nweathering"),
+          t[[5]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Ocean\nAlkalinisation") +ylab(""), 
           ncol=4
           )
       } else if (t[[3]]=="BECCS"){
