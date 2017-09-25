@@ -617,13 +617,15 @@ plot_synthesis_part2 <- function(
   
   # Expert judgment
   if (!is.null(data_ej)) {
-    rect(
-      data_ej$pot_min, data_ej$cost_min,
-      data_ej$pot_max, data_ej$cost_max,
-      lwd=2, lty=1,
-      angle = 45, density = 8,
-      border="#000000"
-    )
+    if (!all(is.na(data_ej))) {
+      rect(
+        data_ej$pot_min, data_ej$cost_min,
+        data_ej$pot_max, data_ej$cost_max,
+        lwd=2, lty=1,
+        angle = 45, density = 8,
+        border="#000000"
+      ) 
+    }
   }
   
   # Former review(s)

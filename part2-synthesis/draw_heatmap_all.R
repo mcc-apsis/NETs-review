@@ -96,7 +96,7 @@ steps <- list(
 data_ej <- list(
   data.frame(
     net      = "AR",
-    pot_min  = 0,
+    pot_min  = 0.5,
     pot_max  = 3.6,
     cost_min = 5,
     cost_max = 50
@@ -110,24 +110,24 @@ data_ej <- list(
   ),
   data.frame(
     net      = "BC",
-    pot_min  = 0.5,
-    pot_max  = 5.0,
-    cost_min = 100,
-    cost_max = 200
+    pot_min  = 0.3,
+    pot_max  = 2.0,
+    cost_min = 0,
+    cost_max = 120
   ),
   data.frame(
     net      = "DAC",
     pot_min  = 4,
     pot_max  = 40,
-    cost_min = 50,
-    cost_max = 250
+    cost_min = 150,
+    cost_max = 300
   ),
   data.frame(
     net      = "EW",
     pot_min  = 2,
-    pot_max  = 10,
-    cost_min = 80,
-    cost_max = 250
+    pot_max  = 4,
+    cost_min = 50,
+    cost_max = 200
   ),
   data.frame(
     net      = "OA",
@@ -145,10 +145,10 @@ data_ej <- list(
   ),
   data.frame(
     net      = "OF",
-    pot_min  = 2,
-    pot_max  = 30,
-    cost_min = 10,
-    cost_max = 80
+    pot_min  = NA,
+    pot_max  = NA,
+    cost_min = NA,
+    cost_max = NA
   ),
   data.frame(
     net      = "SCS",
@@ -199,8 +199,11 @@ all_data <- all_data %>%
   ungroup()
 
 # TODO: EW and OA are additive!! => Add up potentials (and costs?)
-all_data$technology[which(all_data$technology == "Enhanced weathering (terrestrial and ocean)")] <- "Enhanced weathering (terrestrial and ocean) and Ocean alkalinisation"
-all_data$technology[which(all_data$technology == "Ocean alkalinisation")]                        <- "Enhanced weathering (terrestrial and ocean) and Ocean alkalinisation"
+#all_data$technology[which(all_data$technology == "Enhanced weathering (terrestrial and ocean)")] <- "Enhanced weathering (terrestrial and ocean) and Ocean alkalinisation"
+#all_data$technology[which(all_data$technology == "Ocean alkalinisation")]                        <- "Enhanced weathering (terrestrial and ocean) and Ocean alkalinisation"
+
+all_data <- all_data %>%
+  mutate()
 
 #==== PROCESS DATA ==========
 data_steps <- list()
@@ -292,7 +295,7 @@ for (k_net in unique(all_data$technology)) {
       #--- Plot options ---
       do_bu  = TRUE,
       do_iam = FALSE, #ifelse(k_net == "BECCS", TRUE, FALSE),
-      do_rev = do_rev,
+      do_rev = FALSE,
       alpha  = "33",
       #--- Other options ---
       xlab  = "Potential [Gt(CO2)]",
