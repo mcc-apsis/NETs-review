@@ -1,0 +1,63 @@
+<html>
+<head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Topic Modelling App</title>
+<link href="site/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<div id="main">
+
+<h1>NETs review</h1>
+
+<p>Description of what we've done...
+
+<h2> Costs
+
+<p>
+
+<div class="iframe-holder">
+<!-- <iframe src="https://mcc-apsis.github.io/NETs-review/plots/heatbars/costs/index.html"></iframe> -->
+</div>
+
+<h2> Potentials
+
+  <p>
+
+    <div class="iframe-holder">
+    </div>
+
+</div>
+
+</body>
+
+<script type="text/javascript">
+
+srcs = [
+  "https://mcc-apsis.github.io/NETs-review/plots/heatbars/costs/index.html",
+  "https://mcc-apsis.github.io/NETs-review/plots/heatbars/potentials/index.html"
+]
+
+$('.iframe-holder').each(function( index ) {
+  w = $(this).width()
+  h = w*0.6
+  $(this).height(h)
+  console.log( w )
+  $(this).html("<iframe src='"+srcs[index]+"'></iframe>")
+})
+
+$('iframe').on('load', function(){
+
+  console.log("Loaded")
+});
+
+
+
+
+</script>
+
+</html>

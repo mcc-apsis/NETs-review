@@ -44,6 +44,8 @@ sheets <- sheets[!(sheets %in% c("Template"))]
 
 all_data <- data.frame()
 
+datarows <- data.frame()
+
 for (u_sheetName in sheets) {
   print(u_sheetName)
   Sys.sleep(6)
@@ -52,7 +54,10 @@ for (u_sheetName in sheets) {
   data$technology <- u_sheetName
   data$PY <- as.numeric(data$PY)
   all_data <- bind_rows(all_data, data)
+  datarows <- bind_rows(datarows,ss)
 }
+
+length(unique(datarows$X3))
 
 #######################################
 ## Fix one or two problems in the old data
