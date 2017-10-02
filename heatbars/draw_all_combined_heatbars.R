@@ -585,13 +585,20 @@ jittertheme <- theme(
 
 m <- list(
   l = 100,
-  r = 50,
-  b = 200,
-  t = 100,
-  pad = 10
+  r = 100,
+  b = 75,
+  t = 75,
+  pad = 0
 )
 
 ## Costs
+
+rlabs <- rlabs %>%
+  separate(resourcelab, into=c("resourcecopy","lab"),sep="\n",remove=F) %>%
+  mutate(
+    resourcebreak = sub(" ","\n",resource),
+    resourcelabbreak = paste0(resourcebreak,"\n",lab)
+  )
 
 gg <- heatbar(costranges,"pcnt", numeric=T) +
   geom_linerange(
@@ -604,13 +611,22 @@ gg <- heatbar(costranges,"pcnt", numeric=T) +
   labs(x="",y="Costs in $US(2011)/tCO2") +
   coord_cartesian(expand=F) +
   jittertheme +
-  scale_x_continuous(breaks=seq(1,8),labels=rlabs$resourcelab)
+  scale_x_continuous(breaks=seq(1,8),labels=rlabs$resourcelabbreak)
 
 print(gg)
 
 
 ggplotly(gg, tooltip="text") %>%
-  layout(margin = m)
+  layout(margin = m) %>%
+  layout(plot_bgcolor='transparent') %>%
+  layout(paper_bgcolor='transparent')
+
+
+tx  <- readLines("plots/heatbars/costs/index.html")
+tx  <- gsub(pattern = '"padding":40', replace = '"padding":0', x = tx, fixed=T)
+tx  <- gsub(pattern = '"background-color:white;"', replace = '"background-color:none;"', x = tx, fixed=T)
+writeLines(tx, con="plots/heatbars/costs/index.html")
+
 
 ## Potentials
 
@@ -625,21 +641,22 @@ gg <- heatbar(filter(potsranges,resource!="Storage"),"pcnt", step=0.1, numeric=T
   labs(x="",y="Potential GtCO2/year Sequestered") +
   coord_cartesian(expand=F) +
   jittertheme +
-  scale_x_continuous(breaks=seq(1,7),labels=names(potspics))
+  scale_x_continuous(breaks=seq(1,7),labels=rlabs$resourcelabbreak[rlabs$resource!="DAC"])
 
 print(gg)
 
-m <- list(
-  l = 100,
-  r = 50,
-  b = 200,
-  t = 100,
-  pad = 10
-)
-
 ggplotly(gg, tooltip="text") %>%
-  layout(margin = m)
+  layout(margin = m) %>%
+  layout(plot_bgcolor='transparent') %>%
+  layout(paper_bgcolor='transparent')
 
+
+### Save this, then do this
+
+tx  <- readLines("plots/heatbars/potentials/index.html")
+tx  <- gsub(pattern = '"padding":40', replace = '"padding":0', x = tx, fixed=T)
+tx  <- gsub(pattern = '"background-color:white;"', replace = '"background-color:none;"', x = tx, fixed=T)
+writeLines(tx, con="plots/heatbars/potentials/index.html")
 
 
 gg <- heatbar(costranges,"pcnt", numeric=T) +
