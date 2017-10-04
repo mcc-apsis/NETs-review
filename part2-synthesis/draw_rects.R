@@ -47,8 +47,8 @@ all_sums$pots_max[is.na(all_sums$pots_max)] <- 100
 
 expert_judgements <- data.frame(
   technology = unique(all_sums$technology),
-  pots_min = c(0.5, 0.5, 0.3, 4,2,NA,NA,3),
-  pots_max = c(3.6, 5, 2, 40, 4, NA, NA, 6),
+  pots_min = c(0.5, 0.5, 0.3, 0.5,2,NA,NA,3),
+  pots_max = c(3.6, 5, 2, 5, 4, NA, NA, 6),
   costs_min = c(5, 100, 0, 50, 50, NA, NA, 0),
   costs_max = c(50, 200, 120, 300, 200, NA, NA, 100)
 )
