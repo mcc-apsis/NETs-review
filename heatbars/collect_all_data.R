@@ -54,10 +54,16 @@ for (u_sheetName in sheets) {
   data$technology <- u_sheetName
   data$PY <- as.numeric(data$PY)
   all_data <- bind_rows(all_data, data)
+  
+  ss$technology = u_sheetName
   datarows <- bind_rows(datarows,ss)
 }
 
 length(unique(datarows$X3))
+
+
+uniquepapers <- datarows[!duplicated(datarows$X3),]
+
 
 #######################################
 ## Fix one or two problems in the old data
