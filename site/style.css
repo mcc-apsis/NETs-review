@@ -10,6 +10,7 @@ body {
     margin-left: auto;
     margin-right: auto;
     width: 70%;
+		max-width: 1000px;
     border-left: 1px solid grey;
     border-right: 1px solid grey;
     padding: 10px;
