@@ -258,6 +258,7 @@ for (k_net in unique(all_data$technology)) {
   }
 }
 
+p_cex_axis=1.5
 
 #==== PLOT DATA =============
 for (k_net in unique(all_data$technology)) {
