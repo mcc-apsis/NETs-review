@@ -61,8 +61,9 @@ for (u_sheetName in sheets) {
 
 length(unique(datarows$X3))
 
+uniquepapers <- datarows[!duplicated(datarows$X3),]
 
-uniquepapers <- datarows[!duplicated(datarows$X3),1:4]
+uniquepapers <- select(uniquepapers,1:3,technology)
 
 write.csv(uniquepapers,file="tables/unique_spreadsheet_papers.csv",fileEncoding="UTF-8")
 
