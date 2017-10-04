@@ -56,13 +56,15 @@ for (u_sheetName in sheets) {
   all_data <- bind_rows(all_data, data)
   
   ss$technology = u_sheetName
-  datarows <- bind_rows(datarows,ss)
+  datarows <- bind_rows(datarows,ss[3:dim(ss)[1],])
 }
 
 length(unique(datarows$X3))
 
 
-uniquepapers <- datarows[!duplicated(datarows$X3),]
+uniquepapers <- datarows[!duplicated(datarows$X3),1:4]
+
+write.csv(uniquepapers,file="tables/unique_spreadsheet_papers.csv",fileEncoding="UTF-8")
 
 
 #######################################
