@@ -758,7 +758,7 @@ plot_synthesis_part2_DAC <- function(
   # Define data boundaries
   if (DEBUG) cat("[plot_heatmap]   - Defining boundaries\n")
   xmin <- 0
-  xmax <- 100 # Arbitrary value
+  xmax <- 10 # Arbitrary value
   ymin <- 0
   ymax <- max(cost_steps)
   if (DEBUG) cat("[plot_heatmap]     > xmin: ",xmin,", xmax: ",xmax,", ymin: ",ymin,", ymax:",ymax,"\n")
@@ -923,7 +923,7 @@ plot_synthesis_part2_DAC <- function(
   # Axes
   axis(1, at=axes_xtick_pos, cex.axis=p_cex_axis)
   
-  text(50, 0.5, "NA", col = "grey", cex = 3)
+  text(5, 0.5, "NA", col = "grey", cex = 3)
   
   box()
   
