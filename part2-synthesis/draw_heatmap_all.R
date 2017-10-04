@@ -117,8 +117,8 @@ data_ej <- list(
   ),
   data.frame(
     net      = "DAC",
-    pot_min  = 4,
-    pot_max  = 40,
+    pot_min  = 0.5,
+    pot_max  = 5,
     cost_min = 150,
     cost_max = 300
   ),
