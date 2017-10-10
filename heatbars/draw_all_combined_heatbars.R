@@ -33,6 +33,10 @@ load("data/all_data.RData")
 
 all_data$technology[all_data$technology=="Enhanced weathering (terrestrial and ocean)"] <- "Enhanced weathering"
 
+# Curtail very large ew value to 1000
+
+all_data[all_data$value>1000 & !is.na(all_data$value) & all_data$variable=="cost" & all_data$technology=="Enhanced weathering",]$value = 1000
+
 #### Add in max + min 0.5 around estimate
 all_data$TI[is.na(all_data$TI)] <- all_data$CITATION[is.na(all_data$TI)]
 
@@ -308,7 +312,7 @@ for (t in techs) {
     theme(text = element_text(size=fsize))
   print(p)
   if (t %in% c("Ocean alkalinisation","Enhanced weathering")) {
-    p <- p + ylim(0,550)
+    p <- p + ylim(0,1000)
   }
   if (t=="Ocean alkalinisation") {
     tech_graphs[["Enhanced weathering"]][[4]] <- p
@@ -413,52 +417,75 @@ tech_graphs[["BECCS"]][[5]] <- p
 
 #################### 
 ## Tech panels
+extline = data.frame(
+  x=c(2016,2016),
+  y=c(1000,1075)
+)
+
+p <- tech_graphs["Enhanced weathering"][[1]][[1]] +
+  geom_line(
+    data=extline,
+    aes(x,y),
+    linetype=2,
+    arrow = arrow(angle = 15, ends = "last", type = "closed", length=unit(0.1,"inches"))
+  ) +
+  # geom_text(
+  #   aes(2016,1075,label="up to\n3460\n//")
+  # ) + 
+  ylim(0,1200)
+
+p
 
 for (t in tech_graphs[!is.null(tech_graphs)]) {
-  
   if (!is.null(t)) {
     print(t[[3]])
-    png(paste0("plots/heatbars/",t[[3]],"/panel.png"),width=800,height=500)
-    if (!is.null(t[[2]]) & !is.null(t[[1]])) {
-      if (t[[3]]=="Enhanced weathering") {
-        int_breaks <- function(x, n = 3) pretty(x, n)[pretty(x, n) %% 1 == 0] 
-        grid_arrange_shared_legend(
-          t[[1]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Enhanced\nweathering"),
-          t[[4]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Ocean\nalkalinisation") +ylab(""),
-          t[[2]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Enhanced\nweathering"),
-          t[[5]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Ocean\nAlkalinisation") +ylab(""), 
-          ncol=4
-          )
-      } else if (t[[3]]=="BECCS"){
-        g <- ggplotGrob(t[[1]] + theme(legend.position="bottom"))$grobs
-        legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
-        lay <- rbind(c(1,2),c(3,3),c(4,4))
-        lwidth <- sum(legend$width)
-        grid.arrange(
-          t[[1]]+ theme(legend.position="none"),
-          t[[4]]+ theme(legend.position="none"),
-          t[[5]]+ theme(legend.position="none"),
-          legend,
-          layout_matrix=lay,
-          heights= unit.c(unit(0.45, "npc"),unit(0.45, "npc"), unit(0.1, "npc"))
-          )
+    for (ftype in c(".svg","png")) {
+      if (ftype==".svg") {
+        svg(paste0("plots/heatbars/",t[[3]],"/panel.svg"),width=8,height=5)
       } else {
-        grid_arrange_shared_legend(t[[1]],t[[2]],ncol=2)
+        png(paste0("plots/heatbars/",t[[3]],"/panel.png"),width=800,height=500)
       }
-    } else if (!is.null(t[[1]])) {
-      #grid.arrange(t[[1]],ncol=1)
-      print(t[[1]])
-    } else if (!is.null(t[[2]])) {
-      print(t[[2]])
+      if (!is.null(t[[2]]) & !is.null(t[[1]])) {
+        if (t[[3]]=="Enhanced weathering") {
+          int_breaks <- function(x, n = 3) pretty(x, n)[pretty(x, n) %% 1 == 0] 
+          grid_arrange_shared_legend(
+            t[[1]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Enhanced\nweathering"),
+            t[[4]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Ocean\nalkalinisation") +ylab(""),
+            t[[2]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Enhanced\nweathering"),
+            t[[5]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Ocean\nalkalinisation") +ylab(""), 
+            ncol=4
+          )
+        } else if (t[[3]]=="BECCS"){
+          g <- ggplotGrob(t[[1]] + theme(legend.position="bottom"))$grobs
+          legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
+          lay <- rbind(c(1,2),c(3,3),c(4,4))
+          lwidth <- sum(legend$width)
+          grid.arrange(
+            t[[1]]+ theme(legend.position="none"),
+            t[[4]]+ theme(legend.position="none"),
+            t[[5]]+ theme(legend.position="none"),
+            legend,
+            layout_matrix=lay,
+            heights= unit.c(unit(0.45, "npc"),unit(0.45, "npc"), unit(0.1, "npc"))
+          )
+        } else {
+          grid_arrange_shared_legend(t[[1]],t[[2]],ncol=2)
+        }
+      } else if (!is.null(t[[1]])) {
+        #grid.arrange(t[[1]],ncol=1)
+        print(t[[1]])
+      } else if (!is.null(t[[2]])) {
+        print(t[[2]])
+      }
+      dev.off()
+      if (!is.null(t[[3]])) {
+        if (t[[3]]=="Enhanced weathering") {
+          png(paste0("plots/heatbars/",t[[3]],"/panel_alt.png"),width=800,height=500)
+          grid_arrange_shared_legend(t[[1]],t[[2]],t[[4]],t[[5]],ncol=2,nrow=2)
+          dev.off()
+        }
+      }  
     }
-    dev.off()
-    if (!is.null(t[[3]])) {
-      if (t[[3]]=="Enhanced weathering") {
-        png(paste0("plots/heatbars/",t[[3]],"/panel_alt.png"),width=800,height=500)
-        grid_arrange_shared_legend(t[[1]],t[[2]],t[[4]],t[[5]],ncol=2,nrow=2)
-        dev.off()
-      }
-    } 
   }
 }
 
@@ -472,6 +499,8 @@ for (cp in seq(1,2)) {
   do.call("grid_arrange_shared_legend", c(gs, ncol=2,nrow=4))
   dev.off()
 }
+
+tech_graphs[3]
 
 ##########################
 ## Other graphs

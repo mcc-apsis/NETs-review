@@ -196,7 +196,8 @@ all_data$potsinclude[
 
 #EW include everything global
 all_data$costsinclude[
-  all_data$technology=="Enhanced weathering (terrestrial and ocean)" 
+  all_data$technology=="Enhanced weathering (terrestrial and ocean)"  &
+    !grepl("partial-national",all_data$boundaries)
   ] <- T
 
 all_data$potsinclude[
