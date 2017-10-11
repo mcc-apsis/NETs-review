@@ -102,6 +102,12 @@ rlabs <- costranges %>%
     resourcelab=paste0(gsub(" (terrestrial and ocean)","",first(resource),fixed=T),'\n[',max(maxvalue),' studies]')
   )
 
+plabs <- potsranges %>%
+  group_by(resource) %>%
+  summarise(
+    resourcelab=paste0(gsub(" (terrestrial and ocean)","",first(resource),fixed=T),'\n[',max(maxvalue),' studies]')
+  )
+
 names(pics) <- rlabs$resourcelab
 
 ###############################
@@ -634,6 +640,13 @@ rlabs <- rlabs %>%
     resourcelabbreak = paste0(resourcebreak,"\n",lab)
   )
 
+plabs <- plabs %>%
+  separate(resourcelab, into=c("resourcecopy","lab"),sep="\n",remove=F) %>%
+  mutate(
+    resourcebreak = sub(" ","\n",resource),
+    resourcelabbreak = paste0(resourcebreak,"\n",lab)
+  )
+
 gg <- heatbar(costranges,"pcnt", numeric=T) +
   geom_linerange(
     data=costrange,
@@ -675,7 +688,7 @@ gg <- heatbar(filter(potsranges,resource!="Storage"),"pcnt", step=0.1, numeric=T
   labs(x="",y="Potential GtCO2/year Sequestered") +
   coord_cartesian(expand=F) +
   jittertheme +
-  scale_x_continuous(breaks=seq(1,7),labels=rlabs$resourcelabbreak[rlabs$resource!="DAC"])
+  scale_x_continuous(breaks=seq(1,7),labels=plabs$resourcelabbreak[plabs$resource!="DAC"])
 
 print(gg)
 
