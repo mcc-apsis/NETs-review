@@ -288,6 +288,11 @@ tech_graphs <- list()
 techs <- unique(costs$technology)
 
 for (t in techs) {
+  if (t %in% c("Enhanced weathering","Ocean alkalinisation")) {
+    top_n <- 3
+  } else {
+    top_n <- 3
+  }
   tranges <- costranges[costranges$resource==t,]
   tcosts <- costs[costs$technology==t,]
   y1 <- min(tcosts$PY,na.rm=T)
@@ -312,7 +317,7 @@ for (t in techs) {
     theme(text = element_text(size=fsize))
   print(p)
   if (t %in% c("Ocean alkalinisation","Enhanced weathering")) {
-    p <- p + ylim(0,1000)
+    p <- p + ylim(0,1100)
   }
   if (t=="Ocean alkalinisation") {
     tech_graphs[["Enhanced weathering"]][[4]] <- p
@@ -426,15 +431,15 @@ p <- tech_graphs["Enhanced weathering"][[1]][[1]] +
   geom_line(
     data=extline,
     aes(x,y),
-    linetype=2,
-    arrow = arrow(angle = 15, ends = "last", type = "closed", length=unit(0.1,"inches"))
+    linetype=5,
+    arrow = arrow(angle = 45, ends = "last", type = "open", length=unit(0.2,"inches"))
   ) +
-  # geom_text(
-  #   aes(2016,1075,label="up to\n3460\n//")
-  # ) + 
-  ylim(0,1200)
+  geom_text(
+    aes(2016,1100,label="3460")
+  ) +
+  ylim(0,1100)
 
-p
+tech_graphs["Enhanced weathering"][[1]][[1]] <- p
 
 for (t in tech_graphs[!is.null(tech_graphs)]) {
   if (!is.null(t)) {
