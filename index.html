@@ -83,11 +83,20 @@ srcs = [
 ]
 
 $('.iframe-holder').each(function( index ) {
-  w = $(this).width()
-  h = w*0.65
-  $(this).height(h)
-  console.log( w )
-  $(this).html("<iframe src='"+srcs[index]+"'></iframe>")
+  w = $(this).width();
+  h = w*0.65;
+  $(this).height(h);
+  console.log( w );
+  if (navigator.userAgent.indexOf("Firefox") > 0) {
+    $(this).html("Embedded plots do not work in Firefox. View <a href='"+srcs[index]+"'>Link</a>");
+    $(this).toggleClass("iframe-holder")
+    $(this).height(100)
+    //$(this).width("100%")
+  } else {
+    $(this).html("<iframe src='"+srcs[index]+"'></iframe>");
+  }
+
+  setTimeout(function(){  }, 3000);
 })
 
 // $('iframe').on('load', function(){
