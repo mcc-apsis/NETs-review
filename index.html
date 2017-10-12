@@ -78,8 +78,8 @@
 <script type="text/javascript">
 
 srcs = [
-  "plots/heatbars/costs/index.html",
-  "plots/heatbars/potentials/index.html"
+  "plots/heatbars/costs/costs.html",
+  "plots/heatbars/potentials/potentials.html"
 ]
 
 $('.iframe-holder').each(function( index ) {
@@ -88,9 +88,10 @@ $('.iframe-holder').each(function( index ) {
   $(this).height(h);
   console.log( w );
   if (navigator.userAgent.indexOf("Firefox") > 0) {
-    $(this).html("Embedded plots do not work in Firefox. View <a href='"+srcs[index]+"'>Link</a>");
-    $(this).toggleClass("iframe-holder")
-    $(this).height(100)
+    // $(this).html("Embedded plots do not work in Firefox. View <a href='"+srcs[index]+"'>Link</a>");
+    // $(this).toggleClass("iframe-holder")
+    // $(this).height(100)
+    $(this).html("<iframe src='"+srcs[index]+"'></iframe>");
     //$(this).width("100%")
   } else {
     $(this).html("<iframe src='"+srcs[index]+"'></iframe>");

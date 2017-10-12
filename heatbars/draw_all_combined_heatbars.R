@@ -559,14 +559,14 @@ costrange$AUs <- lapply(costrange$AU, fixauthors)
 costrange <- costrange %>%
   mutate(
     ttip=paste0(
-      AUs," (",PY,") ",
+      trimws(AUs)," (",PY,") ",
       "<br>",
-      TIs,
+      trimws(TIs),
       "<br><br>",
       "Cost range: ",round(min,2),"-",round(max,2),
       " $/tCO2","<br>",
-      "<b>System boundaries:</b> ", boundaries, "<br>",
-      "<b>System conditions:</b> ", conditions
+      "<b>System boundaries:</b> ", trimws(boundaries), "<br>",
+      "<b>System conditions:</b> ", trimws(conditions)
     ) 
   )
 
@@ -594,11 +594,11 @@ potsjitter <- potsjitter %>%
 
 
 
-potsjitter$TIs <- lapply(potsjitter$TI, splitwords, n=8)
+potsjitter$TIs <- trimws(lapply(potsjitter$TI, splitwords, n=8))
 
-potsjitter$conditions <- lapply(potsjitter$`Data categorisationsystem conditions`, splitwords, n=8)
+potsjitter$conditions <- trimws(lapply(potsjitter$`Data categorisationsystem conditions`, splitwords, n=8))
 
-potsjitter$AUs <- lapply(potsjitter$AU, fixauthors)
+potsjitter$AUs <- trimws(lapply(potsjitter$AU, fixauthors))
 
 potsjitter <- potsjitter %>%
   mutate(
@@ -609,7 +609,7 @@ potsjitter <- potsjitter %>%
       "<br><br>",
       "<b>Potential:</b> ",round(value,1),
       " Gt CO2/year","<br>",
-      "<b>System boundaries:</b> ", boundaries, "<br>",
+      "<b>System boundaries:</b> ", trimws(boundaries), "<br>",
       "<b>System conditions:</b> ", conditions
     ) 
   )
@@ -633,12 +633,20 @@ m <- list(
 
 ## Costs
 
+pw <- 1100
+
 rlabs <- rlabs %>%
   separate(resourcelab, into=c("resourcecopy","lab"),sep="\n",remove=F) %>%
   mutate(
     resourcebreak = sub(" ","\n",resource),
     resourcelabbreak = paste0(resourcebreak,"\n",lab)
   )
+
+rlabs$resourcelabbreak <- gsub(
+  "Soil\nCarbon Sequestration",
+  "Soil Carbon\nSequestration",
+  rlabs$resourcelabbreak
+)
 
 plabs <- plabs %>%
   separate(resourcelab, into=c("resourcecopy","lab"),sep="\n",remove=F) %>%
@@ -662,12 +670,21 @@ gg <- heatbar(costranges,"pcnt", numeric=T) +
 
 print(gg)
 
-
-ggplotly(gg, tooltip="text") %>%
+p <- ggplotly(gg, tooltip="text",autosize = F, width = pw, height = 600) %>%
+#p <- ggplotly(gg, tooltip="text") %>%
   layout(margin = m) %>%
   layout(plot_bgcolor='transparent') %>%
   layout(paper_bgcolor='transparent')
 
+p
+
+save(p,file="plots/heatbars/costs/pl.RData")
+
+library(widgetframe)
+
+path <- getwd()
+
+htmlwidgets::saveWidget(frameableWidget(p),paste0(path,'/plots/heatbars/costs/index.html'))
 
 tx  <- readLines("plots/heatbars/costs/index.html")
 tx  <- gsub(pattern = '"padding":40', replace = '"padding":0', x = tx, fixed=T)
@@ -675,7 +692,14 @@ tx  <- gsub(pattern = '"background-color:white;"', replace = '"background-color:
 writeLines(tx, con="plots/heatbars/costs/index.html")
 
 
+
 ## Potentials
+
+plabs$resourcelabbreak <- gsub(
+  "Soil\nCarbon Sequestration",
+  "Soil Carbon\nSequestration",
+  plabs$resourcelabbreak
+  )
 
 gg <- heatbar(filter(potsranges,resource!="Storage"),"pcnt", step=0.1, numeric=T) +
   geom_point(
@@ -692,10 +716,20 @@ gg <- heatbar(filter(potsranges,resource!="Storage"),"pcnt", step=0.1, numeric=T
 
 print(gg)
 
-ggplotly(gg, tooltip="text") %>%
+p <- ggplotly(gg, tooltip="text",autosize = F, width = pw, height = 600) %>%
+#p <- ggplotly(gg, tooltip="text") %>%  
   layout(margin = m) %>%
   layout(plot_bgcolor='transparent') %>%
   layout(paper_bgcolor='transparent')
+
+p
+
+save(p,file="plots/heatbars/potentials/pl.RData")
+
+knitr::knit("plots/heatbars/costs/costs.Rmd")
+
+knitr::knit("plots/heatbars/potentials/potentials.Rmd")
+
 
 
 ### Save this, then do this
@@ -704,6 +738,11 @@ tx  <- readLines("plots/heatbars/potentials/index.html")
 tx  <- gsub(pattern = '"padding":40', replace = '"padding":0', x = tx, fixed=T)
 tx  <- gsub(pattern = '"background-color:white;"', replace = '"background-color:none;"', x = tx, fixed=T)
 writeLines(tx, con="plots/heatbars/potentials/index.html")
+
+tx  <- readLines("index_alt.html")
+tx  <- gsub(pattern = '"padding":40', replace = '"padding":0', x = tx, fixed=T)
+tx  <- gsub(pattern = '"background-color:white;"', replace = '"background-color:none;"', x = tx, fixed=T)
+writeLines(tx, con="index_alt.html")
 
 
 gg <- heatbar(costranges,"pcnt", numeric=T) +
