@@ -1,0 +1,18 @@
+---
+title: ''
+output: 
+  html_document:
+    self_contained: false
+    css: ../../../site/style.css
+---
+
+```{r plotly, warning=F, echo=F, message=F}
+
+library(plotly)
+
+
+load("pl.RData")
+
+p
+
+```

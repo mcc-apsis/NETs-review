@@ -22,6 +22,21 @@ costs <- all_data %>%
     costs_max = quantile(value, .75, na.rm = T)
   )
 
+costsranges <- all_data %>%
+  filter(
+    !is.na(value) , 
+    is.finite(value),
+    variable=="cost",
+    costsinclude==T
+  ) %>%
+  group_by(technology) %>% 
+  summarise(
+    pots_min = min(value, na.rm = T),
+    pots_max = max(value, na.rm = T)
+  )
+
+write.csv(potranges,'tables/allcosts.csv')
+
 ## Pots
 
 pots <- all_data %>%
@@ -38,6 +53,22 @@ pots <- all_data %>%
   )
 
 
+potranges <- all_data %>%
+  filter(
+    !is.na(value) , 
+    is.finite(value),
+    variable=="totalPotential",
+    potsinclude==T
+  ) %>%
+  group_by(technology) %>% 
+  summarise(
+    pots_min = min(value, na.rm = T),
+    pots_max = max(value, na.rm = T)
+  )
+
+write.csv(potranges,'tables/allpotentials.csv')
+
+#################
 
 all_sums <- left_join(costs, pots)
 
@@ -52,6 +83,8 @@ expert_judgements <- data.frame(
   costs_min = c(5, 100, 0, 50, 50, NA, NA, 0),
   costs_max = c(50, 200, 120, 300, 200, NA, NA, 100)
 )
+
+write.csv(expert_judgements,"tables/expert_judgements.csv")
 
 
 

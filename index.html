@@ -78,31 +78,41 @@
 <script type="text/javascript">
 
 srcs = [
-  "plots/heatbars/costs/index.html",
-  "plots/heatbars/potentials/index.html"
+  "plots/heatbars/costs/costs.html",
+  "plots/heatbars/potentials/potentials.html"
 ]
 
 $('.iframe-holder').each(function( index ) {
-  w = $(this).width()
-  h = w*0.65
-  $(this).height(h)
-  console.log( w )
-  $(this).html("<iframe src='"+srcs[index]+"'></iframe>")
+  w = $(this).width();
+  h = w*0.65;
+  $(this).height(h);
+  console.log( w );
+  if (navigator.userAgent.indexOf("Firefox") > 0) {
+    // $(this).html("Embedded plots do not work in Firefox. View <a href='"+srcs[index]+"'>Link</a>");
+    // $(this).toggleClass("iframe-holder")
+    // $(this).height(100)
+    $(this).html("<iframe src='"+srcs[index]+"'></iframe>");
+    //$(this).width("100%")
+  } else {
+    $(this).html("<iframe src='"+srcs[index]+"'></iframe>");
+  }
+
+  setTimeout(function(){  }, 3000);
 })
 
-$('iframe').on('load', function(){
-  // $("#htmlwidget_container").css({position:"relative",top:0,left:0,bottom:0,right:0})
-  // $("body").css({padding:0})
-  // $('.iframe-holder').each(function( index ) {
-  //   w = $(this).width()
-  //   h = w*0.6
-  //   $(this).height(h-100)
-  //   $(this).width(w-80)
-  //   console.log( w )
-  // })
-  $(".svg-container").css({border: "1px solid black"})
-  $("iframe")
-});
+// $('iframe').on('load', function(){
+//   // $("#htmlwidget_container").css({position:"relative",top:0,left:0,bottom:0,right:0})
+//   // $("body").css({padding:0})
+//   // $('.iframe-holder').each(function( index ) {
+//   //   w = $(this).width()
+//   //   h = w*0.6
+//   //   $(this).height(h-100)
+//   //   $(this).width(w-80)
+//   //   console.log( w )
+//   // })
+//   $(".svg-container").css({border: "1px solid black"})
+//   //$("iframe")
+// });
 
 
 

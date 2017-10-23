@@ -33,6 +33,10 @@ load("data/all_data.RData")
 
 all_data$technology[all_data$technology=="Enhanced weathering (terrestrial and ocean)"] <- "Enhanced weathering"
 
+# Curtail very large ew value to 1000
+
+all_data[all_data$value>1000 & !is.na(all_data$value) & all_data$variable=="cost" & all_data$technology=="Enhanced weathering",]$value = 1000
+
 #### Add in max + min 0.5 around estimate
 all_data$TI[is.na(all_data$TI)] <- all_data$CITATION[is.na(all_data$TI)]
 
@@ -93,6 +97,12 @@ costranges <- countranges(
 ## Make some nicer labels
 
 rlabs <- costranges %>%
+  group_by(resource) %>%
+  summarise(
+    resourcelab=paste0(gsub(" (terrestrial and ocean)","",first(resource),fixed=T),'\n[',max(maxvalue),' studies]')
+  )
+
+plabs <- potsranges %>%
   group_by(resource) %>%
   summarise(
     resourcelab=paste0(gsub(" (terrestrial and ocean)","",first(resource),fixed=T),'\n[',max(maxvalue),' studies]')
@@ -284,6 +294,11 @@ tech_graphs <- list()
 techs <- unique(costs$technology)
 
 for (t in techs) {
+  if (t %in% c("Enhanced weathering","Ocean alkalinisation")) {
+    top_n <- 3
+  } else {
+    top_n <- 3
+  }
   tranges <- costranges[costranges$resource==t,]
   tcosts <- costs[costs$technology==t,]
   y1 <- min(tcosts$PY,na.rm=T)
@@ -308,7 +323,7 @@ for (t in techs) {
     theme(text = element_text(size=fsize))
   print(p)
   if (t %in% c("Ocean alkalinisation","Enhanced weathering")) {
-    p <- p + ylim(0,550)
+    p <- p + ylim(0,1100)
   }
   if (t=="Ocean alkalinisation") {
     tech_graphs[["Enhanced weathering"]][[4]] <- p
@@ -413,52 +428,75 @@ tech_graphs[["BECCS"]][[5]] <- p
 
 #################### 
 ## Tech panels
+extline = data.frame(
+  x=c(2016,2016),
+  y=c(1000,1075)
+)
+
+p <- tech_graphs["Enhanced weathering"][[1]][[1]] +
+  geom_line(
+    data=extline,
+    aes(x,y),
+    linetype=5,
+    arrow = arrow(angle = 45, ends = "last", type = "open", length=unit(0.2,"inches"))
+  ) +
+  geom_text(
+    aes(2016,1100,label="3460")
+  ) +
+  ylim(0,1100)
+
+tech_graphs["Enhanced weathering"][[1]][[1]] <- p
 
 for (t in tech_graphs[!is.null(tech_graphs)]) {
-  
   if (!is.null(t)) {
     print(t[[3]])
-    png(paste0("plots/heatbars/",t[[3]],"/panel.png"),width=800,height=500)
-    if (!is.null(t[[2]]) & !is.null(t[[1]])) {
-      if (t[[3]]=="Enhanced weathering") {
-        int_breaks <- function(x, n = 3) pretty(x, n)[pretty(x, n) %% 1 == 0] 
-        grid_arrange_shared_legend(
-          t[[1]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Enhanced\nweathering"),
-          t[[4]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Ocean\nalkalinisation") +ylab(""),
-          t[[2]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Enhanced\nweathering"),
-          t[[5]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Ocean\nAlkalinisation") +ylab(""), 
-          ncol=4
-          )
-      } else if (t[[3]]=="BECCS"){
-        g <- ggplotGrob(t[[1]] + theme(legend.position="bottom"))$grobs
-        legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
-        lay <- rbind(c(1,2),c(3,3),c(4,4))
-        lwidth <- sum(legend$width)
-        grid.arrange(
-          t[[1]]+ theme(legend.position="none"),
-          t[[4]]+ theme(legend.position="none"),
-          t[[5]]+ theme(legend.position="none"),
-          legend,
-          layout_matrix=lay,
-          heights= unit.c(unit(0.45, "npc"),unit(0.45, "npc"), unit(0.1, "npc"))
-          )
+    for (ftype in c(".svg","png")) {
+      if (ftype==".svg") {
+        svg(paste0("plots/heatbars/",t[[3]],"/panel.svg"),width=8,height=5)
       } else {
-        grid_arrange_shared_legend(t[[1]],t[[2]],ncol=2)
+        png(paste0("plots/heatbars/",t[[3]],"/panel.png"),width=800,height=500)
       }
-    } else if (!is.null(t[[1]])) {
-      #grid.arrange(t[[1]],ncol=1)
-      print(t[[1]])
-    } else if (!is.null(t[[2]])) {
-      print(t[[2]])
+      if (!is.null(t[[2]]) & !is.null(t[[1]])) {
+        if (t[[3]]=="Enhanced weathering") {
+          int_breaks <- function(x, n = 3) pretty(x, n)[pretty(x, n) %% 1 == 0] 
+          grid_arrange_shared_legend(
+            t[[1]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Enhanced\nweathering"),
+            t[[4]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Ocean\nalkalinisation") +ylab(""),
+            t[[2]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Enhanced\nweathering"),
+            t[[5]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Ocean\nalkalinisation") +ylab(""), 
+            ncol=4
+          )
+        } else if (t[[3]]=="BECCS"){
+          g <- ggplotGrob(t[[1]] + theme(legend.position="bottom"))$grobs
+          legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
+          lay <- rbind(c(1,2),c(3,3),c(4,4))
+          lwidth <- sum(legend$width)
+          grid.arrange(
+            t[[1]]+ theme(legend.position="none"),
+            t[[4]]+ theme(legend.position="none"),
+            t[[5]]+ theme(legend.position="none"),
+            legend,
+            layout_matrix=lay,
+            heights= unit.c(unit(0.45, "npc"),unit(0.45, "npc"), unit(0.1, "npc"))
+          )
+        } else {
+          grid_arrange_shared_legend(t[[1]],t[[2]],ncol=2)
+        }
+      } else if (!is.null(t[[1]])) {
+        #grid.arrange(t[[1]],ncol=1)
+        print(t[[1]])
+      } else if (!is.null(t[[2]])) {
+        print(t[[2]])
+      }
+      dev.off()
+      if (!is.null(t[[3]])) {
+        if (t[[3]]=="Enhanced weathering") {
+          png(paste0("plots/heatbars/",t[[3]],"/panel_alt.png"),width=800,height=500)
+          grid_arrange_shared_legend(t[[1]],t[[2]],t[[4]],t[[5]],ncol=2,nrow=2)
+          dev.off()
+        }
+      }  
     }
-    dev.off()
-    if (!is.null(t[[3]])) {
-      if (t[[3]]=="Enhanced weathering") {
-        png(paste0("plots/heatbars/",t[[3]],"/panel_alt.png"),width=800,height=500)
-        grid_arrange_shared_legend(t[[1]],t[[2]],t[[4]],t[[5]],ncol=2,nrow=2)
-        dev.off()
-      }
-    } 
   }
 }
 
@@ -472,6 +510,8 @@ for (cp in seq(1,2)) {
   do.call("grid_arrange_shared_legend", c(gs, ncol=2,nrow=4))
   dev.off()
 }
+
+tech_graphs[3]
 
 ##########################
 ## Other graphs
@@ -519,14 +559,14 @@ costrange$AUs <- lapply(costrange$AU, fixauthors)
 costrange <- costrange %>%
   mutate(
     ttip=paste0(
-      AUs," (",PY,") ",
+      trimws(AUs)," (",PY,") ",
       "<br>",
-      TIs,
+      trimws(TIs),
       "<br><br>",
       "Cost range: ",round(min,2),"-",round(max,2),
       " $/tCO2","<br>",
-      "<b>System boundaries:</b> ", boundaries, "<br>",
-      "<b>System conditions:</b> ", conditions
+      "<b>System boundaries:</b> ", trimws(boundaries), "<br>",
+      "<b>System conditions:</b> ", trimws(conditions)
     ) 
   )
 
@@ -554,11 +594,11 @@ potsjitter <- potsjitter %>%
 
 
 
-potsjitter$TIs <- lapply(potsjitter$TI, splitwords, n=8)
+potsjitter$TIs <- trimws(lapply(potsjitter$TI, splitwords, n=8))
 
-potsjitter$conditions <- lapply(potsjitter$`Data categorisationsystem conditions`, splitwords, n=8)
+potsjitter$conditions <- trimws(lapply(potsjitter$`Data categorisationsystem conditions`, splitwords, n=8))
 
-potsjitter$AUs <- lapply(potsjitter$AU, fixauthors)
+potsjitter$AUs <- trimws(lapply(potsjitter$AU, fixauthors))
 
 potsjitter <- potsjitter %>%
   mutate(
@@ -569,7 +609,7 @@ potsjitter <- potsjitter %>%
       "<br><br>",
       "<b>Potential:</b> ",round(value,1),
       " Gt CO2/year","<br>",
-      "<b>System boundaries:</b> ", boundaries, "<br>",
+      "<b>System boundaries:</b> ", trimws(boundaries), "<br>",
       "<b>System conditions:</b> ", conditions
     ) 
   )
@@ -593,7 +633,22 @@ m <- list(
 
 ## Costs
 
+pw <- 1100
+
 rlabs <- rlabs %>%
+  separate(resourcelab, into=c("resourcecopy","lab"),sep="\n",remove=F) %>%
+  mutate(
+    resourcebreak = sub(" ","\n",resource),
+    resourcelabbreak = paste0(resourcebreak,"\n",lab)
+  )
+
+rlabs$resourcelabbreak <- gsub(
+  "Soil\nCarbon Sequestration",
+  "Soil Carbon\nSequestration",
+  rlabs$resourcelabbreak
+)
+
+plabs <- plabs %>%
   separate(resourcelab, into=c("resourcecopy","lab"),sep="\n",remove=F) %>%
   mutate(
     resourcebreak = sub(" ","\n",resource),
@@ -615,12 +670,21 @@ gg <- heatbar(costranges,"pcnt", numeric=T) +
 
 print(gg)
 
-
-ggplotly(gg, tooltip="text") %>%
+p <- ggplotly(gg, tooltip="text",autosize = F, width = pw, height = 600) %>%
+#p <- ggplotly(gg, tooltip="text") %>%
   layout(margin = m) %>%
   layout(plot_bgcolor='transparent') %>%
   layout(paper_bgcolor='transparent')
 
+p
+
+save(p,file="plots/heatbars/costs/pl.RData")
+
+library(widgetframe)
+
+path <- getwd()
+
+htmlwidgets::saveWidget(frameableWidget(p),paste0(path,'/plots/heatbars/costs/index.html'))
 
 tx  <- readLines("plots/heatbars/costs/index.html")
 tx  <- gsub(pattern = '"padding":40', replace = '"padding":0', x = tx, fixed=T)
@@ -628,7 +692,14 @@ tx  <- gsub(pattern = '"background-color:white;"', replace = '"background-color:
 writeLines(tx, con="plots/heatbars/costs/index.html")
 
 
+
 ## Potentials
+
+plabs$resourcelabbreak <- gsub(
+  "Soil\nCarbon Sequestration",
+  "Soil Carbon\nSequestration",
+  plabs$resourcelabbreak
+  )
 
 gg <- heatbar(filter(potsranges,resource!="Storage"),"pcnt", step=0.1, numeric=T) +
   geom_point(
@@ -641,14 +712,24 @@ gg <- heatbar(filter(potsranges,resource!="Storage"),"pcnt", step=0.1, numeric=T
   labs(x="",y="Potential GtCO2/year Sequestered") +
   coord_cartesian(expand=F) +
   jittertheme +
-  scale_x_continuous(breaks=seq(1,7),labels=rlabs$resourcelabbreak[rlabs$resource!="DAC"])
+  scale_x_continuous(breaks=seq(1,7),labels=plabs$resourcelabbreak[plabs$resource!="DAC"])
 
 print(gg)
 
-ggplotly(gg, tooltip="text") %>%
+p <- ggplotly(gg, tooltip="text",autosize = F, width = pw, height = 600) %>%
+#p <- ggplotly(gg, tooltip="text") %>%  
   layout(margin = m) %>%
   layout(plot_bgcolor='transparent') %>%
   layout(paper_bgcolor='transparent')
+
+p
+
+save(p,file="plots/heatbars/potentials/pl.RData")
+
+knitr::knit("plots/heatbars/costs/costs.Rmd")
+
+knitr::knit("plots/heatbars/potentials/potentials.Rmd")
+
 
 
 ### Save this, then do this
@@ -657,6 +738,11 @@ tx  <- readLines("plots/heatbars/potentials/index.html")
 tx  <- gsub(pattern = '"padding":40', replace = '"padding":0', x = tx, fixed=T)
 tx  <- gsub(pattern = '"background-color:white;"', replace = '"background-color:none;"', x = tx, fixed=T)
 writeLines(tx, con="plots/heatbars/potentials/index.html")
+
+tx  <- readLines("index_alt.html")
+tx  <- gsub(pattern = '"padding":40', replace = '"padding":0', x = tx, fixed=T)
+tx  <- gsub(pattern = '"background-color:white;"', replace = '"background-color:none;"', x = tx, fixed=T)
+writeLines(tx, con="index_alt.html")
 
 
 gg <- heatbar(costranges,"pcnt", numeric=T) +
