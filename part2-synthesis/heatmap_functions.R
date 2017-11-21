@@ -405,7 +405,7 @@ plot_boxplot <- function(
 
 
 #== Generate potential data =====
-generate_potentials <- function(data, technology, isteps) {
+generate_potentials <- function(data, technology, isteps, measure) {
   # Adjust the maximum here to change the scale
   df <- data.frame(v=isteps)
   
@@ -426,7 +426,7 @@ generate_potentials <- function(data, technology, isteps) {
   pot_range <- countranges(df, 
                            data,
                            resources,
-                           "max"
+                           measure
   )
   
   return(pot_range)

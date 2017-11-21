@@ -190,7 +190,7 @@ load("../../bitbucket/beccs/data/dataplotAll.RData") # IAM
 
 
 #==== PROCESS DATA ==========
-all_data$TI[is.na(all_data$TI)] <- all_data$CITATION[is.na(all_data$TI)] #Fix TI/CITATION mismatch
+all_data$TI[is.na(all_data$TI)] <- all_data$CITATION[is.na(all_data$TI)] #Fix TI/CITATION
 
 
 all_data <- all_data %>%
