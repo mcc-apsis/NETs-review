@@ -31,11 +31,11 @@ costsranges <- all_data %>%
   ) %>%
   group_by(technology) %>% 
   summarise(
-    pots_min = min(value, na.rm = T),
-    pots_max = max(value, na.rm = T)
+    costs_min = min(value, na.rm = T),
+    costs_max = max(value, na.rm = T)
   )
 
-write.csv(potranges,'tables/allcosts.csv')
+write.csv(costsranges,'tables/allcosts.csv')
 
 ## Pots
 
@@ -80,7 +80,7 @@ expert_judgements <- data.frame(
   technology = unique(all_sums$technology),
   pots_min = c(0.5, 0.5, 0.3, 0.5,2,NA,NA,3),
   pots_max = c(3.6, 5, 2, 5, 4, NA, NA, 6),
-  costs_min = c(5, 100, 0, 50, 50, NA, NA, 0),
+  costs_min = c(5, 100, 0, 100, 50, NA, NA, 0),
   costs_max = c(50, 200, 120, 300, 200, NA, NA, 100)
 )
 
