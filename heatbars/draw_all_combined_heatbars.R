@@ -400,6 +400,8 @@ p <- heatbar(beccsranges,"pcnt",step=2) +
 
 print(p)
 
+ggsave("plots/heatbars/BECCS/potentials/bioenergy_range_year_studies.png")
+
 tech_graphs[["BECCS"]][[4]] <- p
 
 ## special one for Storage pots
@@ -424,6 +426,10 @@ print(p)
 tech_graphs[["Storage"]][[2]] <- p
 
 tech_graphs[["BECCS"]][[5]] <- p
+
+
+
+tech_graphs[["BECCS"]][[1]]
 
 
 #################### 
@@ -452,7 +458,7 @@ for (t in tech_graphs[!is.null(tech_graphs)]) {
     print(t[[3]])
     for (ftype in c(".svg","png")) {
       if (ftype==".svg") {
-        svg(paste0("plots/heatbars/",t[[3]],"/panel.svg"),width=8,height=5)
+        svg(paste0("plots/heatbars/",t[[3]],"/panel.svg"),width=14,height=9)
       } else {
         png(paste0("plots/heatbars/",t[[3]],"/panel.png"),width=800,height=500)
       }
