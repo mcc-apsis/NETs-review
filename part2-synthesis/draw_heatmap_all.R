@@ -205,8 +205,7 @@ all_data <- all_data %>%
 #all_data$technology[which(all_data$technology == "Enhanced weathering (terrestrial and ocean)")] <- "Enhanced weathering (terrestrial and ocean) and Ocean alkalinisation"
 #all_data$technology[which(all_data$technology == "Ocean alkalinisation")]                        <- "Enhanced weathering (terrestrial and ocean) and Ocean alkalinisation"
 
-all_data <- all_data %>%
-  mutate()
+
 
 #==== PROCESS DATA ==========
 data_steps <- list()
@@ -234,7 +233,7 @@ for (k_net in unique(all_data$technology)) {
                                        !is.na(value) , 
                                        is.finite(value),
                                        potsinclude==T
-                                     ), net_sn, data_steps[[k_net]]$pot),
+                                     ), net_sn, data_steps[[k_net]]$pot, "max"),
       "cost" = generate_costs(all_data %>% filter(technology == k_net) %>%
                                 filter(
                                   !is.na(value) , 
