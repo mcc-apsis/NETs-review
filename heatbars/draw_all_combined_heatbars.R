@@ -316,7 +316,14 @@ for (t in techs) {
     filter(highest < top_n | lowest < top_n)
   p <- h1[[1]] +  geom_text_repel(data = labels, 
                                   aes(x = PYJ, y = max, label = label, angle = 90) ,
-                                  size=lsize
+                                  size=lsize,
+                                  min.segment.length = unit(0,"lines"),
+                                  point.padding = unit(0.1,"lines"),
+                                  box.padding = unit(0.5,"lines"),
+                                  #segment.color = "steelblue",
+                                  segment.alpha = 0.7,
+                                  nudge_x = 0.2,
+                                  segment.size=1
   ) + ggtitle(paste0(t," - Costs")) +
     scale_x_continuous(breaks= int_breaks) +
     ylab("Cost [US$(2011)/tCO2]") +
@@ -360,7 +367,14 @@ for (t in techs) {
     filter(highest < top_n | lowest < top_n)
   p <- h1[[1]] +  geom_text_repel(data = labels, 
                                   aes(x = PYJ, y = max, label = label, angle = 90) ,
-                                  size=lsize
+                                  size=lsize,
+                                  min.segment.length = unit(0,"lines"),
+                                  point.padding = unit(0.1,"lines"),
+                                  box.padding = unit(0.5,"lines"),
+                                  #segment.color = "steelblue",
+                                  segment.alpha = 0.7,
+                                  nudge_x = 0.2,
+                                  segment.size=1
   ) + ggtitle(paste0(t," - Potentials")) +
     labs(y="Sequestration Potential [Gt CO2/year]") +
     scale_x_continuous(breaks= int_breaks) +
@@ -418,7 +432,7 @@ p <- heatbar(storageranges,"pcnt",step=100) +
                   aes(x = resourcelabn, y = value, 
                       label = label, angle = 90) ,
                   size=lsize
-  ) + ggtitle("Storage Potential") +
+  ) + ggtitle("CO2 Storage Potential") +
   theme(text = element_text(size=fsize))
 
 print(p)
