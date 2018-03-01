@@ -152,7 +152,7 @@ plabs <- potsranges %>%
 
 image.file <- dir("icons", pattern=".png", full.names=TRUE)
 
-image.file <- image.file[!grepl("DAC",image.file)]
+image.file <- image.file[!grepl("DACCS",image.file)]
 
 image.file <- image.file[order(as.integer(sub("_.*","",sub("icons/","",image.file))))]
 npoints <- length(image.file)
@@ -357,7 +357,9 @@ for (t in techs) {
   diff <- y2-y1+2
   mid <- y1+diff/2-1
   int_breaks <- function(x, n = 5) pretty(x, n)[pretty(x, n) %% 1 == 0] 
+  
   h1<- heatbar_years(tpots, tranges, "pcnt", graph = TRUE, y = mid, w = diff, var=t, measurement="max",step=0.1,dsize=dsize)
+  
   labels <- h1[[2]] %>%
     group_by(variable) %>%
     arrange(max) %>%
@@ -408,7 +410,14 @@ p <- heatbar(beccsranges,"pcnt",step=2) +
   geom_text_repel(data = beccslabels, 
                   aes(x = resourcelabn, y = value, 
                       label = label, angle = 90) ,
-                  size=lsize
+                  size=lsize,
+                  min.segment.length = unit(0,"lines"),
+                  point.padding = unit(0.1,"lines"),
+                  box.padding = unit(0.5,"lines"),
+                  #segment.color = "steelblue",
+                  segment.alpha = 0.7,
+                  nudge_x = 0.2,
+                  segment.size=1
   ) + ggtitle("Bioenergy Potential") +
   theme(text = element_text(size=fsize))
 
@@ -431,7 +440,14 @@ p <- heatbar(storageranges,"pcnt",step=100) +
   geom_text_repel(data = storagelabels, 
                   aes(x = resourcelabn, y = value, 
                       label = label, angle = 90) ,
-                  size=lsize
+                  size=lsize,
+                  min.segment.length = unit(0,"lines"),
+                  point.padding = unit(0.1,"lines"),
+                  box.padding = unit(0.5,"lines"),
+                  #segment.color = "steelblue",
+                  segment.alpha = 0.7,
+                  nudge_x = 0.2,
+                  segment.size=1
   ) + ggtitle("CO2 Storage Potential") +
   theme(text = element_text(size=fsize))
 
@@ -732,7 +748,7 @@ gg <- heatbar(filter(potsranges,resource!="Storage"),"pcnt", step=0.1, numeric=T
   labs(x="",y="Potential GtCO2/year Sequestered") +
   coord_cartesian(expand=F) +
   jittertheme +
-  scale_x_continuous(breaks=seq(1,7),labels=plabs$resourcelabbreak[plabs$resource!="DAC"])
+  scale_x_continuous(breaks=seq(1,7),labels=plabs$resourcelabbreak[plabs$resource!="DACCS"])
 
 print(gg)
 

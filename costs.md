@@ -6,7 +6,4 @@ output:
     css: ../../../site/style.css
 ---
 
-
-```
-## Error in loadNamespace(name): there is no package called 'webshot'
-```
+![plot of chunk plotly](figure/plotly-1.png)
