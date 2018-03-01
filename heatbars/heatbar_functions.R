@@ -429,7 +429,7 @@ heatbar_years <- function(
     # ) +
     guides(fill = guide_colourbar(reverse = TRUE)) +
     ylines + labs(
-      x = "Year",y="Costs in $US(2011)/tCO2"
+      x = "Publication Year",y="Costs in $US(2011)/tCO2"
     )
 
   print(p)
