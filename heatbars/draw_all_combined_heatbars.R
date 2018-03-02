@@ -536,6 +536,59 @@ for (t in tech_graphs[!is.null(tech_graphs)]) {
   }
 }
 
+for (t in tech_graphs[!is.null(tech_graphs)]) {
+  if (!is.null(t)) {
+    print(t[[3]])
+    for (ftype in c(".svg","png")) {
+      if (ftype==".svg") {
+        svg(paste0("plots/heatbars/panels/",t[[3]],".svg"),width=14,height=9)
+      } else {
+        png(paste0("plots/heatbars/panels/",t[[3]],".png"),width=800,height=500)
+      }
+      if (!is.null(t[[2]]) & !is.null(t[[1]])) {
+        if (t[[3]]=="Enhanced weathering") {
+          int_breaks <- function(x, n = 3) pretty(x, n)[pretty(x, n) %% 1 == 0] 
+          grid_arrange_shared_legend(
+            t[[1]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Enhanced\nweathering"),
+            t[[4]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Ocean\nalkalinisation") +ylab(""),
+            t[[2]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Enhanced\nweathering"),
+            t[[5]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Ocean\nalkalinisation") +ylab(""), 
+            ncol=4
+          )
+        } else if (t[[3]]=="BECCS"){
+          g <- ggplotGrob(t[[1]] + theme(legend.position="bottom"))$grobs
+          legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
+          lay <- rbind(c(1,2),c(3,3),c(4,4))
+          lwidth <- sum(legend$width)
+          grid.arrange(
+            t[[1]]+ theme(legend.position="none"),
+            t[[4]]+ theme(legend.position="none"),
+            t[[5]]+ theme(legend.position="none"),
+            legend,
+            layout_matrix=lay,
+            heights= unit.c(unit(0.45, "npc"),unit(0.45, "npc"), unit(0.1, "npc"))
+          )
+        } else {
+          grid_arrange_shared_legend(t[[1]],t[[2]],ncol=2)
+        }
+      } else if (!is.null(t[[1]])) {
+        #grid.arrange(t[[1]],ncol=1)
+        print(t[[1]])
+      } else if (!is.null(t[[2]])) {
+        print(t[[2]])
+      }
+      dev.off()
+      if (!is.null(t[[3]])) {
+        if (t[[3]]=="Enhanced weathering") {
+          png(paste0("plots/heatbars/",t[[3]],"/panel_alt.png"),width=800,height=500)
+          grid_arrange_shared_legend(t[[1]],t[[2]],t[[4]],t[[5]],ncol=2,nrow=2)
+          dev.off()
+        }
+      }  
+    }
+  }
+}
+
 
 vars = c("costs","potentials")
 
