@@ -623,7 +623,9 @@ costsjitter <- costs %>%
 costrange <- costs %>%
   filter(measurement %in% c("max","min"), !is.na(value)) %>%
   left_join(select(costsjitter,label, TI, resourcelab,`Data categorisationyear`,`Data categorisationsystem conditions`)) %>%
-  spread(measurement, value)
+
+costrange <- unique(costrange) %>%
+    spread(measurement, value)
 
 costrange$resourcelabn <- as.numeric(factor(costrange$resourcelab)) #+ runif(length(costrange$resourcelab),-0.4,0.4)
 
@@ -812,6 +814,11 @@ p <- ggplotly(gg, tooltip="text",autosize = F, width = pw, height = 600) %>%
   layout(paper_bgcolor='transparent')
 
 p
+
+of <- all_data %>%
+  filter(
+    technology=="Ocean fertilization"
+  )
 
 save(p,file="plots/heatbars/potentials/pl.RData")
 
