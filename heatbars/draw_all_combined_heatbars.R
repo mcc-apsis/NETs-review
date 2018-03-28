@@ -320,8 +320,8 @@ for (t in techs) {
                                   min.segment.length = unit(0,"lines"),
                                   point.padding = unit(0.1,"lines"),
                                   box.padding = unit(0.5,"lines"),
-                                  #segment.color = "steelblue",
-                                  segment.alpha = 0.7,
+                                  segment.color = "grey",
+                                  segment.alpha = 0.6,
                                   nudge_x = 0.2,
                                   segment.size=1
   ) + ggtitle(paste0(t," - Costs")) +
@@ -373,8 +373,8 @@ for (t in techs) {
                                   min.segment.length = unit(0,"lines"),
                                   point.padding = unit(0.1,"lines"),
                                   box.padding = unit(0.5,"lines"),
-                                  #segment.color = "steelblue",
-                                  segment.alpha = 0.7,
+                                  segment.color = "grey",
+                                  segment.alpha = 0.6,
                                   nudge_x = 0.2,
                                   segment.size=1
   ) + ggtitle(paste0(t," - Potentials")) +
@@ -410,14 +410,14 @@ p <- heatbar(beccsranges,"pcnt",step=2) +
   geom_text_repel(data = beccslabels, 
                   aes(x = resourcelabn, y = value, 
                       label = label, angle = 90) ,
-                  size=lsize,
-                  min.segment.length = unit(0,"lines"),
-                  point.padding = unit(0.1,"lines"),
-                  box.padding = unit(0.5,"lines"),
+                  size=lsize#,
+                  #min.segment.length = unit(0,"lines"),
+                  #point.padding = unit(0.1,"lines"),
+                  #box.padding = unit(0.5,"lines")#,
                   #segment.color = "steelblue",
-                  segment.alpha = 0.7,
-                  nudge_x = 0.2,
-                  segment.size=1
+                  #segment.alpha = 0.7#,
+                  #nudge_x = 0.2,
+                  #segment.size=1
   ) + ggtitle("Bioenergy Potential") +
   theme(text = element_text(size=fsize))
 
@@ -429,6 +429,9 @@ tech_graphs[["BECCS"]][[4]] <- p
 
 ## special one for Storage pots
 
+storagelabelsx <- storagelabels %>%
+  filter(highest < 2 | lowest < 2)
+
 p <- heatbar(storageranges,"pcnt",step=100) +
   geom_point(
     data=storagejitter,
@@ -437,17 +440,17 @@ p <- heatbar(storageranges,"pcnt",step=100) +
     alpha=0.3
   ) +
   labs(x="Sink",y="Total Storage Potential [Gt CO2]") +
-  geom_text_repel(data = storagelabels, 
+  geom_text_repel(data = storagelabelsx, 
                   aes(x = resourcelabn, y = value, 
                       label = label, angle = 90) ,
-                  size=lsize,
-                  min.segment.length = unit(0,"lines"),
-                  point.padding = unit(0.1,"lines"),
-                  box.padding = unit(0.5,"lines"),
-                  #segment.color = "steelblue",
-                  segment.alpha = 0.7,
-                  nudge_x = 0.2,
-                  segment.size=1
+                  size=lsize#,
+                  # min.segment.length = unit(0,"lines"),
+                  # point.padding = unit(0.1,"lines"),
+                  # box.padding = unit(0.5,"lines"),
+                  # segment.color = "grey",
+                  # segment.alpha = 0.6,
+                  # nudge_x = 0.2,
+                  # segment.size=1
   ) + ggtitle("CO2 Storage Potential") +
   theme(text = element_text(size=fsize))
 
