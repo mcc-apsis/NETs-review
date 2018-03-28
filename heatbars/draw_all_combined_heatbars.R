@@ -489,8 +489,11 @@ tech_graphs["Enhanced weathering"][[1]][[1]] <- p
 for (t in tech_graphs[!is.null(tech_graphs)]) {
   if (!is.null(t)) {
     print(t[[3]])
-    for (ftype in c(".svg","png")) {
-      if (ftype==".svg") {
+    for (ftype in c(".svg","png","pdf")) {
+      if (ftype=="pdf") {
+        pdf(paste0("plots/heatbars/",t[[3]],"/panel.pdf"),width=14,height=9)
+      }
+      else if (ftype==".svg") {
         svg(paste0("plots/heatbars/",t[[3]],"/panel.svg"),width=14,height=9)
       } else {
         png(paste0("plots/heatbars/",t[[3]],"/panel.png"),width=800,height=500)
@@ -542,8 +545,10 @@ for (t in tech_graphs[!is.null(tech_graphs)]) {
 for (t in tech_graphs[!is.null(tech_graphs)]) {
   if (!is.null(t)) {
     print(t[[3]])
-    for (ftype in c(".svg","png")) {
-      if (ftype==".svg") {
+    for (ftype in c(".svg","png","pdf")) {
+      if (ftype=="pdf") {
+        pdf(paste0("plots/heatbars/panels/",t[[3]],".pdf"),width=14,height=9)
+      } else if (ftype==".svg") {
         svg(paste0("plots/heatbars/panels/",t[[3]],".svg"),width=14,height=9)
       } else {
         png(paste0("plots/heatbars/panels/",t[[3]],".png"),width=800,height=500)
