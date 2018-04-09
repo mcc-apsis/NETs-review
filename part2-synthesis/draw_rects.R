@@ -7,6 +7,8 @@ library(ggplot2)
 load("data/all_data.RData")
 
 
+
+
 #############
 ## Costs
 costs <- all_data %>%
