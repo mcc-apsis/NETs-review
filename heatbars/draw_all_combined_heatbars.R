@@ -175,7 +175,11 @@ names(potspics) <- plabs$resourcelab
 beccs <- filter(pots, technology=="BECCS") %>%
   mutate(variable=`Data categorisationresource`) %>%
   filter(variable!="?",variable!="Misc") %>%
-  mutate(value = (value+ 1.432129) / 0.04982206)
+  mutate(valueOrg = (value+ 1.432129) / 0.04982206, 
+         valueNew = (value / 0.05506451)
+         ) %>% 
+  filter(!is.na(valueNew)) %>% 
+  select(AU, PY, TI, variable, year, potsinclude, measurement, value, valueOrg, valueNew)
 
 
 

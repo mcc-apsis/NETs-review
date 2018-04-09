@@ -35,7 +35,7 @@ all_data$technology[all_data$technology=="Enhanced weathering (terrestrial and o
 
 # Curtail very large ew value to 1000 # 
 #750 for IPCC [& all_data$technology=="Enhanced weathering"] removed this to apply to all large values
-# max_cost <- 750
+max_cost <- 750
 # beyondCosts <- all_data %>% filter(value> max_cost & !is.na(value) & variable=="cost" ) #get costs above
 all_data[all_data$value> max_cost & !is.na(all_data$value) & all_data$variable=="cost"& all_data$technology=="Enhanced weathering" ,]$value = max_cost
 
@@ -565,19 +565,19 @@ costrange$conditions <- lapply(costrange$`Data categorisationsystem conditions`,
 
 costrange$AUs <- lapply(costrange$AU, fixauthors)
 
-costrange <- costrange %>%
-  mutate(
-    ttip=paste0(
-      trimws(AUs)," (",PY,") ",
-      "<br>",
-      trimws(TIs),
-      "<br><br>",
-      "Cost range: ",round(min,2),"-",round(max,2),
-      " $/tCO2","<br>",
-      "<b>System boundaries:</b> ", trimws(boundaries), "<br>",
-      "<b>System conditions:</b> ", trimws(conditions)
-    ) 
-  )
+# costrange <- costrange %>%
+#   mutate(
+#     ttip=paste0(
+#       trimws(AUs)," (",PY,") ",
+#       "<br>",
+#       trimws(TIs),
+#       "<br><br>",
+#       "Cost range: ",round(min,2),"-",round(max,2),
+#       " $/tCO2","<br>",
+#       "<b>System boundaries:</b> ", trimws(boundaries), "<br>",
+#       "<b>System conditions:</b> ", trimws(conditions)
+#     ) 
+#   )
 
 
 
@@ -707,6 +707,7 @@ cost_plot <- gg
 
 
 ## Potentials
+potsBox <- read.csv("tables/allpotentials.csv")
 
 plabs$resourcelabbreak <- gsub(
   "Soil\nCarbon Sequestration",
