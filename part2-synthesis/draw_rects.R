@@ -21,7 +21,8 @@ costs <- all_data %>%
     costs_q25 = quantile(value, .25, na.rm = T),
     costs_q75 = quantile(value, .75, na.rm = T),
     costs_min = min(value, na.rm = T),
-    costs_max = max(value, na.rm = T)
+    costs_max = max(value, na.rm = T), 
+    costs_mean = mean(value, na.rm = T)
   )
 
 costsranges <- all_data %>%
@@ -53,7 +54,8 @@ pots <- all_data %>%
     pots_q25 = quantile(value, .25, na.rm = T),
     pots_q75 = quantile(value, .75, na.rm = T),
     pots_min = min(value, na.rm = T),
-    pots_max = max(value, na.rm = T)
+    pots_max = max(value, na.rm = T),
+    pots_mean = mean(value, na.rm = T)
   )
 
 

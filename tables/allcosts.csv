@@ -1,9 +1,9 @@
-"","technology","costs_q25","costs_q75","costs_min","costs_max"
-"1","Afforestation and Reforestation",4.602272727,30,0.1,237
-"2","BECCS",40,121.75,14,400
-"3","Biochar",90,260.5,8,345
-"4","DACCS",95.25,483,25,1000
-"5","Enhanced weathering (terrestrial and ocean)",23,253.713188220231,14.9863760217984,3459.66709346991
-"6","Ocean alkalinisation",68.795,128.985,18.41,261
-"7","Ocean fertilization",1.25,21.5,0,93.15
-"8","Soil Carbon Sequestration",40,80,20,100
+"","technology","costs_q25","costs_q75","costs_min","costs_max","costs_mean"
+"1","Afforestation and Reforestation",4.602272727,30,0.1,237,27.959397727325
+"2","BECCS",40,121.75,14,400,95.3088235294118
+"3","Biochar",90,260.5,8,345,169.857142857143
+"4","DACCS",95.25,483,25,1000,283.1
+"5","Enhanced weathering (terrestrial and ocean)",23,253.713188220231,14.9863760217984,3459.66709346991,420.175518531053
+"6","Ocean alkalinisation",68.795,128.985,18.41,261,102.717272727273
+"7","Ocean fertilization",1.25,21.5,0,93.15,19.3038461538462
+"8","Soil Carbon Sequestration",40,80,20,100,60
