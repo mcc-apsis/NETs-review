@@ -1,0 +1,62 @@
+body {
+	font: 16px Calibri, "Gill Sans", "Trebuchet MS", sans-serif;
+	line-height: 1.25;
+	margin: 0;
+	padding: 0;
+}
+
+#main {
+    align: center;
+    margin-left: auto;
+    margin-right: auto;
+
+		width: 1000px;
+    border-left: 1px solid grey;
+    border-right: 1px solid grey;
+    padding: 10px;
+}
+
+/*.html-widget {
+	margin-left: -40px;
+}*/
+
+div.main-container {
+	width: 1100px;
+	padding:0px;
+	margin-left: -20px;
+}
+
+img {
+  display: block;
+  align: center;
+  margin-left: auto;
+  margin-right: auto;
+	width: 80%;
+}
+
+.hovertext > path {
+	fill: black;
+}
+
+div.inner {
+  align: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+}
+
+/*.iframe-holder {
+    width:106%;
+    margin-left: -4%;
+}*/
+
+iframe {
+    width:100%;
+    height:100%;
+    background-color: none;
+    border: none;
+}
+
+.svg-container {
+  border: "1px solid black";
+}

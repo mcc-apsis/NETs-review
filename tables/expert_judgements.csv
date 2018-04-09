@@ -1,0 +1,9 @@
+"","technology","pots_min","pots_max","costs_min","costs_max"
+"1","Afforestation and Reforestation",0.5,3.6,5,50
+"2","BECCS",0.5,5,100,200
+"3","Biochar",0.3,2,0,120
+"4","DACCS",0.5,5,100,300
+"5","Enhanced weathering (terrestrial and ocean)",2,4,50,200
+"6","Ocean alkalinisation",NA,NA,NA,NA
+"7","Ocean fertilization",NA,NA,NA,NA
+"8","Soil Carbon Sequestration",3,6,0,100
