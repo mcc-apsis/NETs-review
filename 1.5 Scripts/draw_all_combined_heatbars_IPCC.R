@@ -657,15 +657,21 @@ rlabs$resourcelabbreak <- gsub(
   "Soil Carbon\nSequestration",
   rlabs$resourcelabbreak
 )
+## bring in interQ and means
+costBox <- read.csv("tables/allcosts.csv")
+costBox <- costBox %>%  
+  mutate(technology = as.character(technology))
+costBox$technology[costBox$technology=="Enhanced weathering (terrestrial and ocean)"] <- "Enhanced weathering"
 
-plabs <- plabs %>%
-  separate(resourcelab, into=c("resourcecopy","lab"),sep="\n",remove=F) %>%
-  mutate(
-    resourcebreak = sub(" ","\n",resource),
-    resourcelabbreak = paste0(resourcebreak,"\n",lab)
-  )
+costBox <- right_join(costBox, rlabs, by = c("technology" = "resource")) 
+
+
+ggplot()+
+  geom_crossbar(data = costBox, aes(x = resourcelab,y = costs_mean, ymin = costs_q25, ymax = costs_q75))
 
 gg <- heatbar(costranges,"pcnt", numeric=T) +
+  geom_crossbar(data = costBox, 
+                aes(x = as.numeric(factor(resourcelab)),y = costs_mean, ymin = costs_q25, ymax = costs_q75)) +
   # geom_linerange(
   #   data=costrange,
   #   aes(resourcelabn ,ymin=min, ymax=max, text=ttip),
@@ -707,16 +713,33 @@ cost_plot <- gg
 
 
 ## Potentials
-potsBox <- read.csv("tables/allpotentials.csv")
+
 
 plabs$resourcelabbreak <- gsub(
   "Soil\nCarbon Sequestration",
   "Soil Carbon\nSequestration",
   plabs$resourcelabbreak
   )
+# import interQ and append labels for plotting
+potsBox <- read.csv("tables/allpotentials.csv")
+
+potsBox <- potsBox %>% filter(technology != "Storage") %>% 
+  mutate(technology = as.character(technology))
+potsBox$technology[potsBox$technology=="Enhanced weathering (terrestrial and ocean)"] <- "Enhanced weathering"
+
+DAC_potsBox <- data.frame(X = 8, technology = "DAC", pots_q25 = NA, pots_q75 = NA, pots_min = NA, pots_max = NA)
+
+potsBox<- bind_rows(potsBox, DAC_potsBox)
+potsBox <- right_join(potsBox, plabs, by = c("technology" = "resource")) 
+
+ggplot()+
+  geom_crossbar(data = potsBox, aes(x = resourcelab, y = pots_mean,
+                                   ymin = pots_q25, ymax = pots_q75))
 
 gg <- heatbar(filter(potsranges,resource!="Storage"),"pcnt", step=0.1, numeric=T) +
-  # geom_point(
+  geom_crossbar(data = potsBox, aes(x = as.numeric(factor(resourcelab)), y = pots_mean,
+                                    ymin = pots_q25, ymax = pots_q75))+
+    # geom_point(
   #   data=filter(potsjitter,technology!="Storage"),
   #   aes(resourcelabn ,y=value, text=ttip),
   #   size=1,
@@ -731,7 +754,11 @@ gg <- heatbar(filter(potsranges,resource!="Storage"),"pcnt", step=0.1, numeric=T
 
 print(gg)
 
-grid_arrange_shared_legend(cost_plot,gg)
+combined <- grid_arrange_shared_legend(cost_plot,gg)
+
+ggsave("plots/heat_ranges.pdf", plot = combined, width = 7, height = 7)
+
+pdf("plots/heat_ranges.pdf", width = 5, height = 7)
 
 #PLotly and variations, inc icons
 # p <- ggplotly(gg, tooltip="text",autosize = F, width = pw, height = 600) %>%
