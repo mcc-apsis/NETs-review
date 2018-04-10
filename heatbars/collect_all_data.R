@@ -88,7 +88,7 @@ all_data$value[
   all_data$technology=="Bioenergy" & all_data$variable=="totalPotential"
   ] <- all_data$value[
     all_data$technology=="Bioenergy" & all_data$variable=="totalPotential"
-    ] * 0.04982206 - 1.432129
+    ] * 0.05506451
 
 all_data$value[
   all_data$technology=="Bioenergy" & all_data$variable=="totalPotential" &

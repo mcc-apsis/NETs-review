@@ -175,7 +175,7 @@ names(potspics) <- plabs$resourcelab
 beccs <- filter(pots, technology=="BECCS") %>%
   mutate(variable=`Data categorisationresource`) %>%
   filter(variable!="?",variable!="Misc") %>%
-  mutate(value = (value+ 1.432129) / 0.04982206)
+  mutate(value = value / 0.05506451)
 
 
 
