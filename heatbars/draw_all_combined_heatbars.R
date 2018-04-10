@@ -175,16 +175,8 @@ names(potspics) <- plabs$resourcelab
 beccs <- filter(pots, technology=="BECCS") %>%
   mutate(variable=`Data categorisationresource`) %>%
   filter(variable!="?",variable!="Misc") %>%
-  mutate(value = (value+ 1.432129) / 0.04982206
-         # valueWintercept = value, #CO2
-         # valueEJ_orig = (value+ 1.432129) / 0.04982206, #as captured in EJ
-         # valueCO_nullintercpt = (valueEJ_orig * 0.05506451) #new CO2 estimate
-         ) 
-# %>% 
-  # filter(!is.na(value)) %>% 
-  # select(AU, PY, TI, variable, year, potsinclude, measurement, valueEJ_orig, valueWintercept, valueCO_nullintercpt )
+  mutate(value = value / 0.05506451)
 
-# write.csv(beccs, file = "tables/beccs.csv")
 
 
 beccs$variable[beccs$variable=="Bioenergy Crops"] <- " Bioenergy \nCrops "

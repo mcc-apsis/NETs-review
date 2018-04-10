@@ -3,8 +3,7 @@
 <defs>
 <g>
 <symbol overflow="visible" id="glyph0-0">
-<path style="stroke:none;" d="M 0 -2.589844 L -9.164063 -0.15625 L -9.164063 -1.402344 L -3.15625 -2.792969 C -2.527344 -2.941406 -1.902344 -3.070313 -1.28125 -3.183594 C -2.257813 -3.410156 -2.824219 -3.546875 -2.976563 -3.59375 L -9.1640</svg>
-9844 L -9.164063 -6.800781 L -4.527344 -8.113281 C -3.375 -8.441406 -2.292969 -8.679688 -1.28125 -8.828125 C -1.859375 -8.941406 -2.523438 -9.09375 -3.277344 -9.285156 L -9.164063 -10.722656 L -9.164063 -11.941406 L 0 -9.429688 L 0 -8.257813 L -6.984375 -6.328125 C -7.566406 -6.164063 -7.921875 -6.066406 -8.058594 -6.039063 C -7.632813 -5.941406 -7.277344 -5.851563 -6.984375 -5.769531 L 0 -3.824219 Z M 0 -2.589844 "/>
+<path style="stroke:none;" d="M 0 -2.589844 L -9.164063 -0.15625 L -9.164063 -1.402344 L -3.15625 -2.792969 C -2.527344 -2.941406 -1.902344 -3.070313 -1.28125 -3.183594 C -2.257813 -3.410156 -2.824219 -3.546875 -2.976563 -3.59375 L -9.164063 -5.339844 L -9.164063 -6.800781 L -4.527344 -8.113281 C -3.375 -8.441406 -2.292969 -8.679688 -1.28125 -8.828125 C -1.859375 -8.941406 -2.523438 -9.09375 -3.277344 -9.285156 L -9.164063 -10.722656 L -9.164063 -11.941406 L 0 -9.429688 L 0 -8.257813 L -6.984375 -6.328125 C -7.566406 -6.164063 -7.921875 -6.066406 -8.058594 -6.039063 C -7.632813 -5.941406 -7.277344 -5.851563 -6.984375 -5.769531 L 0 -3.824219 Z M 0 -2.589844 "/>
 </symbol>
 <symbol overflow="visible" id="glyph0-1">
 <path style="stroke:none;" d="M -7.871094 -0.851563 L -9.164063 -0.851563 L -9.164063 -1.976563 L -7.871094 -1.976563 Z M 0 -0.851563 L -6.640625 -0.851563 L -6.640625 -1.976563 L 0 -1.976563 Z M 0 -0.851563 "/>
@@ -358,12 +357,12 @@
 <clipPath id="clip5">
   <path d="M 503.121094 610.933594 L 589.519531 610.933594 L 589.519531 628.214844 L 503.121094 628.214844 Z M 503.121094 610.933594 "/>
 </clipPath>
-<image id="image866" width="21" height="1" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAABCAIAAAC+MnJMAAAABmJLR0QA/wD/AP+gvaeTAAAAN0lEQVQImWP8YK3AgApY5DlYJDiYxTmZRLkYRTgZeQQZeAQZuAUZeAQYeAQZmAUYmAUYmPkhDAB7QALsycEVlQAAAABJRU5ErkJggg=="/>
+<image id="image10" width="21" height="1" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAABCAIAAAC+MnJMAAAABmJLR0QA/wD/AP+gvaeTAAAAN0lEQVQImWP8YK3AgApY5DlYJDiYxTmZRLkYRTgZeQQZeAQZuAUZeAQYeAQZmAUYmAUYmPkhDAB7QALsycEVlQAAAABJRU5ErkJggg=="/>
 <pattern id="pattern0" patternUnits="userSpaceOnUse" width="21" height="1"  patternTransform="matrix(4.114286,0,0,17.28,503.122934,610.934009)">
-  <use xlink:href="#image866"/>
+  <use xlink:href="#image10"/>
 </pattern>
 </defs>
-<g id="surface862">
+<g id="surface6">
 <rect x="0" y="0" width="1008" height="648" style="fill:rgb(100%,100%,100%);fill-opacity:1;stroke:none;"/>
 <g clip-path="url(#clip1)" clip-rule="nonzero">
 <path style="fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;stroke-width:1.066978;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(100%,100%,100%);stroke-opacity:1;stroke-miterlimit:10;" d="M 0 605.265625 L 504 605.265625 L 504 0 L 0 0 Z M 0 605.265625 "/>
