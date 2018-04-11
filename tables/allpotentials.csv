@@ -1,9 +1,8 @@
-"","technology","pots_q25","pots_q75","pots_min","pots_max"
-"1","Afforestation and Reforestation",3.502,5.665,0.733,7.333
-"2","BECCS",3.3038706,9.663821505,1,85.23986148
-"3","Biochar",1.8,4.771,0.9,34.865
-"4","Enhanced weathering (terrestrial and ocean)",2.093735,13.85425,0.23855,95
-"5","Ocean alkalinisation",6.175,44.4975,1,99.09
-"6","Ocean fertilization",2.36665,13.533125,0.367,44.04
-"7","Soil Carbon Sequestration",1.7475,5.01,0.35,11.37
-"8","Storage",160,880,5,13500
+"","technology","pots_q25","pots_q75","pots_q10","pots_q90","pots_min","pots_max"
+"1","Afforestation and Reforestation",3.502,5.665,2.3248,6.5119,0.733,7.333
+"2","BECCS",3.3038706,9.663821505,2.042893321,21.018123467,1,85.23986148
+"3","Biochar",1.8,4.771,1.2,11.9275,0.9,34.865
+"4","Enhanced weathering (terrestrial and ocean)",2.093735,28.9,0.84865,91.54,0.23855,99.09
+"5","Ocean fertilization",2.36665,13.533125,1.15238,24.7725,0.367,44.04
+"6","Soil Carbon Sequestration",1.7475,5.01,0.596,8.363,0.35,11.37
+"7","Storage",160,880,99,3900,5,13500
