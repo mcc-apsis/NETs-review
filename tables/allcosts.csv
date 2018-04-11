@@ -1,8 +1,8 @@
-"","technology","costs_q25","costs_q75","costs_q10","costs_q90","costs_min","costs_max"
-"1","Afforestation and Reforestation",4.602272727,30,1.363636364,65.81,0.1,237
-"2","BECCS",40,121.75,26.4,198.3,14,400
-"3","Biochar",90,260.5,41,318,8,345
-"4","DACCS",95.25,483,51.9,600,25,1000
-"5","Enhanced weathering (terrestrial and ocean)",40,143.5,19.364,322.541101152369,14.9863760217984,3459.66709346991
-"6","Ocean fertilization",1.25,21.5,0,72.805,0,93.15
-"7","Soil Carbon Sequestration",40,80,28,92,20,100
+"","technology","costs_q25","costs_q75","costs_q10","costs_q90","costs_min","costs_max","costs_mean","costs_min_expert","costs_max_expert"
+"1","Afforestation and Reforestation",4.602272727,30,1.363636364,65.81,0.1,237,27.959397727325,5,50
+"2","BECCS",40,121.75,26.4,198.3,14,400,95.3088235294118,100,200
+"3","Biochar",90,260.5,41,318,8,345,169.857142857143,0,120
+"4","DACCS",95.25,483,51.9,600,25,1000,283.1,100,300
+"5","Enhanced weathering (terrestrial and ocean)",40,143.5,19.364,322.541101152369,14.9863760217984,3459.66709346991,239.148008236023,50,200
+"6","Ocean fertilization",1.25,21.5,0,72.805,0,93.15,19.3038461538462,NA,NA
+"7","Soil Carbon Sequestration",40,80,28,92,20,100,60,0,100
