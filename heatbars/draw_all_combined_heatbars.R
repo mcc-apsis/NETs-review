@@ -152,7 +152,7 @@ plabs <- potsranges %>%
 
 image.file <- dir("icons", pattern=".png", full.names=TRUE)
 
-image.file <- image.file[!grepl("DAC",image.file)]
+image.file <- image.file[!grepl("DACCS",image.file)]
 
 image.file <- image.file[order(as.integer(sub("_.*","",sub("icons/","",image.file))))]
 npoints <- length(image.file)
@@ -175,7 +175,7 @@ names(potspics) <- plabs$resourcelab
 beccs <- filter(pots, technology=="BECCS") %>%
   mutate(variable=`Data categorisationresource`) %>%
   filter(variable!="?",variable!="Misc") %>%
-  mutate(value = (value+ 1.432129) / 0.04982206)
+  mutate(value = value / 0.05506451)
 
 
 
@@ -316,7 +316,14 @@ for (t in techs) {
     filter(highest < top_n | lowest < top_n)
   p <- h1[[1]] +  geom_text_repel(data = labels, 
                                   aes(x = PYJ, y = max, label = label, angle = 90) ,
-                                  size=lsize
+                                  size=lsize,
+                                  min.segment.length = unit(0,"lines"),
+                                  point.padding = unit(0.1,"lines"),
+                                  box.padding = unit(0.5,"lines"),
+                                  segment.color = "grey",
+                                  segment.alpha = 0.6,
+                                  nudge_x = 0.2,
+                                  segment.size=1
   ) + ggtitle(paste0(t," - Costs")) +
     scale_x_continuous(breaks= int_breaks) +
     ylab("Cost [US$(2011)/tCO2]") +
@@ -350,7 +357,9 @@ for (t in techs) {
   diff <- y2-y1+2
   mid <- y1+diff/2-1
   int_breaks <- function(x, n = 5) pretty(x, n)[pretty(x, n) %% 1 == 0] 
+  
   h1<- heatbar_years(tpots, tranges, "pcnt", graph = TRUE, y = mid, w = diff, var=t, measurement="max",step=0.1,dsize=dsize)
+  
   labels <- h1[[2]] %>%
     group_by(variable) %>%
     arrange(max) %>%
@@ -360,7 +369,14 @@ for (t in techs) {
     filter(highest < top_n | lowest < top_n)
   p <- h1[[1]] +  geom_text_repel(data = labels, 
                                   aes(x = PYJ, y = max, label = label, angle = 90) ,
-                                  size=lsize
+                                  size=lsize,
+                                  min.segment.length = unit(0,"lines"),
+                                  point.padding = unit(0.1,"lines"),
+                                  box.padding = unit(0.5,"lines"),
+                                  segment.color = "grey",
+                                  segment.alpha = 0.6,
+                                  nudge_x = 0.2,
+                                  segment.size=1
   ) + ggtitle(paste0(t," - Potentials")) +
     labs(y="Sequestration Potential [Gt CO2/year]") +
     scale_x_continuous(breaks= int_breaks) +
@@ -394,15 +410,27 @@ p <- heatbar(beccsranges,"pcnt",step=2) +
   geom_text_repel(data = beccslabels, 
                   aes(x = resourcelabn, y = value, 
                       label = label, angle = 90) ,
-                  size=lsize
+                  size=lsize#,
+                  #min.segment.length = unit(0,"lines"),
+                  #point.padding = unit(0.1,"lines"),
+                  #box.padding = unit(0.5,"lines")#,
+                  #segment.color = "steelblue",
+                  #segment.alpha = 0.7#,
+                  #nudge_x = 0.2,
+                  #segment.size=1
   ) + ggtitle("Bioenergy Potential") +
   theme(text = element_text(size=fsize))
 
 print(p)
 
+ggsave("plots/heatbars/BECCS/potentials/bioenergy_range_year_studies.png")
+
 tech_graphs[["BECCS"]][[4]] <- p
 
 ## special one for Storage pots
+
+storagelabelsx <- storagelabels %>%
+  filter(highest < 2 | lowest < 2)
 
 p <- heatbar(storageranges,"pcnt",step=100) +
   geom_point(
@@ -412,11 +440,18 @@ p <- heatbar(storageranges,"pcnt",step=100) +
     alpha=0.3
   ) +
   labs(x="Sink",y="Total Storage Potential [Gt CO2]") +
-  geom_text_repel(data = storagelabels, 
+  geom_text_repel(data = storagelabelsx, 
                   aes(x = resourcelabn, y = value, 
                       label = label, angle = 90) ,
-                  size=lsize
-  ) + ggtitle("Storage Potential") +
+                  size=lsize#,
+                  # min.segment.length = unit(0,"lines"),
+                  # point.padding = unit(0.1,"lines"),
+                  # box.padding = unit(0.5,"lines"),
+                  # segment.color = "grey",
+                  # segment.alpha = 0.6,
+                  # nudge_x = 0.2,
+                  # segment.size=1
+  ) + ggtitle("CO2 Storage Potential") +
   theme(text = element_text(size=fsize))
 
 print(p)
@@ -424,6 +459,10 @@ print(p)
 tech_graphs[["Storage"]][[2]] <- p
 
 tech_graphs[["BECCS"]][[5]] <- p
+
+
+
+tech_graphs[["BECCS"]][[1]]
 
 
 #################### 
@@ -450,11 +489,69 @@ tech_graphs["Enhanced weathering"][[1]][[1]] <- p
 for (t in tech_graphs[!is.null(tech_graphs)]) {
   if (!is.null(t)) {
     print(t[[3]])
-    for (ftype in c(".svg","png")) {
-      if (ftype==".svg") {
-        svg(paste0("plots/heatbars/",t[[3]],"/panel.svg"),width=8,height=5)
+    for (ftype in c(".svg","png","pdf")) {
+      if (ftype=="pdf") {
+        pdf(paste0("plots/heatbars/",t[[3]],"/panel.pdf"),width=14,height=9)
+      }
+      else if (ftype==".svg") {
+        svg(paste0("plots/heatbars/",t[[3]],"/panel.svg"),width=14,height=9)
       } else {
         png(paste0("plots/heatbars/",t[[3]],"/panel.png"),width=800,height=500)
+      }
+      if (!is.null(t[[2]]) & !is.null(t[[1]])) {
+        if (t[[3]]=="Enhanced weathering") {
+          int_breaks <- function(x, n = 3) pretty(x, n)[pretty(x, n) %% 1 == 0] 
+          grid_arrange_shared_legend(
+            t[[1]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Enhanced\nweathering"),
+            t[[4]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Ocean\nalkalinisation") +ylab(""),
+            t[[2]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Enhanced\nweathering"),
+            t[[5]] + scale_x_continuous(breaks= int_breaks) + ggtitle("Ocean\nalkalinisation") +ylab(""), 
+            ncol=4
+          )
+        } else if (t[[3]]=="BECCS"){
+          g <- ggplotGrob(t[[1]] + theme(legend.position="bottom"))$grobs
+          legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
+          lay <- rbind(c(1,2),c(3,3),c(4,4))
+          lwidth <- sum(legend$width)
+          grid.arrange(
+            t[[1]]+ theme(legend.position="none"),
+            t[[4]]+ theme(legend.position="none"),
+            t[[5]]+ theme(legend.position="none"),
+            legend,
+            layout_matrix=lay,
+            heights= unit.c(unit(0.45, "npc"),unit(0.45, "npc"), unit(0.1, "npc"))
+          )
+        } else {
+          grid_arrange_shared_legend(t[[1]],t[[2]],ncol=2)
+        }
+      } else if (!is.null(t[[1]])) {
+        #grid.arrange(t[[1]],ncol=1)
+        print(t[[1]])
+      } else if (!is.null(t[[2]])) {
+        print(t[[2]])
+      }
+      dev.off()
+      if (!is.null(t[[3]])) {
+        if (t[[3]]=="Enhanced weathering") {
+          png(paste0("plots/heatbars/",t[[3]],"/panel_alt.png"),width=800,height=500)
+          grid_arrange_shared_legend(t[[1]],t[[2]],t[[4]],t[[5]],ncol=2,nrow=2)
+          dev.off()
+        }
+      }  
+    }
+  }
+}
+
+for (t in tech_graphs[!is.null(tech_graphs)]) {
+  if (!is.null(t)) {
+    print(t[[3]])
+    for (ftype in c(".svg","png","pdf")) {
+      if (ftype=="pdf") {
+        pdf(paste0("plots/heatbars/panels/",t[[3]],".pdf"),width=14,height=9)
+      } else if (ftype==".svg") {
+        svg(paste0("plots/heatbars/panels/",t[[3]],".svg"),width=14,height=9)
+      } else {
+        png(paste0("plots/heatbars/panels/",t[[3]],".png"),width=800,height=500)
       }
       if (!is.null(t[[2]]) & !is.null(t[[1]])) {
         if (t[[3]]=="Enhanced weathering") {
@@ -534,7 +631,9 @@ costsjitter <- costs %>%
 costrange <- costs %>%
   filter(measurement %in% c("max","min"), !is.na(value)) %>%
   left_join(select(costsjitter,label, TI, resourcelab,`Data categorisationyear`,`Data categorisationsystem conditions`)) %>%
-  spread(measurement, value)
+
+costrange <- unique(costrange) %>%
+    spread(measurement, value)
 
 costrange$resourcelabn <- as.numeric(factor(costrange$resourcelab)) #+ runif(length(costrange$resourcelab),-0.4,0.4)
 
@@ -712,7 +811,7 @@ gg <- heatbar(filter(potsranges,resource!="Storage"),"pcnt", step=0.1, numeric=T
   labs(x="",y="Potential GtCO2/year Sequestered") +
   coord_cartesian(expand=F) +
   jittertheme +
-  scale_x_continuous(breaks=seq(1,7),labels=plabs$resourcelabbreak[plabs$resource!="DAC"])
+  scale_x_continuous(breaks=seq(1,7),labels=plabs$resourcelabbreak[plabs$resource!="DACCS"])
 
 print(gg)
 
@@ -723,6 +822,11 @@ p <- ggplotly(gg, tooltip="text",autosize = F, width = pw, height = 600) %>%
   layout(paper_bgcolor='transparent')
 
 p
+
+of <- all_data %>%
+  filter(
+    technology=="Ocean fertilization"
+  )
 
 save(p,file="plots/heatbars/potentials/pl.RData")
 

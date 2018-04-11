@@ -7,6 +7,8 @@ library(ggplot2)
 load("data/all_data.RData")
 
 
+
+
 #############
 ## Costs
 costs <- all_data %>%
@@ -18,8 +20,11 @@ costs <- all_data %>%
   ) %>%
   group_by(technology) %>% 
   summarise(
-    costs_min = quantile(value, .25, na.rm = T),
-    costs_max = quantile(value, .75, na.rm = T)
+    costs_q25 = quantile(value, .25, na.rm = T),
+    costs_q75 = quantile(value, .75, na.rm = T),
+    costs_min = min(value, na.rm = T),
+    costs_max = max(value, na.rm = T), 
+    costs_mean = mean(value, na.rm = T)
   )
 
 costsranges <- all_data %>%
@@ -35,7 +40,7 @@ costsranges <- all_data %>%
     costs_max = max(value, na.rm = T)
   )
 
-write.csv(costsranges,'tables/allcosts.csv')
+write.csv(costs,'tables/allcosts.csv')
 
 ## Pots
 
@@ -48,8 +53,11 @@ pots <- all_data %>%
   ) %>%
   group_by(technology) %>% 
   summarise(
-    pots_min = quantile(value, .25, na.rm = T),
-    pots_max = quantile(value, .75, na.rm = T)
+    pots_q25 = quantile(value, .25, na.rm = T),
+    pots_q75 = quantile(value, .75, na.rm = T),
+    pots_min = min(value, na.rm = T),
+    pots_max = max(value, na.rm = T),
+    pots_mean = mean(value, na.rm = T)
   )
 
 
@@ -66,7 +74,7 @@ potranges <- all_data %>%
     pots_max = max(value, na.rm = T)
   )
 
-write.csv(potranges,'tables/allpotentials.csv')
+write.csv(pots,'tables/allpotentials.csv')
 
 #################
 

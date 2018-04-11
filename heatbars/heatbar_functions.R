@@ -375,6 +375,24 @@ heatbar_years <- function(
     ) %>%
     filter(v <  max(df$v[df$value>0]))
   
+  ydots <- NA
+  
+  if (measurement=="range") {
+    datap <- dataf %>%
+      filter(max-min < 2)
+    dataf <- dataf %>%
+      filter(max-min > 2)
+    if (nrow(datap) > 0) {
+      ydots <- geom_point(
+        data=datap,
+        aes_string(x="PYJ",
+                   y="max"),
+        size=dsize      
+      )
+    }
+  }
+
+  
   if (is.na(grp)) {
     ylines <- geom_linerange(
       data=dataf,
@@ -382,7 +400,7 @@ heatbar_years <- function(
                  ymin="min",
                  ymax="max"),
       size=0.6
-    )
+    ) 
   } else {
     ylines <- geom_linerange(
       data=dataf,
@@ -391,6 +409,11 @@ heatbar_years <- function(
                  ymax="max",
                  colour=grp),
       size=0.6
+    ) + geom_point(
+      data=datap,
+      aes_string(x="PYJ",
+                 y="max"),
+      size=dsize      
     )
   } 
   
@@ -429,8 +452,16 @@ heatbar_years <- function(
     # ) +
     guides(fill = guide_colourbar(reverse = TRUE)) +
     ylines + labs(
-      x = "Year",y="Costs in $US(2011)/tCO2"
+      x = "Publication Year",y="Costs in $US(2011)/tCO2"
     )
+  if (!is.na(ydots)) {
+    p <- p + ydots
+    if (nrow(datap) > 0) {
+      dataf <- rbind(dataf,datap)
+    } 
+  }
+  
+
 
   print(p)
   if(graph){

@@ -32,9 +32,10 @@ qid = 1498
 
 # In[20]:
 
+
 fnames = [
-    'bib_data/1990-2005/pre_2006_3 [Nodes].csv',
-    'bib_data/1990-2017/all_years_3 [Nodes].csv',
+    'bib_data/1990-2005/1990_2005.csv',
+    'bib_data/1990-2017/1990_2017.csv',
 ]
 
 for fname in fnames:
@@ -45,7 +46,7 @@ for fname in fnames:
 
     df.head()
 
-    q = Query.objects.get(pk=1558)
+    q = Query.objects.get(pk=2720)
 
     docs = Doc.objects.filter(query=q)
 
@@ -60,11 +61,12 @@ for fname in fnames:
     def istech(x,t):
         doi = str(x['url']).replace('http://dx.doi.org/','').strip()
 
+
         soup = BeautifulSoup(x['description'])
         rows = soup.find_all('tr')
         arow = [r for r in rows if r.find_all(text=re.compile('Authors'))]
         trow = [r for r in rows if r.find_all(text=re.compile('Title'))]
-        a = x['label'].split()[0]
+        a = x['Label'].split()[0]
 
         try:
             title = trow[0].find_all('td')[1].text
@@ -73,7 +75,7 @@ for fname in fnames:
 
         try:
             doc = docs.get(
-                    wosarticle__di=doi
+                    wosarticle__di__iexact=doi
                 )
         except:
             try:
@@ -82,7 +84,7 @@ for fname in fnames:
                 )
             except:
                 try:
-                    py = x['label'].split()[1].replace('(','').replace(')','')
+                    py = x['Label'].split()[1].replace('(','').replace(')','')
                     doc = docs.get(
                         docauthinst__AU__icontains=a,
                         PY=py
@@ -96,7 +98,8 @@ for fname in fnames:
                         )
                         print("found doc {} using auth".format(doc.title))
                     except:
-                        print("could not find doc with doi: ".format(doi))
+                        print("could not find doc with doi: {}".format(doi))
+                        print(repr(x['Label']))
                         return(np.nan)
 
         if doc.technology.name==t:

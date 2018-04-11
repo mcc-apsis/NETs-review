@@ -88,7 +88,7 @@ all_data$value[
   all_data$technology=="Bioenergy" & all_data$variable=="totalPotential"
   ] <- all_data$value[
     all_data$technology=="Bioenergy" & all_data$variable=="totalPotential"
-    ] * 0.04982206 - 1.432129
+    ] * 0.05506451
 
 all_data$value[
   all_data$technology=="Bioenergy" & all_data$variable=="totalPotential" &
@@ -140,10 +140,10 @@ all_data$potsinclude=F
 
 all_data$boundaries[is.na(all_data$boundaries)] <- ""
 
-#DAC - remove mil-101, as MG-2 has a bigger range
+#DACCS - remove mil-101, as MG-2 has a bigger range
 #pots
 all_data$costsinclude[
-  all_data$technology=="DAC" &
+  all_data$technology=="DACCS" &
     (is.na(all_data$`Data categorisationsystem conditions`) |
        all_data$`Data categorisationsystem conditions`=="MG-2")
   ] <- T
