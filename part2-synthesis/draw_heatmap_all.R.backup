@@ -112,7 +112,7 @@ data_ej <- list(
     net      = "BC",
     pot_min  = 0.3,
     pot_max  = 2.0,
-    cost_min = 0,
+    cost_min = 30,
     cost_max = 120
   ),
   data.frame(
