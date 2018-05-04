@@ -97,7 +97,15 @@ countranges <- function(df, data, headers, measure) {
         measurement %in% c("min","max"),
         variable==resource,
         !is.na(value)
-      ) %>% spread(
+      ) 
+      
+      dataf <- dataf %>% 
+        group_by(TI, measurement) %>% 
+        filter(
+          value == max(value)
+        ) %>% 
+        ungroup() %>% 
+      spread(
         measurement, value
       ) %>%
       filter(
@@ -121,7 +129,7 @@ countranges <- function(df, data, headers, measure) {
         print("warning, some titles seem to be duplicated, do you
             need to filter by a dimension?") 
       if (measure=="range") {
-    
+
       } else {
         # dataf <- dataf %>% 
         #   group_by(TI) %>% 
@@ -157,7 +165,7 @@ countranges <- function(df, data, headers, measure) {
   
   if (measure == "range") {
     data_r_sum <- filter(
-      suppressWarnings(mutate(data,value=as.numeric(value))),
+      suppressWarnings(mutate(data_cleaned,value=as.numeric(value))),
       measurement %in% c("min","max"),
       !is.na(value)
     ) %>% spread(

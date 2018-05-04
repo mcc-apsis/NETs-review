@@ -229,25 +229,25 @@ ggplot(df_long, aes(x = source))+
         legend.position = "bottom")
 
 
-ggplot(df_long, aes(x = source))+
-  geom_linerange(aes(ymin = min, ymax = max, color = bar_type, size = 0.25, alpha = 0.7),
-                 position = position_dodge(width = 0.0))+
-  geom_point(data = filter(df_long,is.na(max) & !is.na(min)),aes(y = min, x = source, color = bar_type))+
-  coord_flip()+
-  facet_grid(net~variable, scales = "free", space = "free_y")+# , labeller = labeller(variable = facet_labels))+ #labeller=label_parsed
-  theme_solarized() +
-  geom_text(data = df_long, aes(x = source, y = max, label = trimmed_labels, hjust = 1))+
-  geom_text(data = text_ovp, aes(x = source, y = 1, label = min, hjust=0))+
-  scale_color_manual(values = cols, name = "")+
-  labs(x= "", y = "")+
-  guides(size = "none", alpha = "none")+
-  theme(plot.background = element_rect(fill = "white"), 
-        legend.background = element_rect(fill = "white"),
-        legend.position = "bottom")
+# ggplot(df_long, aes(x = source))+
+#   geom_linerange(aes(ymin = min, ymax = max, color = bar_type, size = 0.25, alpha = 0.7),
+#                  position = position_dodge(width = 0.0))+
+#   geom_point(data = filter(df_long,is.na(max) & !is.na(min)),aes(y = min, x = source, color = bar_type))+
+#   coord_flip()+
+#   facet_grid(net~variable, scales = "free", space = "free_y")+# , labeller = labeller(variable = facet_labels))+ #labeller=label_parsed
+#   theme_solarized() +
+#   geom_text(data = df_long, aes(x = source, y = max, label = trimmed_labels, hjust = 1))+
+#   geom_text(data = text_ovp, aes(x = source, y = 1, label = min, hjust=0))+
+#   scale_color_manual(values = cols, name = "")+
+#   labs(x= "", y = "")+
+#   guides(size = "none", alpha = "none")+
+#   theme(plot.background = element_rect(fill = "white"), 
+#         legend.background = element_rect(fill = "white"),
+#         legend.position = "bottom")
 
 
   
-ggsave("part1-synthesis/plots/review_ranges2050.png")
+#ggsave("part1-synthesis/plots/review_ranges2050.png")
 
 #####
 # ggplot(filter(df, !is.na(pot_min)), aes(source))+
