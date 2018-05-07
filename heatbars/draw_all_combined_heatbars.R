@@ -92,7 +92,7 @@ costranges <- countranges(
     costs,
     value=as.numeric(gsub("[^0-9\\.]", "", value))
   ), 
-  techs, "range"))
+  techs, "range",filt_subcats = TRUE))
 
 ## Make some nicer labels
 
@@ -138,7 +138,7 @@ potsranges <- countranges(
     pots,
     value=as.numeric(value)
   ),
-  techs, "max")
+  techs, "max",filt_subcats = TRUE)
 
 plabs <- potsranges %>%
   filter(resource!="Storage") %>%
@@ -618,50 +618,6 @@ tech_graphs[3]
 
 ## Data prep
 
-ranges <- seq(0,100,by=0.1)
-df <- data.frame(v=ranges)
-
-pots$measurement <- gsub(" (Gt CO2/yr)","",pots$measurement,fixed=T)
-
-pots <- pots %>% group_by(
-  TI,technology,measurement
-) %>% filter(
-  value == max(value)
-) %>% 
-  ungroup()
-
-potsranges <- countranges(
-  df, 
-  mutate(
-    pots,
-    value=as.numeric(value)
-  ),
-  techs, "max")
-
-
-
-costs <- costs %>% group_by(
-  TI,technology,measurement
-) %>% filter(
-  value == max(value)
-) %>% 
-  ungroup()
-
-
-techs <- unique(costs$technology)
-ranges <- seq(0,1000)
-df <- data.frame(v=ranges)
-
-
-system.time(
-  costranges <- countranges(
-    df, 
-    mutate(
-      costs,
-      value=as.numeric(gsub("[^0-9\\.]", "", value))
-    ), 
-    techs, "range"))
-
 
 
 
@@ -678,7 +634,7 @@ costsjitter <- costs %>%
 
 costrange <- costs %>%
   filter(measurement %in% c("max","min"), !is.na(value)) %>%
-  left_join(select(costsjitter,label, TI, resourcelab,`Data categorisationyear`,`Data categorisationsystem conditions`)) %>%
+  left_join(select(costsjitter,label, TI, resourcelab,`Data categorisationyear`,`Data categorisationsystem conditions`)) 
 
 costrange <- unique(costrange) %>%
     spread(measurement, value)

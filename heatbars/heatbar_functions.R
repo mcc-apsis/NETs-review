@@ -59,7 +59,7 @@ get_data <- function(ss,offset=2){
   return(data)
 }
 
-countranges <- function(df, data, headers, measure) {
+countranges <- function(df, data, headers, measure, filt_subcats=FALSE) {
   
   if (measure !="range") {
     onames <- names(data)
@@ -88,6 +88,14 @@ countranges <- function(df, data, headers, measure) {
     data_cleaned$TI[is.na(data_cleaned$TI)] <- data_cleaned$CITATION[is.na(data_cleaned$TI)]
   }
   
+  if (filt_subcats) {
+    data_cleaned <- data_cleaned %>% 
+      group_by(TI, variable, measurement) %>% 
+      filter(
+        value == max(value)
+      ) %>% 
+      ungroup()       
+  }
 
   
   countrange <- function(x, resource, measure) {
@@ -100,11 +108,6 @@ countranges <- function(df, data, headers, measure) {
       ) 
       
       dataf <- dataf %>% 
-        group_by(TI, measurement) %>% 
-        filter(
-          value == max(value)
-        ) %>% 
-        ungroup() %>% 
       spread(
         measurement, value
       ) %>%
