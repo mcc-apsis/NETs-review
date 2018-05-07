@@ -77,7 +77,7 @@ steps <- list(
     pot_max  = 50,
     pot_n    = 1000,
     cost_min = 1,
-    cost_max = 100,
+    cost_max = 500,
     cost_n   = 1000
   ),
   data.frame(
@@ -205,9 +205,9 @@ all_data <- all_data %>%
 # TODO: EW and OA are additive!! => Add up potentials (and costs?)
 #all_data$technology[which(all_data$technology == "Enhanced weathering (terrestrial and ocean)")] <- "Enhanced weathering (terrestrial and ocean) and Ocean alkalinisation"
 #all_data$technology[which(all_data$technology == "Ocean alkalinisation")]                        <- "Enhanced weathering (terrestrial and ocean) and Ocean alkalinisation"
-
-all_data <- all_data %>%
-  mutate()
+# 
+# all_data <- all_data %>%
+#   mutate()
 
 #==== PROCESS DATA ==========
 data_steps <- list()
