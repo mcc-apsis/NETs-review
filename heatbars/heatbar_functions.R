@@ -92,6 +92,7 @@ countranges <- function(df, data, headers, measure, filt_subcats=FALSE) {
     data_cleaned <- data_cleaned %>% 
       group_by(TI, variable, measurement) %>% 
       filter(
+        !is.na(value) &
         value == max(value)
       ) %>% 
       ungroup()       
