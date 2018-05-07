@@ -119,7 +119,7 @@ data_ej <- list(
     net      = "DAC",
     pot_min  = 0.5,
     pot_max  = 5,
-    cost_min = 150,
+    cost_min = 100,
     cost_max = 300
   ),
   data.frame(
@@ -235,10 +235,12 @@ for (k_net in unique(all_data$technology)) {
                                        !is.na(value) , 
                                        is.finite(value),
                                        potsinclude==T
-                                     ) %>% 
-                                     group_by(TI,technology,measurement) %>% 
-                                     filter(value == max(value)) %>% 
-                                     ungroup(), net_sn, data_steps[[k_net]]$pot, "max"),
+                                     ) # %>% 
+  #                                 group_by(TI,technology,measurement) %>% 
+ #                                    filter(value == max(value)) %>% 
+#                                     ungroup()
+                                   , 
+                                   net_sn, data_steps[[k_net]]$pot, "max"),
       "cost" = generate_costs(all_data %>% filter(technology == k_net) %>%
                                 filter(
                                   !is.na(value) , 
