@@ -152,8 +152,8 @@ data_ej <- list(
   ),
   data.frame(
     net      = "SCS",
-    pot_min  = 3,
-    pot_max  = 6,
+    pot_min  = 2.3,
+    pot_max  = 5.3,
     cost_min = 0,
     cost_max = 100
   )
