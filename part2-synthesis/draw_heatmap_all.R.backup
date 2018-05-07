@@ -77,7 +77,7 @@ steps <- list(
     pot_max  = 50,
     pot_n    = 1000,
     cost_min = 1,
-    cost_max = 100,
+    cost_max = 500,
     cost_n   = 1000
   ),
   data.frame(
@@ -112,7 +112,7 @@ data_ej <- list(
     net      = "BC",
     pot_min  = 0.3,
     pot_max  = 2.0,
-    cost_min = 0,
+    cost_min = 30,
     cost_max = 120
   ),
   data.frame(
@@ -190,7 +190,7 @@ load("../../bitbucket/beccs/data/dataplotAll.RData") # IAM
 
 
 #==== PROCESS DATA ==========
-all_data$TI[is.na(all_data$TI)] <- all_data$CITATION[is.na(all_data$TI)] #Fix TI/CITATION mismatch
+all_data$TI[is.na(all_data$TI)] <- all_data$CITATION[is.na(all_data$TI)] #Fix TI/CITATION
 
 
 all_data <- all_data %>%
@@ -201,11 +201,13 @@ all_data <- all_data %>%
   filter(ind==1) %>%
   ungroup()
 
+
 # TODO: EW and OA are additive!! => Add up potentials (and costs?)
 #all_data$technology[which(all_data$technology == "Enhanced weathering (terrestrial and ocean)")] <- "Enhanced weathering (terrestrial and ocean) and Ocean alkalinisation"
 #all_data$technology[which(all_data$technology == "Ocean alkalinisation")]                        <- "Enhanced weathering (terrestrial and ocean) and Ocean alkalinisation"
-
-
+# 
+# all_data <- all_data %>%
+#   mutate()
 
 #==== PROCESS DATA ==========
 data_steps <- list()
@@ -233,7 +235,10 @@ for (k_net in unique(all_data$technology)) {
                                        !is.na(value) , 
                                        is.finite(value),
                                        potsinclude==T
-                                     ), net_sn, data_steps[[k_net]]$pot, "max"),
+                                     ) %>% 
+                                     group_by(TI,technology,measurement) %>% 
+                                     filter(value == max(value)) %>% 
+                                     ungroup(), net_sn, data_steps[[k_net]]$pot, "max"),
       "cost" = generate_costs(all_data %>% filter(technology == k_net) %>%
                                 filter(
                                   !is.na(value) , 
@@ -268,7 +273,7 @@ for (k_net in unique(all_data$technology)) {
   net_sn <- paste(net_names$shortname[which(net_names$longname == k_net)])
   print(net_sn)
   if (net_sn != "DAC") {
-   
+    
     do_rev <- TRUE
     data_rev <- all_data %>% 
       filter(technology == k_net) %>% 
