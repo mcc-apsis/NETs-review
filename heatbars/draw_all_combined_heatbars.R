@@ -618,6 +618,54 @@ tech_graphs[3]
 
 ## Data prep
 
+ranges <- seq(0,100,by=0.1)
+df <- data.frame(v=ranges)
+
+pots$measurement <- gsub(" (Gt CO2/yr)","",pots$measurement,fixed=T)
+
+pots <- pots %>% group_by(
+  TI,technology,measurement
+) %>% filter(
+  value == max(value)
+) %>% 
+  ungroup()
+
+potsranges <- countranges(
+  df, 
+  mutate(
+    pots,
+    value=as.numeric(value)
+  ),
+  techs, "max")
+
+
+
+costs <- costs %>% group_by(
+  TI,technology,measurement
+) %>% filter(
+  value == max(value)
+) %>% 
+  ungroup()
+
+
+techs <- unique(costs$technology)
+ranges <- seq(0,1000)
+df <- data.frame(v=ranges)
+
+
+system.time(
+  costranges <- countranges(
+    df, 
+    mutate(
+      costs,
+      value=as.numeric(gsub("[^0-9\\.]", "", value))
+    ), 
+    techs, "range"))
+
+
+
+
+
 ##########################
 ## All costs with jittered ranges
 costsjitter <- costs %>%

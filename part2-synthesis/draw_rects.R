@@ -42,7 +42,7 @@ costsranges <- all_data %>%
     costs_max = max(value, na.rm = T)
   )
 
-write.csv(costs,'tables/allcosts.csv')
+
 
 ## Pots
 
@@ -78,7 +78,7 @@ potranges <- all_data %>%
     pots_max = max(value, na.rm = T)
   )
 
-write.csv(pots,'tables/allpotentials.csv')
+
 
 #################
 
@@ -101,6 +101,9 @@ write.csv(expert_judgements,"tables/expert_judgements.csv")
 pots <- left_join(pots,select(expert_judgements,technology,pots_min_expert, pots_max_expert))
 
 costs <- left_join(costs,select(expert_judgements,technology,costs_min_expert, costs_max_expert))
+
+write.csv(costs,'tables/allcosts.csv')
+write.csv(pots,'tables/allpotentials.csv')
 
 ggplot() + 
   geom_rect(
