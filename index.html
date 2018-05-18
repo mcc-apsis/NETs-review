@@ -12,111 +12,52 @@
 
 <div id="main">
 
+  <div class="header">
+<a href="/">Project</a>
+<a href="/methods/">Methods</a>
+<a href="/results/">Results</a>
+  </div>
+
   <!-- <div class="inner"> -->
 
-    <h1>NETs Review</h1>
+    <h1>A Systematic Review of Negative Emissions Technologies</h1>
 
-    <h2>Review Procedure</h2>
-
-    <p>The project shared a common review methodology,
-      which aims to be comprehensive in terms of literature reviewed,
-      and transparent in the selection process.
-      The steps taken were as follows (also shown in the next figure):
-    <ul>
-      <li>We developed an initial search query to identify the NETs literature,
-        disaggregated by each technology. Our queries are available
-        <a href="https://github.com/mcc-apsis/NETs-review/blob/master/tables/all_queries.xlsx">here</a>, and
-        the full list of documents thereby obtained can be found in
-        <a href="https://github.com/mcc-apsis/NETs-review/blob/master/tables/all_considered_docs.xlsx">here</a>
-      <li>We performed a preliminary scoping review to narrow down the search results
-        to relevant publications by reading all the abstracts.
-        Documents which were found to be relevant have a 1 in the 'relevant' column
-        in the spreadsheet above
-      <li>We extracted data from the relevant documents on costs, potentials
-        and side-effects. This step is explained in detail below: documents
-        which were included in the spreadsheet have a 1 in the 'In_Spreadsheet'
-        column in the spreadsheet above
+    <p>With the Paris Agreement’s ambition of limiting climate change to well
+      below 2°C and possibly even below 1.5°C, negative emission technologies
+      (NETs) have moved into the limelight of discussions in climate science and
+      policy. Despite several assessments of NETs, the current knowledge on NETs
+      is still diffuse and incomplete, but also growing fast.
+    </p>
+    <p>This site documents a systematic review of negative emissions technologies
+      carried out by 20 researchers at 10 different institutions. The review was
+      published as a 3 part Topical Review in the journal
+      <a href"http://iopscience.iop.org/journal/1748-9326">Environmental Research Letters</a>:
+      <ul>
+        <li>Minx J C, Lamb W F, Callaghan M W, Fuss S, Hilaire J, Creutzig F,
+          Amann T, Beringer T, de Oliveira Garcia W, Hartmann J, Khanna T,
+          Lenzi D, Luderer G, Nemet G F, Rogelj J, Smith P, Vicente L V,
+          Wilcox J and del Mar Zamora M 2018 Negative emissions: Part 1 - Research landscape, ethics and synthesis Environ. Res. Lett. <a href="https://doi.org/10.1088/1748-9326/aabf9b">https://doi.org/10.1088/1748-9326/aabf9b</a></li>
+        <li>Fuss S, Lamb W F, Callaghan M W, Hilaire J, Creutzig F, Amann T, Beringer T, de Oliveira Garcia W, Hartmann J, Khanna T, Luderer G, Nemet G F, Rogelj J, Smith P, Vicente L V, Wilcox J, del Mar Zamora M and Minx J C 2018 Negative emissions - Part 2: Costs, potentials and side effects Environ. Res. Lett. <a href="https://doi.org/10.1088/1748-9326/aabf9f">https://doi.org/10.1088/1748-9326/aabf9f</a></li>
+        <li>Nemet G F, Callaghan M W, Creutzig F, Fuss S, Hartmann J, Hilaire J, Lamb W F, Minx J C, Rogers S and Smith P 2018 Negative emissions - Part 3: Innovation and upscaling Environ. Res. Lett. <a href="https://doi.org/10.1088/1748-9326/aabff4">https://doi.org/10.1088/1748-9326/aabff4</a></li>
       </ul>
 
-      <p>
+      <!-- <h2>About NETs</h2> -->
+      <hr class="padded"></hr>
+      In <a href="https://doi.org/10.1088/1748-9326/aabf9b">part 1</a> we define negative emissions as intentional human efforts to remove CO<sub>2</sub> from the atmosphere. The paper explains the different technologies used to do this; synthesises information from the other parts of the review; and summarises developments in the literature on NETs (visualised below).
+      <img src="/site/Fig5_bibliographic coupling network.svg"/>
+      <p><a href="https://doi.org/10.1088/1748-9326/aabf9f">Part 2</a> reports information collected from over 800 papers on the costs, negative emission potentials, and side effects of the different technologies. An interactive graph shows these  <a href="/results/#heatbars">results</a>.
+        <hr class="padded"></hr>
 
-      <img src="site/protocol_diagram.png" width="80%"/>
 
-    <h2> Stage 3: Collecting Costs and Potentials</h2>
 
-      <p>The data was collected in the spreadsheet available <a href="https://docs.google.com/spreadsheets/d/1iefbp2QvlLG0vDXLTKAelvdPTPVF6HECHCx7OoQa0yU/edit?usp=sharing">
-        here</a>
-      </p>
-      <p>
-        The code used to sort, filter and standardise this data, and to turn it into the figures
-        below is made available <a href="https://github.com/mcc-apsis/NETs-review/tree/master/heatbars">here</a>:
 
-    <h3> Costs </h3>
+  </h3>
+  <h3>
 
-    <p>
-  <!-- </div> -->
 
-<div class="iframe-holder">
-<!-- <iframe src="https://mcc-apsis.github.io/NETs-review/plots/heatbars/costs/index.html"></iframe> -->
-</div>
-
-  <!-- <div class="inner"> -->
-
-    <h3> Potentials </h3>
-
-    <p>
-
-  <!-- </div> -->
-
-    <div class="iframe-holder">
-    </div>
 
 </div>
 
 </body>
-
-<script type="text/javascript">
-
-srcs = [
-  "plots/heatbars/costs/costs.html",
-  "plots/heatbars/potentials/potentials.html"
-]
-
-$('.iframe-holder').each(function( index ) {
-  w = $(this).width();
-  h = w*0.65;
-  $(this).height(h);
-  console.log( w );
-  if (navigator.userAgent.indexOf("Firefox") > 0) {
-    // $(this).html("Embedded plots do not work in Firefox. View <a href='"+srcs[index]+"'>Link</a>");
-    // $(this).toggleClass("iframe-holder")
-    // $(this).height(100)
-    $(this).html("<iframe src='"+srcs[index]+"'></iframe>");
-    //$(this).width("100%")
-  } else {
-    $(this).html("<iframe src='"+srcs[index]+"'></iframe>");
-  }
-
-  setTimeout(function(){  }, 3000);
-})
-
-// $('iframe').on('load', function(){
-//   // $("#htmlwidget_container").css({position:"relative",top:0,left:0,bottom:0,right:0})
-//   // $("body").css({padding:0})
-//   // $('.iframe-holder').each(function( index ) {
-//   //   w = $(this).width()
-//   //   h = w*0.6
-//   //   $(this).height(h-100)
-//   //   $(this).width(w-80)
-//   //   console.log( w )
-//   // })
-//   $(".svg-container").css({border: "1px solid black"})
-//   //$("iframe")
-// });
-
-
-
-
-</script>
 
 </html>

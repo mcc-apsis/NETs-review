@@ -1,0 +1,97 @@
+<html>
+<head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>NETs Review</title>
+<link href="/site/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+<div id="main">
+
+  <div class="header">
+<a href="/">Project</a>
+<a href="/methods/">Methods</a>
+<a href="/results/">Results</a>
+  </div>
+
+      <h1>A Systematic Review of Negative Emissions Technologies</h1>
+
+      <h2>Synthesis</h2>
+
+      The following figure, from <a href="https://doi.org/10.1088/1748-9326/aabf9b">part 1</a>, synthesises information on costs, potentials and side effects of the different negative emissions technologies
+      <img src="/site/Fig6_synthesis" width="80%"/>
+      <hr class="padded">
+
+
+      <h2 id="heatbars">Costs and Potentials</h2>
+          <h3> Costs </h3>
+
+          <p>
+        <!-- </div> -->
+
+      <div class="iframe-holder">
+      <!-- <iframe src="https://mcc-apsis.github.io/NETs-review/plots/heatbars/costs/index.html"></iframe> -->
+      </div>
+
+        <!-- <div class="inner"> -->
+
+          <h3> Potentials </h3>
+
+          <p>
+
+        <!-- </div> -->
+
+          <div class="iframe-holder">
+          </div>
+
+</div>
+</body>
+
+
+<script type="text/javascript">
+
+srcs = [
+  "/plots/heatbars/costs/costs.html",
+  "/plots/heatbars/potentials/potentials.html"
+]
+
+$('.iframe-holder').each(function( index ) {
+  w = $(this).width();
+  h = w*0.65;
+  $(this).height(h);
+  console.log( w );
+  if (navigator.userAgent.indexOf("Firefox") > 0) {
+    // $(this).html("Embedded plots do not work in Firefox. View <a href='"+srcs[index]+"'>Link</a>");
+    // $(this).toggleClass("iframe-holder")
+    // $(this).height(100)
+    $(this).html("<iframe src='"+srcs[index]+"'></iframe>");
+    //$(this).width("100%")
+  } else {
+    $(this).html("<iframe src='"+srcs[index]+"'></iframe>");
+  }
+
+  setTimeout(function(){  }, 3000);
+})
+
+// $('iframe').on('load', function(){
+//   // $("#htmlwidget_container").css({position:"relative",top:0,left:0,bottom:0,right:0})
+//   // $("body").css({padding:0})
+//   // $('.iframe-holder').each(function( index ) {
+//   //   w = $(this).width()
+//   //   h = w*0.6
+//   //   $(this).height(h-100)
+//   //   $(this).width(w-80)
+//   //   console.log( w )
+//   // })
+//   $(".svg-container").css({border: "1px solid black"})
+//   //$("iframe")
+// });
+
+
+
+
+</script>

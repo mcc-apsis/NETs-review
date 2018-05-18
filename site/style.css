@@ -11,8 +11,8 @@ body {
     margin-right: auto;
 
 		width: 1000px;
-    border-left: 1px solid grey;
-    border-right: 1px solid grey;
+    /* border-left: 1px solid grey;
+    border-right: 1px solid grey; */
     padding: 10px;
 }
 
@@ -24,6 +24,17 @@ div.main-container {
 	width: 1100px;
 	padding:0px;
 	margin-left: -20px;
+}
+
+div.header {
+	padding: 40px 0px 10px;
+	text-align:right;
+}
+
+div.header > a {
+	padding: 10px 0px 10px 40px;
+	color: green;
+	text-decoration: none
 }
 
 img {
@@ -57,6 +68,19 @@ iframe {
     border: none;
 }
 
+a {
+	text-decoration: none;
+	font-weight: bolder
+}
+
 .svg-container {
   border: "1px solid black";
+}
+
+hr.padded {
+	margin: 40px;
+}
+
+img {
+	margin:20px auto;
 }
