@@ -90,3 +90,7 @@ hr.padded {
 img {
 	margin:20px auto;
 }
+
+div.footer {
+	color: #545454;
+}
